@@ -3,7 +3,7 @@ package GreenHub;
 public class GreenHub {
 	
 	public static void main(String[] args ) {
-		System.out.println("Test");
+		System.out.println("Test123!");
 		
 		User User1 = new User();
 		
