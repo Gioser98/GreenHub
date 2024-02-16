@@ -5,18 +5,29 @@ import java.util.*;
 public class Map {
 
 	private int id;
-	private Collection<ArrayList<ChargingStation>> chargingStations;
+	private ArrayList<ChargingStation> chargingStations;
+	
+	// Getter&Setter
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Collection<ArrayList<ChargingStation>> getChargingStations() {
+	public ArrayList<ChargingStation> getChargingStations() {
 		return chargingStations;
 	}
-	public void setChargingStations(Collection<ArrayList<ChargingStation>> chargingStations) {
+	public void setChargingStations(ArrayList<ChargingStation> chargingStations) {
 		this.chargingStations = chargingStations;
+	}
+	
+	// Contructors
+	public Map() {
+	    // Costruttore vuoto
+	}
+	public Map(int id, ArrayList<ChargingStation> chargingStations) {
+	    this.id = id;
+	    this.chargingStations = chargingStations;
 	}
 
 }

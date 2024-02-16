@@ -1,21 +1,14 @@
 package GreenHub;
 
-import java.util.*;
-
 public class ChargingStation {
 
-	Collection<Charge> delivers;
 	private int id;
 	private Location location;
 	private int timeTable;
 	private int availableRate;
 	private boolean maintenance;
-	public Collection<Charge> getDelivers() {
-		return delivers;
-	}
-	public void setDelivers(Collection<Charge> delivers) {
-		this.delivers = delivers;
-	}
+	
+	// Getters&Setters
 	public int getId() {
 		return id;
 	}
@@ -45,6 +38,18 @@ public class ChargingStation {
 	}
 	public void setMaintenance(boolean maintenance) {
 		this.maintenance = maintenance;
+	}
+
+	// Constructors
+	public ChargingStation() {
+	    // Costruttore vuoto
+	}
+	public ChargingStation(int id, Location location, int timeTable, int availableRate, boolean maintenance) {
+	    this.id = id;
+	    this.location = location;
+	    this.timeTable = timeTable;
+	    this.availableRate = availableRate;
+	    this.maintenance = maintenance;
 	}
 
 }

@@ -5,6 +5,8 @@ public class Location {
 	private float latitude;
 	private float longitude;
 	private int range;
+	
+	// Getter&Setter
 	public float getLatitude() {
 		return latitude;
 	}
@@ -23,5 +25,15 @@ public class Location {
 	public void setRange(int range) {
 		this.range = range;
 	}
-
+	
+	// Constructors
+	public Location() {
+	    // Costruttore vuoto
+	}
+	public Location(float latitude, float longitude, int range) {
+	    this.latitude = latitude;
+	    this.longitude = longitude;
+	    this.range = range;
+	}
+	
 }

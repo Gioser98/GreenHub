@@ -9,6 +9,8 @@ public class Transaction {
 	private int type;
 	private float amount;
 	private Charge charge;
+	
+	// Getter&Setter
 	public int getId() {
 		return id;
 	}
@@ -39,5 +41,18 @@ public class Transaction {
 	public void setCharge(Charge charge) {
 		this.charge = charge;
 	}
+	
+	// Constructors
+	public Transaction() {
+	    // Costruttore vuoto
+	}
+	public Transaction(int id, LocalDateTime timestamp, int type, float amount, Charge charge) {
+	    this.id = id;
+	    this.timestamp = timestamp;
+	    this.type = type;
+	    this.amount = amount;
+	    this.charge = charge;
+	}
+
 
 }

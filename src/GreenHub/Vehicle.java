@@ -9,6 +9,8 @@ public class Vehicle {
 	private ChargingRate supportedRate;
 	private int capacity;
 	private Location location;
+	
+	// Getter&Setter
 	public int getId() {
 		return id;
 	}
@@ -50,6 +52,20 @@ public class Vehicle {
 	}
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	
+	// Constructors
+	public Vehicle() {
+	    // Costruttore vuoto
+	}
+	public Vehicle(int id, String maker, String model, int engineType, ChargingRate supportedRate, int capacity, Location location) {
+	    this.id = id;
+	    this.maker = maker;
+	    this.model = model;
+	    this.engineType = engineType;
+	    this.supportedRate = supportedRate;
+	    this.capacity = capacity;
+	    this.location = location;
 	}
 
 }

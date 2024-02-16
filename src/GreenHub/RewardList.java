@@ -6,6 +6,8 @@ public class RewardList {
 	private String description;
 	private int greenPointsCost;
 	private int remainingQuantity;
+	
+	// Getter&Setter
 	public String getName() {
 		return name;
 	}
@@ -29,6 +31,17 @@ public class RewardList {
 	}
 	public void setRemainingQuantity(int remainingQuantity) {
 		this.remainingQuantity = remainingQuantity;
+	}
+	
+	// Constructors
+	public RewardList() {
+	    // Costruttore vuoto
+	}
+	public RewardList(String name, String description, int greenPointsCost, int remainingQuantity) {
+	    this.name = name;
+	    this.description = description;
+	    this.greenPointsCost = greenPointsCost;
+	    this.remainingQuantity = remainingQuantity;
 	}
 
 }

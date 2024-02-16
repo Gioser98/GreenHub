@@ -2,15 +2,10 @@ package GreenHub;
 
 public class RewardSystem {
 
-	Charge applies;
 	private int rechargeFactor;
 	private int rentFactor;
-	public Charge getApplies() {
-		return applies;
-	}
-	public void setApplies(Charge applies) {
-		this.applies = applies;
-	}
+	
+	// Getter&Setter
 	public int getRechargeFactor() {
 		return rechargeFactor;
 	}
@@ -22,6 +17,15 @@ public class RewardSystem {
 	}
 	public void setRentFactor(int rentFactor) {
 		this.rentFactor = rentFactor;
+	}
+	
+	// Constructors
+	public RewardSystem() {
+	    // Costruttore vuoto
+	}
+	public RewardSystem(int rechargeFactor,int rentFactor) {
+	    this.rechargeFactor = rechargeFactor;
+	    this.rentFactor = rentFactor;
 	}
 
 }

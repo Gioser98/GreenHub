@@ -8,6 +8,8 @@ public class User {
 	private String name;
 	private String surname;
 	private Location location;
+	
+	// Getter&Setter
 	public String getUsername() {
 		return username;
 	}
@@ -43,6 +45,19 @@ public class User {
 	}
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+	
+	// Constructors
+	public User() {
+	    // Costruttore vuoto
+	}
+	public User(String username, int greenPointsBalance, int type, String name, String surname, Location location) {
+	    this.username = username;
+	    this.greenPointsBalance = greenPointsBalance;
+	    this.type = type;
+	    this.name = name;
+	    this.surname = surname;
+	    this.location = location;
 	}
 
 }

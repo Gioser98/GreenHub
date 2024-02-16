@@ -10,6 +10,8 @@ public class Reservation {
 	private ChargingStation chargingStation;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
+	
+	// Getter&Setter
 	public int getId() {
 		return id;
 	}
@@ -46,5 +48,19 @@ public class Reservation {
 	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
+	
+	// Constructors
+	public Reservation() {
+	    // Costruttore vuoto
+	}
+	public Reservation(int id, User user, Vehicle vehicle, ChargingStation chargingStation, LocalDateTime startTime, LocalDateTime endTime) {
+	    this.id = id;
+	    this.user = user;
+	    this.vehicle = vehicle;
+	    this.chargingStation = chargingStation;
+	    this.startTime = startTime;
+	    this.endTime = endTime;
+	}
+
 
 }
