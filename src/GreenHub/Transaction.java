@@ -1,9 +1,11 @@
 package GreenHub;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Transaction {
-
+public class Transaction implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private LocalDateTime timestamp;
 	private int type;
@@ -53,6 +55,10 @@ public class Transaction {
 	    this.amount = amount;
 	    this.charge = charge;
 	}
-
+	
+	// Methods
+	public String toString() {
+		return "totti";
+	}
 
 }

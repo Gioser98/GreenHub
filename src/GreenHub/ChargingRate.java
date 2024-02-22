@@ -1,10 +1,13 @@
 package GreenHub;
 
-public class ChargingRate {
+import java.io.Serializable;
 
+public class ChargingRate implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private int power;
-	private float price;
+	private double price;
 
 	// Getter&Setter
 	public int getId() {
@@ -19,10 +22,10 @@ public class ChargingRate {
 	public void setPower(int power) {
 		this.power = power;
 	}
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	
@@ -30,9 +33,15 @@ public class ChargingRate {
 	public ChargingRate() {
 	    // Costruttore vuoto
 	}
-	public ChargingRate(int id, int power, float price) {
+	public ChargingRate(int id, int power, double price) {
 	    this.id = id;
 	    this.power = power;
 	    this.price = price;
+	}
+	
+	// Methods
+	
+	public String toString() {
+		return "ID: " + id + ". " + power + " kW a " + price + " €/kW" ;
 	}
 }

@@ -1,9 +1,11 @@
 package GreenHub;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class EnergySupplier {
-
+public class EnergySupplier implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private ArrayList<ChargingStation> chargingStations;
 	
@@ -21,13 +23,23 @@ public class EnergySupplier {
 		this.chargingStations = chargingStations;
 	}
 	
-	//Constructors
+	// Constructors
 	public EnergySupplier() {
 	    // Costruttore vuoto
 	}
-	public EnergySupplier(String name, ArrayList<ChargingStation> chargingStations) {
+	public EnergySupplier(String name) {
 	    this.name = name;
-	    this.chargingStations = chargingStations;
+        this.chargingStations = new ArrayList<>();
 	}
+	
+	// Methods
+	public String toString() {
+		return name;
+	}
+	
+	// Aggiungi una colonnina alla lista di colonnine in possesso del fornitore
+    public void addChargingStation(ChargingStation chargingStation) {
+        chargingStations.add(chargingStation);
+    }
 
 }

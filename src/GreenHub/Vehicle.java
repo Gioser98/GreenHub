@@ -1,11 +1,14 @@
 package GreenHub;
 
-public class Vehicle {
+import java.io.Serializable;
 
+public class Vehicle implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String maker;
 	private String model;
-	private int engineType;
+	private int engineType; // 0 Electric - 1 Hybrid - 2 Combustion
 	private ChargingRate supportedRate;
 	private int capacity;
 	private Location location;
@@ -66,6 +69,11 @@ public class Vehicle {
 	    this.supportedRate = supportedRate;
 	    this.capacity = capacity;
 	    this.location = location;
+	}
+	
+	// Methods
+	public String toString() {
+		return maker + " " + model ;
 	}
 
 }

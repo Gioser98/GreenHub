@@ -1,10 +1,13 @@
 package GreenHub;
 
-public class User {
+import java.io.Serializable;
 
+public class User implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String username;
 	private int greenPointsBalance;
-	private int type;
+	private int type; // 0 EV - 1 ICE - 2 NoVehicle
 	private String name;
 	private String surname;
 	private Location location;
@@ -58,6 +61,11 @@ public class User {
 	    this.name = name;
 	    this.surname = surname;
 	    this.location = location;
+	}
+	
+	// Methods
+	public String toString() {
+		return username + ". Bilancio GP: " + greenPointsBalance;
 	}
 
 }

@@ -1,10 +1,12 @@
 package GreenHub;
 
-public class Location {
+import java.io.Serializable;
 
+public class Location implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private float latitude;
 	private float longitude;
-	private int range;
 	
 	// Getter&Setter
 	public float getLatitude() {
@@ -19,21 +21,22 @@ public class Location {
 	public void setLongitude(float longitude) {
 		this.longitude = longitude;
 	}
-	public int getRange() {
-		return range;
-	}
-	public void setRange(int range) {
-		this.range = range;
-	}
 	
 	// Constructors
 	public Location() {
 	    // Costruttore vuoto
 	}
-	public Location(float latitude, float longitude, int range) {
+	public Location(float latitude, float longitude) {
 	    this.latitude = latitude;
 	    this.longitude = longitude;
-	    this.range = range;
 	}
 	
+	// Methods	
+	public int distance(Location loc1, Location loc2) {
+		return (int) Math.sqrt(Math.pow((loc1.latitude - loc2.latitude), 2) + Math.pow((loc1.longitude - loc2.longitude), 2));
+	}
+	
+	public int distance(Location loc1) {
+		return (int) Math.sqrt(Math.pow((loc1.latitude - latitude), 2) + Math.pow((loc1.longitude - longitude), 2));
+	}
 }

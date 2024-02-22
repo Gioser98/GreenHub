@@ -1,63 +1,90 @@
 package GreenHub;
 
-public class Charge {
+import java.io.Serializable;
+import java.time.*;
 
-	private String username;
-	private int greenPointsBalance;
-	private int type;
-	private String name;
-	private String surname;
-	private Location location;
+public class Charge implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	private int id;
+	private User user;
+	private Vehicle vehicle;
+	private ChargingStation chargingStation;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private int energy;
+	private ChargingRate ChargingRate;
 	
 	// Getter&Setter
-	public String getUsername() {
-		return username;
+	public int getId() {
+		return id;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public int getGreenPointsBalance() {
-		return greenPointsBalance;
+	public User getUser() {
+		return user;
 	}
-	public void setGreenPointsBalance(int greenPointsBalance) {
-		this.greenPointsBalance = greenPointsBalance;
+	public void setUser(User user) {
+		this.user = user;
 	}
-	public int getType() {
-		return type;
+	public Vehicle getVehicle() {
+		return vehicle;
 	}
-	public void setType(int type) {
-		this.type = type;
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
-	public String getName() {
-		return name;
+	public ChargingStation getChargingStation() {
+		return chargingStation;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setChargingStation(ChargingStation chargingStation) {
+		this.chargingStation = chargingStation;
 	}
-	public String getSurname() {
-		return surname;
+	public LocalDateTime getStartTime() {
+		return startTime;
 	}
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
 	}
-	public Location getLocation() {
-		return location;
+	public LocalDateTime getEndTime() {
+		return endTime;
 	}
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
+	}
+	public int getEnergy() {
+		return energy;
+	}
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
+	public ChargingRate getChargingRate() {
+		return ChargingRate;
+	}
+	public void setChargingRate(ChargingRate chargingRate) {
+		ChargingRate = chargingRate;
 	}
 	
 	// Constructors
 	public Charge() {
-	    // Costruttore vuoto
+		    // Costruttore vuoto
 	}
-	public Charge(String username, int greenPointsBalance, int type, String name, String surname, Location location) {
-	    this.username = username;
-	    this.greenPointsBalance = greenPointsBalance;
-	    this.type = type;
-	    this.name = name;
-	    this.surname = surname;
-	    this.location = location;
+	
+	public Charge(int id, User user, Vehicle vehicle, ChargingStation chargingStation, LocalDateTime startTime, 
+			LocalDateTime endTime, int energy, ChargingRate ChargingRate) {
+		
+		this.id = id;
+		this.user = user;
+		this.vehicle = vehicle;
+		this.chargingStation = chargingStation;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.energy = energy;
+		this.ChargingRate = ChargingRate;
 	}
-
+	
+	// Methods
+	public String toString() {
+		return "totti";
+	}
 }

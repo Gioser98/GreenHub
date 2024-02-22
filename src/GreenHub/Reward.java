@@ -1,7 +1,10 @@
 package GreenHub;
 
-public class RewardList {
+import java.io.Serializable;
 
+public class Reward implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
 	private int greenPointsCost;
@@ -34,14 +37,22 @@ public class RewardList {
 	}
 	
 	// Constructors
-	public RewardList() {
+	public Reward() {
 	    // Costruttore vuoto
 	}
-	public RewardList(String name, String description, int greenPointsCost, int remainingQuantity) {
+	public Reward(String name, String description, int greenPointsCost, int remainingQuantity) {
 	    this.name = name;
 	    this.description = description;
 	    this.greenPointsCost = greenPointsCost;
 	    this.remainingQuantity = remainingQuantity;
 	}
-
+	
+	// Methods
+	
+	/**
+	 * Restituisce la ricompensa in un formato leggibile.
+	 */
+	public String toString() {
+		return name + ": " + description + ". Costo in GP: " + greenPointsCost + ". Quantità rimanente: " + remainingQuantity;
+	}
 }
