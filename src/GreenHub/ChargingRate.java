@@ -42,6 +42,6 @@ public class ChargingRate implements Serializable {
 	// Methods
 	
 	public String toString() {
-		return "ID: " + id + ". " + power + " kW a " + price + " €/kW" ;
+		return "ID:" + id + ". " + power + " kW a " + price + " €/kW" ;
 	}
 }

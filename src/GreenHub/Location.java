@@ -5,20 +5,20 @@ import java.io.Serializable;
 public class Location implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private float latitude;
-	private float longitude;
+	private int latitude;
+	private int longitude;
 	
 	// Getter&Setter
-	public float getLatitude() {
+	public int getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(float latitude) {
+	public void setLatitude(int latitude) {
 		this.latitude = latitude;
 	}
-	public float getLongitude() {
+	public int getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(float longitude) {
+	public void setLongitude(int longitude) {
 		this.longitude = longitude;
 	}
 	
@@ -26,7 +26,7 @@ public class Location implements Serializable {
 	public Location() {
 	    // Costruttore vuoto
 	}
-	public Location(float latitude, float longitude) {
+	public Location(int latitude, int longitude) {
 	    this.latitude = latitude;
 	    this.longitude = longitude;
 	}
@@ -38,5 +38,9 @@ public class Location implements Serializable {
 	
 	public int distance(Location loc1) {
 		return (int) Math.sqrt(Math.pow((loc1.latitude - latitude), 2) + Math.pow((loc1.longitude - longitude), 2));
+	}
+	
+	public String toString() {
+		return "(" + latitude + "," + longitude + ")";
 	}
 }

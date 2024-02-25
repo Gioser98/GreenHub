@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ChargingStation implements Serializable {
@@ -66,10 +67,14 @@ public class ChargingStation implements Serializable {
 	}
 	
 	// Methods
-	
 	public String toString() {
-		return "totti";
+		String text = "";
+		if (maintenance) {
+			text = "Stazione in manutenzione";
+		}
+		return "ID:" + id + ". Posizione: " + location + " di proprietà di " + owner.getName() + ". " + text ;
 	}
+	
 	public boolean isCompatibleWithVehicle(Vehicle vehicle) {
 	    // Recupera la tariffa supportata dal veicolo
 		ChargingRate carSupportedRate = vehicle.getSupportedRate();
@@ -84,6 +89,12 @@ public class ChargingStation implements Serializable {
 		return false;
 	}
 	
-	//public boolean isAvailable()
+	public boolean isAvailable(LocalDateTime startTime, LocalDateTime endTime) {
+		System.out.println("startTime: "+ startTime);
+		System.out.println("endTime: "+ endTime);
+		System.out.println("timeTable: "+ timeTable);
+		
+		return true;
+	}
 	
 }
