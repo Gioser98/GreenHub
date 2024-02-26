@@ -1,37 +1,36 @@
 package GreenHub;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GreenHub {
-	
+
 	private static Scanner in;
-	
+
 	private static ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
 	private static ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
 	private static ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
 	private static ArrayList<Reward> rewardList = new ArrayList<Reward>();
 	private static ArrayList<User> userList = new ArrayList<User>();
 	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
-	
+
 	// SISTEMARE L'ORARIO (GESTIRSELO DA SOLI CON CLASSE TIME?)
-	
+
 	/*
-	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	*/
-	
+	 * private static ArrayList<Transaction> transactionList = new
+	 * ArrayList<Transaction>(); private static ArrayList<Reservation>
+	 * reservationList = new ArrayList<Reservation>();
+	 */
+
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args ) throws IOException {
-		
+	public static void main(String[] args) throws IOException {
+
 		System.out.println("BENVENUTO IN GREENHUB!");
 		System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
 		System.out.println("Per salvare le modifiche sul file, terminare il programma scegliendo "
 				+ "l'apposita opzione, altrimenti verranno perse.");
-		
-		
+
 		// Lettura chargingRateList
 		FileInputStream FIS = new FileInputStream("ChargingRate.txt");
 		ObjectInputStream OIS = new ObjectInputStream(FIS);
@@ -41,7 +40,7 @@ public class GreenHub {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Lettura energySupplierList
 		FIS = new FileInputStream("EnergySupplier.txt");
 		OIS = new ObjectInputStream(FIS);
@@ -51,7 +50,7 @@ public class GreenHub {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Lettura chargingStationList
 		FIS = new FileInputStream("ChargingStation.txt");
 		OIS = new ObjectInputStream(FIS);
@@ -60,11 +59,8 @@ public class GreenHub {
 			OIS.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (InvalidClassException e) {
-			System.out.println("Formato della classe cambiato!");
 		}
-		
-		/*
+
 		// Lettura rewardList
 		FIS = new FileInputStream("Reward.txt");
 		OIS = new ObjectInputStream(FIS);
@@ -74,7 +70,7 @@ public class GreenHub {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Lettura userList
 		FIS = new FileInputStream("User.txt");
 		OIS = new ObjectInputStream(FIS);
@@ -84,7 +80,7 @@ public class GreenHub {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Lettura vehicleList
 		FIS = new FileInputStream("Vehicle.txt");
 		OIS = new ObjectInputStream(FIS);
@@ -94,11 +90,10 @@ public class GreenHub {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		*/
-		int scelta;		
-		
-		do {	
+
+		int scelta;
+
+		do {
 			System.out.println("Effettuare una scelta:");
 			System.out.println("1. Aggiunta di un charge rate");
 			System.out.println("2. Rimozione di un charge rate");
@@ -131,142 +126,144 @@ public class GreenHub {
 			} catch (Exception e) {
 				scelta = -1;
 			}
-			
+
 			switch (scelta) {
 			case 1: {
 				System.out.println("---AGGIUNTA DI UN CHARGE RATE---");
-				
+
 				ChargingRate cr1 = new ChargingRate();
-				
-				int maxID=0;
+
+				int maxID = 0;
 				for (ChargingRate cr : chargingRateList) {
-					if (cr.getId()>maxID) {
+					if (cr.getId() > maxID) {
 						maxID = cr.getId();
 					}
 				}
-				cr1.setId(maxID+1);
-				
+				cr1.setId(maxID + 1);
+
 				System.out.print("Potenza di ricarica del nuovo charge rate (in kW): ");
 				cr1.setPower(in.nextInt());
-				
+
 				System.out.print("Prezzo di ricarica del nuovo charge rate (in €/kW): ");
 				cr1.setPrice(in.nextDouble());
-				
+
 				chargingRateList.add(cr1);
 				System.out.println("Charge rate aggiunto!");
-				
+
 				// Stampa della lista aggiornata
 				int i = 1;
 				for (ChargingRate cr : chargingRateList) {
 					System.out.println(i + ") " + cr);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 2: {
 				System.out.println("---RIMOZIONE DI UN CHARGE RATE---");
-				
+
 				// Stampa della lista iniziale
 				int i = 1;
 				for (ChargingRate cr : chargingRateList) {
 					System.out.println(i + ") " + cr);
 					i++;
 				}
-				
+
 				System.out.print("Charge rate da rimuovere: ");
 				chargingRateList.remove(in.nextInt() - 1);
 
 				System.out.println("Charge rate rimosso!");
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (ChargingRate cr : chargingRateList) {
 					System.out.println(i + ") " + cr);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 3: {
 				System.out.println("---MODIFICA DI UN CHARGE RATE---");
-				
+
 				// Stampa della lista iniziale
 				int i = 1;
 				for (ChargingRate cr : chargingRateList) {
 					System.out.println(i + ") " + cr);
 					i++;
 				}
-				
+
 				System.out.print("Charge rate da modificare: ");
 				int crNumber = in.nextInt();
 
 				System.out.println("1. Modificare la potenza");
 				System.out.println("2. Modificare il prezzo");
-				
+
 				System.out.print("Scelta: ");
-				
+
 				scelta = in.nextInt();
-				
+
 				switch (scelta) {
 				case 1: {
 					System.out.print("Nuova potenza (in kW): ");
 					int newPower = in.nextInt();
-					int oldPower = chargingRateList.get(crNumber-1).getPower();
-					
-					chargingRateList.get(crNumber-1).setPower(newPower);
-					
-					System.out.println("La potenza del charge rate scelto è passata da " + oldPower + " kW a " + newPower + " kW.");
+					int oldPower = chargingRateList.get(crNumber - 1).getPower();
+
+					chargingRateList.get(crNumber - 1).setPower(newPower);
+
+					System.out.println("La potenza del charge rate scelto è passata da " + oldPower + " kW a "
+							+ newPower + " kW.");
 					break;
 				}
 				case 2: {
 					System.out.print("Nuovo prezzo (in €/kW): ");
 					double newPrice = in.nextDouble();
-					double oldPrice = chargingRateList.get(crNumber-1).getPrice();
-					
-					chargingRateList.get(crNumber-1).setPrice(newPrice);
-					
-					System.out.println("Il prezzo del charge rate scelto è passato da " + oldPrice + " €/kW a " + newPrice + " €/kW.");
+					double oldPrice = chargingRateList.get(crNumber - 1).getPrice();
+
+					chargingRateList.get(crNumber - 1).setPrice(newPrice);
+
+					System.out.println("Il prezzo del charge rate scelto è passato da " + oldPrice + " €/kW a "
+							+ newPrice + " €/kW.");
 					break;
 				}
 				}
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (ChargingRate cr : chargingRateList) {
 					System.out.println(i + ") " + cr);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 4: {
 				System.out.println("---AGGIUNTA DI UN FORNITORE DI ENERGIA---");
-				
+
 				EnergySupplier es1 = new EnergySupplier();
-				
+
 				System.out.print("Nome del nuovo fornitore di energia: ");
 				es1.setName(in.next());
 				es1.setChargingStations(null);
-				
+
 				energySupplierList.add(es1);
-				
+
 				// Stampa della lista aggiornata
 				int i = 1;
 				for (EnergySupplier es : energySupplierList) {
 					System.out.println(i + ") " + es);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 5: {
 				System.out.println("---RIMOZIONE DI UN FORNITORE DI ENERGIA---");
-				
+
 				int i = 1;
 				for (EnergySupplier es : energySupplierList) {
 					System.out.println(i + ") " + es);
@@ -276,22 +273,22 @@ public class GreenHub {
 				energySupplierList.remove(in.nextInt() - 1);
 
 				System.out.println("Fornitore di energia rimosso!");
-				
-				//Rimuovere anche tutte le colonnine in suo possesso
-				
+
+				// Rimuovere anche tutte le colonnine in suo possesso
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (EnergySupplier es : energySupplierList) {
 					System.out.println(i + ") " + es);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 6: {
 				System.out.println("---MODIFICA DI UN FORNITORE DI ENERGIA---");
-				
+
 				int i = 1;
 				for (EnergySupplier es : energySupplierList) {
 					System.out.println(i + ") " + es);
@@ -302,47 +299,48 @@ public class GreenHub {
 
 				System.out.println("1. Modificare il nome");
 				// System.out.println("2. Altro?");
-				
+
 				System.out.print("Scelta: ");
-				
+
 				scelta = in.nextInt();
-				
+
 				switch (scelta) {
 				case 1: {
 					System.out.print("Nuovo nome: ");
 					String newName = in.next();
-					String oldName = energySupplierList.get(esNumber-1).getName();
-					
-					energySupplierList.get(esNumber-1).setName(newName);
-					
-					System.out.println("Il nome del fornitore di energia passato da " + oldName + " a " + newName + ".");
+					String oldName = energySupplierList.get(esNumber - 1).getName();
+
+					energySupplierList.get(esNumber - 1).setName(newName);
+
+					System.out
+							.println("Il nome del fornitore di energia passato da " + oldName + " a " + newName + ".");
 					break;
 				}
 				}
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (EnergySupplier es : energySupplierList) {
 					System.out.println(i + ") " + es);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 7: {
 				System.out.println("---AGGIUNTA DI UNA STAZIONE DI RICARICA---");
-				
+
 				ChargingStation csNew = new ChargingStation();
-				
-				int maxID=0;
+
+				int maxID = 0;
 				for (ChargingStation cs : chargingStationList) {
-					if (cs.getId()>maxID) {
+					if (cs.getId() > maxID) {
 						maxID = cs.getId();
 					}
 				}
-				csNew.setId(maxID+1);
-				
+				csNew.setId(maxID + 1);
+
 				System.out.println("Quale fornitore di energia ha installato questa stazione?");
 				// Stampa di tutti i fornitori di energia
 				int i = 1;
@@ -351,8 +349,8 @@ public class GreenHub {
 					i++;
 				}
 				System.out.print("Scelta: ");
-				csNew.setOwner(energySupplierList.get(in.nextInt()-1));
-				
+				csNew.setOwner(energySupplierList.get(in.nextInt() - 1));
+
 				System.out.println("Quali rate di ricarica supporta questa stazione?");
 				// Stampa di tutti i rate di ricarica
 				i = 1;
@@ -361,53 +359,54 @@ public class GreenHub {
 					i++;
 				}
 				System.out.print("Scelta (separati da virgole ad es 1,3,5): ");
-				
-		        // Divide la stringa in array di stringhe usando la virgola come delimitatore
+
+				// Divide la stringa in array di stringhe usando la virgola come delimitatore
 				String[] chargingRateStringArray = in.next().split(",");
-				
+
 				// Crea un vettore di int per memorizzare le stazioni selezionate
-		        int[] chargingRateIntArray = new int[chargingRateStringArray.length];
-		        
-		        // Converte gli elementi dell'array di stringhe in int e li inserisce nel vettore
-		        for (i = 0; i < chargingRateStringArray.length; i++) {
-		        	chargingRateIntArray[i] = Integer.parseInt(chargingRateStringArray[i]);
-		        }
-		        
-		        ArrayList<ChargingRate> tempArray = new ArrayList<ChargingRate>();
-		        
-		        // Estrae gli standard di ricarica
-		        for (i = 0; i < chargingRateIntArray.length; i++) {
-		        	tempArray.add(chargingRateList.get(chargingRateIntArray[i]-1));		        	
-		        }
-		        
-		        csNew.setAvailableRates(tempArray);
-				
+				int[] chargingRateIntArray = new int[chargingRateStringArray.length];
+
+				// Converte gli elementi dell'array di stringhe in int e li inserisce nel
+				// vettore
+				for (i = 0; i < chargingRateStringArray.length; i++) {
+					chargingRateIntArray[i] = Integer.parseInt(chargingRateStringArray[i]);
+				}
+
+				ArrayList<ChargingRate> tempArray = new ArrayList<ChargingRate>();
+
+				// Estrae gli standard di ricarica
+				for (i = 0; i < chargingRateIntArray.length; i++) {
+					tempArray.add(chargingRateList.get(chargingRateIntArray[i] - 1));
+				}
+
+				csNew.setAvailableRates(tempArray);
+
 				Location l1 = new Location();
 				System.out.print("Posizione X: ");
 				l1.setLatitude(in.nextInt());
 				System.out.print("Posizione Y: ");
 				l1.setLongitude(in.nextInt());
-				
+
 				csNew.setLocation(l1);
 				csNew.setMaintenance(false);
 				csNew.setTimeTable(null);
-				//update EnergySupplierStations?
-				
+				// update EnergySupplierStations?
+
 				chargingStationList.add(csNew);
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (ChargingStation cs : chargingStationList) {
 					System.out.println(i + ") " + cs);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 8: {
 				System.out.println("---RIMOZIONE DI UNA STAZIONE DI RICARICA---");
-				
+
 				int i = 1;
 				for (ChargingStation cs : chargingStationList) {
 					System.out.println(i + ") " + cs);
@@ -417,124 +416,148 @@ public class GreenHub {
 				chargingStationList.remove(in.nextInt() - 1);
 
 				System.out.println("Stazione di ricarica rimossa!");
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (ChargingStation cs : chargingStationList) {
 					System.out.println(i + ") " + cs);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 9: {
 				System.out.println("---MODIFICA DI UNA STAZIONE DI RICARICA---");
-				
-				/*
+
 				int i = 1;
 				for (ChargingStation cs : chargingStationList) {
 					System.out.println(i + ") " + cs);
 					i++;
 				}
-				
+
 				System.out.print("Stazione di ricarica da modificare: ");
 				int csNumber = in.nextInt();
 
 				System.out.println("1. Modificare i charging rate disponibili");
-				System.out.println("2. Modificare la disponibilità");
-				
+				System.out.println("2. Modificare lo stato della manutenzione");
+
 				System.out.print("Scelta: ");
-				
+
 				scelta = in.nextInt();
-				
+
 				switch (scelta) {
 				case 1: {
-					System.out.print("Nuova potenza (in kW): ");
-					int newPower = in.nextInt();
-					int oldPower = chargingRateList.get(crNumber-1).getPower();
-					
-					chargingRateList.get(crNumber-1).setPower(newPower);
-					
-					System.out.println("La potenza del charge rate scelto è passata da " + oldPower + " kW a " + newPower + " kW.");
+					// Stampa di tutti i rate di ricarica
+					i = 1;
+					for (ChargingRate cr : chargingRateList) {
+						System.out.println(i + ") " + cr);
+						i++;
+					}
+					System.out.print("Nuovi charging rate disponibili (separati da virgole ad es 1,3,5): ");
+
+					// Divide la stringa in array di stringhe usando la virgola come delimitatore
+					String[] chargingRateStringArray = in.next().split(",");
+
+					// Crea un vettore di int per memorizzare le stazioni selezionate
+					int[] chargingRateIntArray = new int[chargingRateStringArray.length];
+
+					// Converte gli elementi dell'array di stringhe in int e li inserisce nel
+					// vettore
+					for (i = 0; i < chargingRateStringArray.length; i++) {
+						chargingRateIntArray[i] = Integer.parseInt(chargingRateStringArray[i]);
+					}
+
+					ArrayList<ChargingRate> tempArray = new ArrayList<ChargingRate>();
+
+					// Estrae gli standard di ricarica
+					for (i = 0; i < chargingRateIntArray.length; i++) {
+						tempArray.add(chargingRateList.get(chargingRateIntArray[i] - 1));
+					}
+
+					chargingStationList.get(csNumber - 1).setAvailableRates(tempArray);
+
+					System.out.println("Nuovi charging rate impostati");
 					break;
 				}
 				case 2: {
-					System.out.print("Nuovo prezzo (in €/kW): ");
-					double newPrice = in.nextDouble();
-					double oldPrice = chargingRateList.get(crNumber-1).getPrice();
-					
-					chargingRateList.get(crNumber-1).setPrice(newPrice);
-					
-					System.out.println("Il prezzo del charge rate scelto è passato da " + oldPrice + " €/kW a " + newPrice + " €/kW.");
+					if (chargingStationList.get(csNumber - 1).isMaintenance()) {
+						System.out.print("La stazione " + chargingStationList.get(csNumber - 1).getId()
+								+ " non è più in manutenzione");
+						chargingStationList.get(csNumber - 1).setMaintenance(false);
+					} else {
+						System.out.print("La stazione " + chargingStationList.get(csNumber - 1).getId()
+								+ " è da ora in manutenzione");
+						chargingStationList.get(csNumber - 1).setMaintenance(true);
+					}
+
 					break;
 				}
 				}
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (ChargingStation cs : chargingStationList) {
 					System.out.println(i + ") " + cs);
 					i++;
 				}
-				*/
+
 				break;
 			}
-			
+
 			case 10: {
 				System.out.println("---AGGIUNTA DI UNA RICOMPENSA---");
-				
+
 				Reward reward = new Reward();
-				
-				System.out.print("Name: ");
+
+				System.out.print("Nome: ");
 				reward.setName(in.next());
-				
-				System.out.print("Description: ");
+
+				System.out.print("Descrizione: ");
 				in.nextLine();
 				reward.setDescription(in.nextLine());
-				
-				System.out.print("GreenPointsCost: ");
+
+				System.out.print("Costo in Green Points: ");
 				reward.setGreenPointsCost(in.nextInt());
-				
-				System.out.print("RemainingQuantity: ");
+
+				System.out.print("Quantità rimanente: ");
 				reward.setRemainingQuantity(in.nextInt());
-				
+
 				rewardList.add(reward);
-				
-				
+
 				// Stampa della lista aggiornata
 				int i = 1;
 				for (Reward r : rewardList) {
 					System.out.println(i + ") " + r);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 11: {
 				System.out.println("---RIMOZIONE DI UNA RICOMPENSA---");
-				
+
 				int i = 1;
 				for (Reward r : rewardList) {
 					System.out.println(i + ") " + r);
 					i++;
 				}
-				
+
 				System.out.print("Ricompensa da rimuovere: ");
 				rewardList.remove(in.nextInt() - 1);
 				System.out.println("Ricompensa rimossa!");
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (Reward r : rewardList) {
 					System.out.println(i + ") " + r);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 12: {
 				System.out.println("---MODIFICA DI UNA RICOMPENSA---");
 				int i = 1;
@@ -542,117 +565,270 @@ public class GreenHub {
 					System.out.println(i + ") " + r);
 					i++;
 				}
-				
-				// Modifiche da fare alle ricompense....
-				
+
+				System.out.print("Ricompensa da modificare: ");
+				int rNumber = in.nextInt();
+
+				System.out.println("1. Modificare il nome");
+				System.out.println("2. Modificare la descrizione");
+				System.out.println("3. Modificare il costo in Green Points");
+				System.out.println("4. Modificare la quantità rimanente");
+
+				System.out.print("Scelta: ");
+
+				scelta = in.nextInt();
+
+				switch (scelta) {
+				case 1: {
+					System.out.print("Nuovo nome della ricompensa: ");
+
+					String newName = in.next();
+					String oldName = rewardList.get(rNumber - 1).getName();
+
+					rewardList.get(rNumber - 1).setName(newName);
+
+					System.out.println("Il nome della ricompensa è passato da " + oldName + " a " + newName + ".");
+
+					break;
+				}
+				case 2: {
+					System.out.print("Nuova descrizione della ricompensa: ");
+
+					String newDescription = in.next();
+
+					rewardList.get(rNumber - 1).setName(newDescription);
+
+					System.out.println("Descrizione della ricompensa aggiornata.");
+
+					break;
+				}
+				case 3: {
+					System.out.print("Nuovo costo in Green Points della ricompensa: ");
+
+					int newGPCost = in.nextInt();
+					int oldGPCost = rewardList.get(rNumber - 1).getGreenPointsCost();
+
+					rewardList.get(rNumber - 1).setGreenPointsCost(newGPCost);
+
+					System.out.println("Il costo in Green Points ricompensa " + rewardList.get(rNumber - 1).getName()
+							+ " è passato da " + oldGPCost + " a " + newGPCost);
+
+					break;
+				}
+				case 4: {
+					System.out.print("Nuova quantità rimanente della ricompensa: ");
+
+					int newQuantity = in.nextInt();
+					int oldQuantity = rewardList.get(rNumber - 1).getRemainingQuantity();
+
+					rewardList.get(rNumber - 1).setRemainingQuantity(newQuantity);
+
+					System.out.println("La quantità rimanente della ricompensa " + rewardList.get(rNumber - 1).getName()
+							+ " è passata da " + oldQuantity + " a " + newQuantity);
+
+					break;
+				}
+				}
 				// Stampa della lista aggiornata
 				i = 1;
 				for (Reward r : rewardList) {
 					System.out.println(i + ") " + r);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 13: {
 				System.out.println("---AGGIUNTA DI UN UTENTE---");
-				
+
 				User User1 = new User();
-				
+
 				System.out.print("Nome: ");
 				User1.setName(in.next());
-				
+
 				System.out.print("Cognome: ");
 				User1.setSurname(in.next());
-				
+
 				System.out.print("Username: ");
 				User1.setUsername(in.next());
-				
+
 				System.out.println("Se hai un veicolo elettrico, inserisci 0");
 				System.out.println("Se hai un veicolo a combustione interna, inserisci 1");
 				System.out.println("Se non hai un veicolo e vuoi usufruire del car sharing, inserisci 2");
 				System.out.print("Scelta: ");
 				User1.setType(in.nextInt());
-				
+
 				User1.setGreenPointsBalance(0);
-				
+
 				Location l1 = new Location();
 				System.out.print("Posizione X: ");
 				l1.setLatitude(in.nextInt());
 				System.out.print("Posizione Y: ");
 				l1.setLongitude(in.nextInt());
-				
+
 				User1.setLocation(l1);
-				
+
 				userList.add(User1);
-				
+
 				// Stampa della lista aggiornata
 				int i = 1;
 				for (User u : userList) {
 					System.out.println(i + ") " + u);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 14: {
 				System.out.println("---RIMOZIONE DI UN UTENTE---");
-				
+
 				int i = 1;
 				for (User u : userList) {
 					System.out.println(i + ") " + u);
 					i++;
 				}
-				
+
 				System.out.print("Utente da rimuovere: ");
 				userList.remove(in.nextInt() - 1);
 				System.out.println("Utente rimosso!");
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (User u : userList) {
 					System.out.println(i + ") " + u);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 15: {
 				System.out.println("---MODIFICA DI UN UTENTE---");
-				
+
 				int i = 1;
 				for (User u : userList) {
 					System.out.println(i + ") " + u);
 					i++;
 				}
-				
-				// Modifiche all'utente....
-				
+
+				System.out.print("Utente da modificare: ");
+				int uNumber = in.nextInt();
+
+				System.out.println("1. Modificare l'username");
+				System.out.println("2. Modificare il bilancio dei Green Points");
+				System.out.println("3. Modificare la tipologia di utente (EV-ICE-NoVehicle)");
+				System.out.println("4. Modificare il nome");
+				System.out.println("5. Modificare il cognome");
+
+				System.out.print("Scelta: ");
+
+				scelta = in.nextInt();
+
+				switch (scelta) {
+				case 1: {
+					System.out.print("Nuovo username: ");
+
+					String newUsername = in.next();
+					String oldUsername = userList.get(uNumber - 1).getUsername();
+
+					userList.get(uNumber - 1).setUsername(newUsername);
+
+					System.out.println("L'username dell'utente è passato da " + oldUsername + " a " + newUsername);
+
+					break;
+				}
+				case 2: {
+					System.out.print("Nuovo bilancio dei Green Points: ");
+
+					int newGPBalance = in.nextInt();
+					int oldGPBalance = userList.get(uNumber - 1).getGreenPointsBalance();
+
+					userList.get(uNumber - 1).setGreenPointsBalance(newGPBalance);
+
+					System.out.println(
+							"Il bilancio dei Green Points dell'utente " + userList.get(uNumber - 1).getUsername()
+									+ " è passato da " + oldGPBalance + " a " + newGPBalance);
+					break;
+				}
+				case 3: {
+					System.out.print("Nuova tipologia (0 EV - 1 ICE - 2 NoVehicle): ");
+
+					int newType = in.nextInt();
+					int oldType = userList.get(uNumber - 1).getType();
+
+					userList.get(uNumber - 1).setType(newType);
+
+					System.out.println("La tipologia dell'utente " + userList.get(uNumber - 1).getUsername()
+							+ " è passata da " + oldType + " a " + newType);
+
+					break;
+				}
+				case 4: {
+					System.out.print("Nuovo nome: ");
+
+					String newName = in.next();
+					String oldName = userList.get(uNumber - 1).getName();
+
+					userList.get(uNumber - 1).setName(newName);
+
+					System.out.println("Il nome dell'utente " + userList.get(uNumber - 1).getUsername()
+							+ " è passato da " + oldName + " a " + newName);
+
+					break;
+				}
+				case 5: {
+					System.out.print("Nuovo cognome: ");
+
+					String newSurname = in.next();
+					String oldSurname = userList.get(uNumber - 1).getSurname();
+
+					userList.get(uNumber - 1).setSurname(newSurname);
+
+					System.out.println("Il cognome dell'utente " + userList.get(uNumber - 1).getUsername()
+							+ " è passato da " + oldSurname + " a " + newSurname);
+
+					break;
+				}
+				}
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (User u : userList) {
 					System.out.println(i + ") " + u);
 					i++;
 				}
-				
+
 				break;
 			}
 
 			case 16: {
 				System.out.println("---AGGIUNTA DI UN VEICOLO---");
-				
+
 				Vehicle v1 = new Vehicle();
 				System.out.print("Marca: ");
 				v1.setMaker(in.next());
 
 				System.out.print("Modello: ");
-				v1.setModel(in.next());
-				
+				in.nextLine();
+				v1.setModel(in.nextLine());
+
 				System.out.print("Motorizzazione (0 Electric - 1 Hybrid - 2 ICE): ");
 				v1.setEngineType(in.nextInt());
+				
+				if(v1.getEngineType()!=2) {
+					System.out.println("Quale rate di ricarica supporta questo veicolo?");
+					// Stampa di tutti i rate di ricarica
+					int i = 1;
+					for (ChargingRate cr : chargingRateList) {
+						System.out.println(i + ") " + cr);
+						i++;
+					}
+					System.out.print("Scelta: ");
+					int cr = in.nextInt();
+					v1.setSupportedRate(chargingRateList.get(cr - 1));
+				}
 
 				System.out.print("Carburante (in litri o kWh): ");
 				v1.setCapacity(in.nextInt());
@@ -666,74 +842,79 @@ public class GreenHub {
 				l1.setLongitude(in.nextInt());
 
 				v1.setLocation(l1);
-				
+
 				System.out.println("Auto aggiunta!");
 				System.out.println(v1);
 
 				vehicleList.add(v1);
-				
+
 				// Stampa della lista aggiornata
 				int i = 1;
 				for (Vehicle v : vehicleList) {
 					System.out.println(i + ") " + v);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 17: {
 				System.out.println("---RIMOZIONE DI UN VEICOLO---");
-				
+
 				int i = 1;
 				for (Vehicle v : vehicleList) {
 					System.out.println(i + ") " + v);
 					i++;
 				}
-				
+
 				System.out.print("Veicolo da rimuovere: ");
 				vehicleList.remove(in.nextInt() - 1);
 				System.out.println("Veicolo rimosso!");
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (Vehicle v : vehicleList) {
 					System.out.println(i + ") " + v);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 18: {
 				System.out.println("---MODIFICA DI UN VEICOLO---");
-				
+
 				int i = 1;
 				for (Vehicle v : vehicleList) {
 					System.out.println(i + ") " + v);
 					i++;
 				}
-				
+
 				// Modifiche al veicolo....
-				
+
 				// Stampa della lista aggiornata
 				i = 1;
 				for (Vehicle v : vehicleList) {
 					System.out.println(i + ") " + v);
 					i++;
 				}
-				
+
 				break;
 			}
-			
+
 			case 100: {
 				chargeNow();
-				
+
+				Time t1 = new Time(13, 00);
+				Time t2 = new Time(18, 35);
+
+				System.out.println("Distanza tra due ore: " + t1.distance(t2));
+
 				break;
 			}
-			
+
 			case 999: {
-				
+
 				do {
 					System.out.println("---MODALITA' DI DEBUG---");
 					System.out.println("1. Debug - Stampa di tutti i charge rate");
@@ -753,11 +934,11 @@ public class GreenHub {
 					} catch (Exception e) {
 						scelta = -1;
 					}
-					
+
 					switch (scelta) {
 					case 1: {
 						System.out.println("---Debug - Stampa di tutti i charge rate---");
-						
+
 						int i = 1;
 						for (ChargingRate cr : chargingRateList) {
 							System.out.println(i + ") " + cr);
@@ -767,7 +948,7 @@ public class GreenHub {
 					}
 					case 2: {
 						System.out.println("---Debug - Stampa di tutti i fornitori di energia---");
-						
+
 						int i = 1;
 						for (EnergySupplier es : energySupplierList) {
 							System.out.println(i + ") " + es);
@@ -777,7 +958,7 @@ public class GreenHub {
 					}
 					case 3: {
 						System.out.println("---Debug - Stampa di tutte le stazioni di ricarica---");
-						
+
 						int i = 1;
 						for (ChargingStation cs : chargingStationList) {
 							System.out.println(i + ") " + cs);
@@ -786,66 +967,65 @@ public class GreenHub {
 						break;
 					}
 					}
-					
+
 				} while (scelta != 99);
-				
+
 				scelta = 0;
 			}
 			}
-			
+
 		} while (scelta != 99);
-		
+
 		in.close();
-		
-		saveAll();		
+
+		saveAll();
 	}
 
 	public static void chargeNow() {
 		System.out.println("chargeNow");
-		
-		
+
 	}
 
 	public static void reserveSpot() {
 		System.out.println("reserveSpot");
 	}
-	
-	public static void saveAll() throws IOException {		
+
+	public static void saveAll() throws IOException {
 		// Salvataggio di chargingRateList
-	    try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
-	         ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
-	        chargingRateOOS.writeObject(chargingRateList);
-	    }
+		try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
+				ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
+			chargingRateOOS.writeObject(chargingRateList);
+		}
 
-	    // Salvataggio di energySupplierList
-	    try (FileOutputStream energySupplierFOS = new FileOutputStream(new File("EnergySupplier.txt"));
-	         ObjectOutputStream energySupplierOOS = new ObjectOutputStream(energySupplierFOS)) {
-	        energySupplierOOS.writeObject(energySupplierList);
-	    }
+		// Salvataggio di energySupplierList
+		try (FileOutputStream energySupplierFOS = new FileOutputStream(new File("EnergySupplier.txt"));
+				ObjectOutputStream energySupplierOOS = new ObjectOutputStream(energySupplierFOS)) {
+			energySupplierOOS.writeObject(energySupplierList);
+		}
 
-	    // Salvataggio di chargingStationList
-	    try (FileOutputStream chargingStationFOS = new FileOutputStream(new File("ChargingStation.txt"));
-	         ObjectOutputStream chargingStationOOS = new ObjectOutputStream(chargingStationFOS)) {
-	        chargingStationOOS.writeObject(chargingStationList);
-	    }
+		// Salvataggio di chargingStationList
+		try (FileOutputStream chargingStationFOS = new FileOutputStream(new File("ChargingStation.txt"));
+				ObjectOutputStream chargingStationOOS = new ObjectOutputStream(chargingStationFOS)) {
+			chargingStationOOS.writeObject(chargingStationList);
+		}
 
-	    // Salvataggio di rewardList
-	    try (FileOutputStream rewardFOS = new FileOutputStream(new File("Reward.txt"));
-	         ObjectOutputStream rewardOOS = new ObjectOutputStream(rewardFOS)) {
-	        rewardOOS.writeObject(rewardList);
-	    }
+		// Salvataggio di rewardList
+		try (FileOutputStream rewardFOS = new FileOutputStream(new File("Reward.txt"));
+				ObjectOutputStream rewardOOS = new ObjectOutputStream(rewardFOS)) {
+			rewardOOS.writeObject(rewardList);
+		}
 
-	    // Salvataggio di userList
-	    try (FileOutputStream userFOS = new FileOutputStream(new File("User.txt"));
-	         ObjectOutputStream userOOS = new ObjectOutputStream(userFOS)) {
-	        userOOS.writeObject(userList);
-	    }
+		// Salvataggio di userList
+		try (FileOutputStream userFOS = new FileOutputStream(new File("User.txt"));
+				ObjectOutputStream userOOS = new ObjectOutputStream(userFOS)) {
+			userOOS.writeObject(userList);
+		}
 
-	    // Salvataggio di vehicleList
-	    try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Vehicle.txt"));
-	         ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
-	        vehicleOOS.writeObject(vehicleList);
-	    }
+		// Salvataggio di vehicleList
+		try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Vehicle.txt"));
+				ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
+			vehicleOOS.writeObject(vehicleList);
+		}
 		System.out.println("\n\n----------------------------------------------------------------");
 		System.out.println("Tutti i dati sono stati correttamente salvati su file.");
 		System.out.println("----------------------------------------------------------------");

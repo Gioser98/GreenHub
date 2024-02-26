@@ -11,6 +11,7 @@ public class User implements Serializable {
 	private String name;
 	private String surname;
 	private Location location;
+	// private String email;
 	
 	// Getter&Setter
 	public String getUsername() {

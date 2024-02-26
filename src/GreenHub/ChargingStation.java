@@ -70,9 +70,9 @@ public class ChargingStation implements Serializable {
 	public String toString() {
 		String text = "";
 		if (maintenance) {
-			text = "Stazione in manutenzione";
+			text = ". Stazione in manutenzione!";
 		}
-		return "ID:" + id + ". Posizione: " + location + " di proprietà di " + owner.getName() + ". " + text ;
+		return "Stazione in " + location + " di proprietà di " + owner.getName() + " (ID:" + id + ") " + text ;
 	}
 	
 	public boolean isCompatibleWithVehicle(Vehicle vehicle) {
@@ -96,5 +96,7 @@ public class ChargingStation implements Serializable {
 		
 		return true;
 	}
+	
+	// metodo per mostrare la timetable senza gli slot occupati
 	
 }

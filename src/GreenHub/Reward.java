@@ -55,4 +55,10 @@ public class Reward implements Serializable {
 	public String toString() {
 		return name + ": " + description + ". Costo in GP: " + greenPointsCost + ". Quantità rimanente: " + remainingQuantity;
 	}
+	
+	// Permette di effettuare lo sconto di tutte le ricompense
+	public void discountReward(int value) {
+		System.out.println("Che tipo di sconto vuoi applicare?");
+	}
+
 }

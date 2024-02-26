@@ -1,7 +1,6 @@
 package GreenHub;
 
 import java.io.Serializable;
-import java.time.*;
 
 public class Reservation implements Serializable {
 	
@@ -10,8 +9,8 @@ public class Reservation implements Serializable {
 	private User user;
 	private Vehicle vehicle;
 	private ChargingStation chargingStation;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
+	private Time startTime;
+	private Time endTime;
 	
 	// Getter&Setter
 	public int getId() {
@@ -38,16 +37,16 @@ public class Reservation implements Serializable {
 	public void setChargingStation(ChargingStation chargingStation) {
 		this.chargingStation = chargingStation;
 	}
-	public LocalDateTime getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalDateTime startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
-	public LocalDateTime getEndTime() {
+	public Time getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(LocalDateTime endTime) {
+	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
 	
@@ -55,7 +54,7 @@ public class Reservation implements Serializable {
 	public Reservation() {
 	    // Costruttore vuoto
 	}
-	public Reservation(int id, User user, Vehicle vehicle, ChargingStation chargingStation, LocalDateTime startTime, LocalDateTime endTime) {
+	public Reservation(int id, User user, Vehicle vehicle, ChargingStation chargingStation, Time startTime, Time endTime) {
 	    this.id = id;
 	    this.user = user;
 	    this.vehicle = vehicle;

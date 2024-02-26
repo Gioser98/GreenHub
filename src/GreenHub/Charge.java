@@ -1,7 +1,6 @@
 package GreenHub;
 
 import java.io.Serializable;
-import java.time.*;
 
 public class Charge implements Serializable {
 	
@@ -10,8 +9,8 @@ public class Charge implements Serializable {
 	private User user;
 	private Vehicle vehicle;
 	private ChargingStation chargingStation;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
+	private Time startTime;
+	private Time endTime;
 	private int energy;
 	private ChargingRate ChargingRate;
 	
@@ -40,16 +39,16 @@ public class Charge implements Serializable {
 	public void setChargingStation(ChargingStation chargingStation) {
 		this.chargingStation = chargingStation;
 	}
-	public LocalDateTime getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(LocalDateTime startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
-	public LocalDateTime getEndTime() {
+	public Time getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(LocalDateTime endTime) {
+	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
 	public int getEnergy() {
@@ -70,8 +69,8 @@ public class Charge implements Serializable {
 		    // Costruttore vuoto
 	}
 	
-	public Charge(int id, User user, Vehicle vehicle, ChargingStation chargingStation, LocalDateTime startTime, 
-			LocalDateTime endTime, int energy, ChargingRate ChargingRate) {
+	public Charge(int id, User user, Vehicle vehicle, ChargingStation chargingStation, Time startTime, 
+			Time endTime, int energy, ChargingRate ChargingRate) {
 		
 		this.id = id;
 		this.user = user;
