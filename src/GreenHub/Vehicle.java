@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Vehicle implements Serializable {
 	
@@ -8,10 +9,10 @@ public class Vehicle implements Serializable {
 	private int id;
 	private String maker;
 	private String model;
-	private int engineType; // 0 Electric - 1 Hybrid - 2 Combustion
+	private int type; // 0 Electric - 1 Hybrid - 2 Combustion
 	private ChargingRate supportedRate;
-	private int capacity;
 	private Location location;
+	private User owner;
 	
 	// Getter&Setter
 	public int getId() {
@@ -32,11 +33,11 @@ public class Vehicle implements Serializable {
 	public void setModel(String model) {
 		this.model = model;
 	}
-	public int getEngineType() {
-		return engineType;
+	public int getType() {
+		return type;
 	}
-	public void setEngineType(int engineType) {
-		this.engineType = engineType;
+	public void setType(int type) {
+		this.type = type;
 	}
 	public ChargingRate getSupportedRate() {
 		return supportedRate;
@@ -44,30 +45,30 @@ public class Vehicle implements Serializable {
 	public void setSupportedRate(ChargingRate supportedRate) {
 		this.supportedRate = supportedRate;
 	}
-	public int getCapacity() {
-		return capacity;
-	}
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
 	public Location getLocation() {
 		return location;
 	}
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+	public User getOwner() {
+		return owner;
+	}
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+	
 	
 	// Constructors
 	public Vehicle() {
 	    // Costruttore vuoto
 	}
-	public Vehicle(int id, String maker, String model, int engineType, ChargingRate supportedRate, int capacity, Location location) {
+	public Vehicle(int id, String maker, String model, int type, ChargingRate supportedRate, Location location) {
 	    this.id = id;
 	    this.maker = maker;
 	    this.model = model;
-	    this.engineType = engineType;
+	    this.type = type;
 	    this.supportedRate = supportedRate;
-	    this.capacity = capacity;
 	    this.location = location;
 	}
 	
@@ -75,5 +76,15 @@ public class Vehicle implements Serializable {
 	public String toString() {
 		return maker + " " + model ;
 	}
+	
+	public static void printAll(ArrayList<Vehicle> vehicleList) {
+		int i = 1;
+		for (Vehicle v : vehicleList) {
+			System.out.println(i + ") " + v);
+			i++;
+		}
+	}
+	
+	
 
 }

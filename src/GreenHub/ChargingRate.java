@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ChargingRate implements Serializable {
 	
@@ -43,5 +44,13 @@ public class ChargingRate implements Serializable {
 	
 	public String toString() {
 		return power + " kW a " + price + " €/kW (ID:" + id + ")";
+	}
+	
+	public static void printAll (ArrayList<ChargingRate> chargingRateList) {
+		int i = 1;
+		for (ChargingRate cr : chargingRateList) {
+			System.out.println(i + ") " + cr);
+			i++;
+		}
 	}
 }

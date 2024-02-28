@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Reward implements Serializable {
 	
@@ -59,6 +60,14 @@ public class Reward implements Serializable {
 	// Permette di effettuare lo sconto di tutte le ricompense
 	public void discountReward(int value) {
 		System.out.println("Che tipo di sconto vuoi applicare?");
+	}
+	
+	public static void printAll (ArrayList<Reward> rewardList) {
+		int i = 1;
+		for (Reward r : rewardList) {
+			System.out.println(i + ") " + r);
+			i++;
+		}
 	}
 
 }

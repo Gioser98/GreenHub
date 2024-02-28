@@ -75,6 +75,14 @@ public class ChargingStation implements Serializable {
 		return "Stazione in " + location + " di proprietà di " + owner.getName() + " (ID:" + id + ") " + text ;
 	}
 	
+	public static void printAll (ArrayList<ChargingStation> chargingStationList) {
+		int i = 1;
+		for (ChargingStation cs : chargingStationList) {
+			System.out.println(i + ") " + cs);
+			i++;
+		}
+	}
+	
 	public boolean isCompatibleWithVehicle(Vehicle vehicle) {
 	    // Recupera la tariffa supportata dal veicolo
 		ChargingRate carSupportedRate = vehicle.getSupportedRate();

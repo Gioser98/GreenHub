@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 	
@@ -67,6 +68,14 @@ public class User implements Serializable {
 	// Methods
 	public String toString() {
 		return username + ". Bilancio GP: " + greenPointsBalance;
+	}
+	
+	public static void printAll (ArrayList<User> userList) {
+		int i = 1;
+		for (User u : userList) {
+			System.out.println(i + ") " + u);
+			i++;
+		}
 	}
 
 }

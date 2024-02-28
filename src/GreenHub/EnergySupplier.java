@@ -37,6 +37,14 @@ public class EnergySupplier implements Serializable {
 		return name;
 	}
 	
+	public static void printAll (ArrayList<EnergySupplier> energySupplierList) {
+		int i = 1;
+		for (EnergySupplier es : energySupplierList) {
+			System.out.println(i + ") " + es);
+			i++;
+		}
+	}
+	
 	// Aggiungi una colonnina alla lista di colonnine in possesso del fornitore
     public void addChargingStation(ChargingStation chargingStation) {
         chargingStations.add(chargingStation);
