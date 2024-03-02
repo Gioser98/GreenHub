@@ -10,6 +10,7 @@ public class Vehicle implements Serializable {
 	private String maker;
 	private String model;
 	private int type; // 0 Electric - 1 Hybrid - 2 Combustion
+	private int capacity;
 	private ChargingRate supportedRate;
 	private Location location;
 	private User owner;
@@ -38,6 +39,12 @@ public class Vehicle implements Serializable {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public int getCapacity() {
+		return capacity;
+	}
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 	public ChargingRate getSupportedRate() {
 		return supportedRate;

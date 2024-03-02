@@ -83,14 +83,16 @@ public class ChargingStation implements Serializable {
 		}
 	}
 	
-	public boolean isCompatibleWithVehicle(Vehicle vehicle) {
+	public boolean isCompatibleWithVehicle(Vehicle vehicle, double pricePerkWh) {
 	    // Recupera la tariffa supportata dal veicolo
 		ChargingRate carSupportedRate = vehicle.getSupportedRate();
 		
 		// Controlla se la tariffa supportata è presente tra le tariffe disponibili
 	    for (ChargingRate availableRate : availableRates) {
-	    	if (availableRate.getId() == carSupportedRate.getId())
+	    	if (availableRate.getId() == carSupportedRate.getId()) {
+	    		pricePerkWh = availableRate.getPrice();
 	    		return true;
+	    	}	
 	    }
 	    
 	    // Se la tariffa non è stata trovata, restituisce False
