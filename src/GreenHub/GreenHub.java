@@ -16,6 +16,7 @@ public class GreenHub {
 	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
 	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
+	private static RewardSystem currentRewardSystem = new RewardSystem();
 
 	public static void main(String[] args) throws IOException {
 
@@ -30,8 +31,20 @@ public class GreenHub {
 		boolean adminMode = false;
 		int scelta, i;
 
+		/*
+		String[] replace = new String[48];
+		replace[1]="antonio";
+
+		for (ChargingStation cs : chargingStationList) {
+			cs.setTimeTable(replace);
+			System.out.println("Old " + cs.getTimeTable());
+			cs.resetTimeTable();
+			System.out.println("New " + cs.getTimeTable());
+		}
+		 */
+
 		System.out
-				.print("Se non sei registrato, inserisci 0 per registrarti, altrimenti inserisci il tuo nome utente: ");
+		.print("Se non sei registrato, inserisci 0 per registrarti, altrimenti inserisci il tuo nome utente: ");
 		String currentUsername = in.next();
 
 		if (currentUsername.equals("0")) {
@@ -48,13 +61,13 @@ public class GreenHub {
 			do {
 				System.out.print("Scegli ora il tuo username: ");
 				username = in.next();
-				nameOk = true; // Imposta il flag su true di default, se non viene trovato un username uguale
+				nameOk = true;
 
 				for (User u : userList) {
 					if (u.getUsername().equals(username)) {
 						System.out.println("L'username inserito non è disponibile!");
-						nameOk = false; // Se trova un username uguale, imposta il flag su false
-						break; // Esci dal ciclo perché hai già trovato un match
+						nameOk = false;
+						break;
 					}
 				}
 			} while (!nameOk);
@@ -352,7 +365,7 @@ public class GreenHub {
 
 					csNew.setLocation(l1);
 					csNew.setMaintenance(false);
-					csNew.setTimeTable(null);
+					csNew.setTimeTable("", 0);
 					// update EnergySupplierStations?
 
 					chargingStationList.add(csNew);
@@ -368,7 +381,7 @@ public class GreenHub {
 
 					// Stampa della lista iniziale
 					ChargingStation.printAll(chargingStationList);
-
+						
 					System.out.print("Stazione di ricarica da rimuovere: ");
 					chargingStationList.remove(in.nextInt() - 1);
 					System.out.println("Stazione di ricarica rimossa!");
@@ -537,8 +550,8 @@ public class GreenHub {
 						rewardList.get(rNumber - 1).setGreenPointsCost(newGPCost);
 
 						System.out
-								.println("Il costo in Green Points ricompensa " + rewardList.get(rNumber - 1).getName()
-										+ " è passato da " + oldGPCost + " a " + newGPCost);
+						.println("Il costo in Green Points ricompensa " + rewardList.get(rNumber - 1).getName()
+								+ " è passato da " + oldGPCost + " a " + newGPCost);
 
 						break;
 					}
@@ -552,7 +565,7 @@ public class GreenHub {
 
 						System.out.println(
 								"La quantità rimanente della ricompensa " + rewardList.get(rNumber - 1).getName()
-										+ " è passata da " + oldQuantity + " a " + newQuantity);
+								+ " è passata da " + oldQuantity + " a " + newQuantity);
 
 						break;
 					}
@@ -657,7 +670,7 @@ public class GreenHub {
 
 						System.out.println(
 								"Il bilancio dei Green Points dell'utente " + userList.get(uNumber - 1).getUsername()
-										+ " è passato da " + oldGPBalance + " a " + newGPBalance);
+								+ " è passato da " + oldGPBalance + " a " + newGPBalance);
 						break;
 					}
 					case 3: {
@@ -849,28 +862,41 @@ public class GreenHub {
 						System.out.println("1. Debug - Stampa di tutti i charge rate");
 						System.out.println("2. Debug - Stampa di tutti i fornitori di energia");
 						System.out.println("3. Debug - Stampa di tutte le stazioni di ricarica");
-						System.out.println("4. Debug - Stampa di tutte le ricompense TODO");
-						System.out.println("5. Debug - Stampa di tutti gli utenti TODO");
-						System.out.println("6. Debug - Stampa di tutti i veicoli TODO");
-						System.out.println("7. Debug - Stampa di tutte le ricariche effettuate TODO");
+						System.out.println("4. Debug - Stampa di tutte le ricompense");
+						System.out.println("5. Debug - Stampa di tutti gli utenti");
+						System.out.println("6. Debug - Stampa di tutti i veicoli");
+						System.out.println("7. Debug - Stampa di tutte le ricariche effettuate");
 						System.out.println("99. Torna al menù precedente");
 						System.out.print("Scelta: ");
 						scelta = in.nextInt();
 
 						switch (scelta) {
 						case 1: {
-							System.out.println("---Debug - Stampa di tutti i charge rate---");
 							ChargingRate.printAll(chargingRateList);
 							break;
 						}
 						case 2: {
-							System.out.println("---Debug - Stampa di tutti i fornitori di energia---");
 							EnergySupplier.printAll(energySupplierList);
 							break;
 						}
 						case 3: {
-							System.out.println("---Debug - Stampa di tutte le stazioni di ricarica---");
 							ChargingStation.printAll(chargingStationList);
+							break;
+						}
+						case 4: {
+							Reward.printAll(rewardList);
+							break;
+						}
+						case 5: {
+							User.printAll(userList);
+							break;
+						}
+						case 6: {
+							Vehicle.printAll(vehicleList);
+							break;
+						}
+						case 7: {
+							System.out.println("TODO");
 							break;
 						}
 						}
@@ -884,6 +910,8 @@ public class GreenHub {
 			Vehicle currentVehicle = currentUser.getPersonalVehicle();
 			ChargingStation currentCS = new ChargingStation();
 			LocalTime currentTime = LocalTime.now();
+			//currentRewardSystem.setRechargeFactor(1);
+			//currentRewardSystem.setRentFactor(1);
 
 			System.out.println(
 					"Benvenuto " + currentUser.getName() + ". Saldo GP: " + currentUser.getGreenPointsBalance());
@@ -907,23 +935,27 @@ public class GreenHub {
 				System.out.print("Y: ");
 				locCurrUser.setLongitude(in.nextInt());
 				currentUser.setLocation(locCurrUser);
+				System.out.print("Distanza massima della stazione: ");
+				int range = in.nextInt();
 
-				System.out.println("Ecco la lista delle stazioni disponibili intorno a te:");
+				System.out.println("Ecco la lista delle stazioni disponibili intorno a te");
 				for (ChargingStation cs : chargingStationList) {
 					if (!cs.isMaintenance()) {
-						System.out.println(cs);
+						if (cs.getLocation().distance(locCurrUser)<range) {
+							System.out.println(cs + "- distanza: " + cs.getLocation().distance(locCurrUser));
+						}
 					}
 				}
 
-				System.out.print("Inserisci l'ID della stazione dove vuoi effettuare la ricarica:");
+				System.out.print("Inserisci l'ID della stazione dove vuoi effettuare la ricarica: ");
 				int csID = in.nextInt();
 				while (true) {
-					if (chargingStationList.get(csID).isCompatibleWithVehicle(currentVehicle)) {
+					if (chargingStationList.get(csID - 1).isCompatibleWithVehicle(currentVehicle)) {
 						currentCS = chargingStationList.get(csID);
 						break;
 					} else {
 						System.out
-								.println("La stazione scelta non è compatibile con il tuo veicolo. Scegline un'altra:");
+						.print("La stazione scelta non è compatibile con il tuo veicolo. Scegline un'altra: ");
 						csID = in.nextInt();
 					}
 				}
@@ -935,7 +967,7 @@ public class GreenHub {
 				newCharge.setUser(currentUser);
 				newCharge.setEnergy(currentVehicle.getCapacity());
 				newCharge.setId(0);
-				
+
 				Time startTime = new Time(currentTime.getHour(), currentTime.getMinute());
 				float timeToCharge = currentVehicle.getCapacity() / currentVehicle.getSupportedRate().getPower();
 				int hour = (int) timeToCharge;
@@ -949,19 +981,88 @@ public class GreenHub {
 				newCharge.setStartTime(startTime);
 				newCharge.setEndTime(new Time(endHour, endMinute));
 
-				double chargeAmount = currentVehicle.getCapacity() / currentVehicle.getSupportedRate().getPrice();
+				double chargeAmount = currentVehicle.getCapacity() * currentVehicle.getSupportedRate().getPrice();
+				System.out.println("Il totale è " + chargeAmount + "€. Come vuoi pagare?");
+				System.out.println("Inserisci 0 per contanti");
+				System.out.println("Inserisci 1 per carta di credito");
+				System.out.println("Inserisci 2 per carta di debito");
+				System.out.print("Scelta: ");
 
 				Transaction newTransaction = new Transaction();
+				newTransaction.setType(in.nextInt());
 				newTransaction.setCharge(newCharge);
 				newTransaction.setAmount(chargeAmount);
-				newTransaction.setTimestamp(new Time(currentTime.getHour(),currentTime.getMinute()));
-				newTransaction.setType(0);
-				System.out.println("Ricarica effettuata, totale: " + chargeAmount);
-				// fare la transazione!
+				newTransaction.setTimestamp(new Time(currentTime.getHour(), currentTime.getMinute()));
+				int maxID = 0;
+				for (Transaction t : transactionList) {
+					if (t.getId() > maxID) {
+						maxID = t.getId();
+					}
+				}
+				newTransaction.setId(maxID + 1);
+
+				int newPoints = (int) (chargeAmount * currentRewardSystem.getRechargeFactor());
+				currentUser.increaseGPBalance(newPoints);
+				System.out.println("Ricarica effettuata! Con questa ricarica hai guadagnato " + newPoints + " punti.");
+
 				break;
 			}
 			case 2: {
-				System.out.println("Prenota una ricaricaaaaaaaaaaaaaaaaaaaa");
+				if (currentUser.getType() != 0) {
+					System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico");
+					break;
+				}
+				System.out.println("Dove ti trovi?");
+				Location locCurrUser = new Location();
+				System.out.print("X: ");
+				locCurrUser.setLatitude(in.nextInt());
+				System.out.print("Y: ");
+				locCurrUser.setLongitude(in.nextInt());
+				currentUser.setLocation(locCurrUser);
+				System.out.print("Distanza massima della stazione: ");
+				int range = in.nextInt();
+
+				System.out.println("Ecco la lista delle stazioni prenotabili intorno a te");
+				for (ChargingStation cs : chargingStationList) {
+					if (!cs.isMaintenance()) {
+						if (cs.getLocation().distance(locCurrUser)<range) {
+							System.out.println(cs + "- distanza: " + cs.getLocation().distance(locCurrUser));
+						}
+					}
+				}
+
+				System.out.print("Inserisci l'ID della stazione che vuoi prenotare: ");
+				int csID = in.nextInt();
+				while (true) {
+					if (chargingStationList.get(csID - 1).isCompatibleWithVehicle(currentVehicle)) {
+						currentCS = chargingStationList.get(csID);
+						break;
+					} else {
+						System.out.print("La stazione scelta non è compatibile con il tuo veicolo. Scegline un'altra: ");
+						csID = in.nextInt();
+					}
+				}
+				currentCS.printTimeTableWithTimeSlots();
+
+				System.out.print("Quali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
+				String[] slot = in.next().split("-");
+				boolean slotAvailable = true;
+
+				for(int j=Integer.parseInt(slot[0]);j<Integer.parseInt(slot[1]);j++) {
+					if (!currentCS.getTimeTable()[j].equals("")) {
+						slotAvailable = false;
+					}
+				}
+
+				if (slotAvailable) {
+					for(int j=Integer.parseInt(slot[0]);j<Integer.parseInt(slot[1]);j++) {
+						currentCS.setTimeTable(currentUser.getUsername(),j);
+					}
+					System.out.println("Slot prenotati");
+				} else {
+					System.out.println("Slot non disponibili!");
+				}
+
 				break;
 			}
 			case 3: {
@@ -1051,17 +1152,36 @@ public class GreenHub {
 			e.printStackTrace();
 		}
 
-		/*
-		 * // Lettura transactionList FIS = new FileInputStream("Transaction.txt"); OIS
-		 * = new ObjectInputStream(FIS); try { transactionList =
-		 * (ArrayList<Transaction>) OIS.readObject(); OIS.close(); } catch
-		 * (ClassNotFoundException e) { e.printStackTrace(); }
-		 * 
-		 * // Lettura reservationList FIS = new FileInputStream("Reservation.txt"); OIS
-		 * = new ObjectInputStream(FIS); try { reservationList =
-		 * (ArrayList<Reservation>) OIS.readObject(); OIS.close(); } catch
-		 * (ClassNotFoundException e) { e.printStackTrace(); }
-		 */
+		// Lettura transactionList
+		FIS = new FileInputStream("Transaction.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			transactionList = (ArrayList<Transaction>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// Lettura reservationList
+		FIS = new FileInputStream("Reservation.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			reservationList = (ArrayList<Reservation>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// Lettura rewardSystem
+		FIS = new FileInputStream("RewardSystem.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			currentRewardSystem = (RewardSystem) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void saveAll() throws IOException {
@@ -1102,16 +1222,23 @@ public class GreenHub {
 		}
 
 		// Salvataggio di transactionList
-		try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Transaction.txt"));
-				ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
-			vehicleOOS.writeObject(transactionList);
+		try (FileOutputStream transactionFOS = new FileOutputStream(new File("Transaction.txt"));
+				ObjectOutputStream transactionOOS = new ObjectOutputStream(transactionFOS)) {
+			transactionOOS.writeObject(transactionList);
 		}
 
 		// Salvataggio di reservationList
-		try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Reservation.txt"));
-				ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
-			vehicleOOS.writeObject(reservationList);
+		try (FileOutputStream reservationFOS = new FileOutputStream(new File("Reservation.txt"));
+				ObjectOutputStream reservationOOS = new ObjectOutputStream(reservationFOS)) {
+			reservationOOS.writeObject(reservationList);
 		}
+
+		// Salvataggio di RewardSystem
+		try (FileOutputStream rewardSystemFOS = new FileOutputStream(new File("RewardSystem.txt"));
+				ObjectOutputStream rewardSystemOOS = new ObjectOutputStream(rewardSystemFOS)) {
+			rewardSystemOOS.writeObject(currentRewardSystem);
+		}
+
 		System.out.println("\n\n----------------------------------------------------------------");
 		System.out.println("Tutti i dati sono stati correttamente salvati su file.");
 		System.out.println("----------------------------------------------------------------");

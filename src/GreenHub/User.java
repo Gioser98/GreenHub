@@ -107,5 +107,9 @@ public class User implements Serializable {
 		}
 		return null;
 	}
+	
+	public void increaseGPBalance(int points) {
+		this.greenPointsBalance = this.greenPointsBalance + points;
+	}
 
 }
