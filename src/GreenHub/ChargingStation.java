@@ -115,7 +115,7 @@ public class ChargingStation implements Serializable {
 			String endTime = formatTime((i + 1) * 30);
 			String slotStatus = (timeTable[i] == "") ? "Disponibile" : "Occupata";
 
-			System.out.printf("Slot %s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
+			System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
 
 			if ((i + 1) % 4 == 0) {
 				System.out.println();
@@ -123,7 +123,7 @@ public class ChargingStation implements Serializable {
 		}
 	}
 
-	private String formatTime(int minutes) {
+	public static String formatTime(int minutes) {
 		int hours = minutes / 60;
 		int mins = minutes % 60;
 		return String.format("%02d:%02d", hours, mins);

@@ -34,14 +34,8 @@ public class ChargingRate implements Serializable {
 	public ChargingRate() {
 	    // Costruttore vuoto
 	}
-	public ChargingRate(int id, int power, double price) {
-	    this.id = id;
-	    this.power = power;
-	    this.price = price;
-	}
-	
+
 	// Methods
-	
 	public String toString() {
 		return power + " kW a " + price + " €/kW (ID:" + id + ")";
 	}
