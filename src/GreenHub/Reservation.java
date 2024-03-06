@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Reservation implements Serializable {
 	
@@ -54,18 +55,36 @@ public class Reservation implements Serializable {
 	public Reservation() {
 	    // Costruttore vuoto
 	}
-	public Reservation(int id, User user, Vehicle vehicle, ChargingStation chargingStation, Time startTime, Time endTime) {
-	    this.id = id;
-	    this.user = user;
-	    this.vehicle = vehicle;
-	    this.chargingStation = chargingStation;
-	    this.startTime = startTime;
-	    this.endTime = endTime;
-	}
 	
 	// Methods
 	public String toString() {
 		return "Prenotazione di " + user + " con il veicolo " + vehicle + "presso al stazione di ricarica "+ chargingStation + " inizia alle " + startTime + " e finisce alle " + endTime;
+	}
+	
+	public static void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS,
+			int startingSlot, int endingSlot, boolean slotAvailable, ArrayList<Reservation> reservationList) {
+		Reservation newReservation;
+		if (slotAvailable) {
+			for (int j = startingSlot; j < endingSlot; j++) {
+				currentCS.setTimeTable(currentUser.getUsername(), j);
+			}
+			System.out.println("Slot prenotati!");
+			newReservation = new Reservation();
+			newReservation.setUser(currentUser);
+			newReservation.setVehicle(currentVehicle);
+			newReservation.setChargingStation(currentCS);
+			newReservation.setStartTime(new Time(startingSlot * 30 / 60, endingSlot * 30 % 60));
+			int maxID = 0;
+			for (Reservation r : reservationList) {
+				if (r.getId() > maxID) {
+					maxID = r.getId();
+				}
+			}
+			newReservation.setId(maxID + 1);
+			reservationList.add(newReservation);
+		} else {
+			System.out.println("Slot non disponibili!");
+		}
 	}
 
 }

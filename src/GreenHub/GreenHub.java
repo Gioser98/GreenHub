@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class GreenHub {
 
-	private static Scanner in;
+	private static Scanner in = new Scanner(System.in);
 	private static ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
 	private static ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
 	private static ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
@@ -27,7 +27,6 @@ public class GreenHub {
 
 		readAll();
 
-		in = new Scanner(System.in);
 		boolean adminMode = false;
 
 		/*
@@ -143,8 +142,8 @@ public class GreenHub {
 					System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico");
 					break;
 				}
-				getNearAvailableStation(currentUser);
-				currentCS = chooseStation(currentVehicle, currentCS);
+				ChargingStation.getNearAvailableStation(currentUser, chargingStationList);
+				currentCS = ChargingStation.chooseStation(currentVehicle, chargingStationList);
 				registerCharge(currentUser, currentVehicle, currentCS, currentTime, newCharge, startTime);
 				registerTransaction(currentUser, currentVehicle, currentTime, newCharge, newTransaction);
 
@@ -155,9 +154,8 @@ public class GreenHub {
 					System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico");
 					break;
 				}
-				getNearAvailableStation(currentUser);
-
-				currentCS = chooseStation(currentVehicle, currentCS);
+				ChargingStation.getNearAvailableStation(currentUser, chargingStationList);
+				currentCS = ChargingStation.chooseStation(currentVehicle, chargingStationList);
 				currentCS.printTimeTableWithTimeSlots();
 
 				System.out.print("Quali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
@@ -167,7 +165,7 @@ public class GreenHub {
 				boolean slotAvailable = true;
 
 				slotAvailable = checkSlotAvailability(currentCS, startingSlot, endingSlot, slotAvailable);
-				reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable);
+				Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable,reservationList);
 
 				break;
 			}
@@ -190,6 +188,7 @@ public class GreenHub {
 	private static void adminOp() {
 		int scelta;
 		int i;
+		
 		do {
 			System.out.println("-------------ADMIN MODE-------------");
 			System.out.println("Effettuare una scelta:");
@@ -982,32 +981,6 @@ public class GreenHub {
 		} while (scelta != 99);
 	}
 
-	private static void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS,
-			int startingSlot, int endingSlot, boolean slotAvailable) {
-		Reservation newReservation;
-		if (slotAvailable) {
-			for (int j = startingSlot; j < endingSlot; j++) {
-				currentCS.setTimeTable(currentUser.getUsername(), j);
-			}
-			System.out.println("Slot prenotati!");
-			newReservation = new Reservation();
-			newReservation.setUser(currentUser);
-			newReservation.setVehicle(currentVehicle);
-			newReservation.setChargingStation(currentCS);
-			newReservation.setStartTime(new Time(startingSlot * 30 / 60, endingSlot * 30 % 60));
-			int maxID = 0;
-			for (Reservation r : reservationList) {
-				if (r.getId() > maxID) {
-					maxID = r.getId();
-				}
-			}
-			newReservation.setId(maxID + 1);
-			reservationList.add(newReservation);
-		} else {
-			System.out.println("Slot non disponibili!");
-		}
-	}
-
 	private static boolean checkSlotAvailability(ChargingStation currentCS, int startingSlot, int endingSlot,
 			boolean slotAvailable) {
 		for (int j = startingSlot; j < endingSlot; j++) {
@@ -1016,42 +989,6 @@ public class GreenHub {
 			}
 		}
 		return slotAvailable;
-	}
-
-	private static ChargingStation chooseStation(Vehicle currentVehicle, ChargingStation currentCS) {
-		System.out.print("Inserisci l'ID della stazione dove vuoi effettuare la ricarica: ");
-		int csID = in.nextInt();
-		while (true) {
-			if (chargingStationList.get(csID - 1).isCompatibleWithVehicle(currentVehicle)) {
-				currentCS = chargingStationList.get(csID);
-				break;
-			} else {
-				System.out.print("La stazione scelta non è compatibile con il tuo veicolo. Scegline un'altra: ");
-				csID = in.nextInt();
-			}
-		}
-		return currentCS;
-	}
-
-	private static void getNearAvailableStation(User currentUser) {
-		System.out.println("Dove ti trovi?");
-		Location locCurrUser = new Location();
-		System.out.print("X: ");
-		locCurrUser.setLatitude(in.nextInt());
-		System.out.print("Y: ");
-		locCurrUser.setLongitude(in.nextInt());
-		currentUser.setLocation(locCurrUser);
-		System.out.print("Distanza massima della stazione: ");
-		int range = in.nextInt();
-
-		System.out.println("Ecco la lista delle stazioni disponibili intorno a te");
-		for (ChargingStation cs : chargingStationList) {
-			if (!cs.isMaintenance()) {
-				if (cs.getLocation().distance(locCurrUser) < range) {
-					System.out.println(cs + "- distanza: " + cs.getLocation().distance(locCurrUser));
-				}
-			}
-		}
 	}
 
 	private static void registerTransaction(User currentUser, Vehicle currentVehicle, LocalTime currentTime,

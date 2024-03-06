@@ -3,6 +3,7 @@ package GreenHub;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ChargingStation implements Serializable {
 
@@ -134,5 +135,44 @@ public class ChargingStation implements Serializable {
 			this.timeTable[i] = "";
 		}
 		System.out.println("Il vettore timeTable è stato azzerato.");
+	}
+	
+	public static void getNearAvailableStation(User currentUser, ArrayList<ChargingStation> chargingStationList) {
+		Scanner in = new Scanner(System.in);
+		System.out.println("Dove ti trovi?");
+		Location locCurrUser = new Location();
+		System.out.print("X: ");
+		locCurrUser.setLatitude(in.nextInt());
+		System.out.print("Y: ");
+		locCurrUser.setLongitude(in.nextInt());
+		currentUser.setLocation(locCurrUser);
+		System.out.print("Distanza massima della stazione: ");
+		int range = in.nextInt();
+
+		System.out.println("Ecco la lista delle stazioni disponibili intorno a te");
+		for (ChargingStation cs : chargingStationList) {
+			if (!cs.isMaintenance()) {
+				if (cs.getLocation().distance(locCurrUser) < range) {
+					System.out.println(cs + "- distanza: " + cs.getLocation().distance(locCurrUser));
+				}
+			}
+		}
+	}
+	
+	public static ChargingStation chooseStation(Vehicle currentVehicle, ArrayList<ChargingStation> chargingStationList) {
+		Scanner in = new Scanner(System.in);
+		ChargingStation currentCS = null;
+		System.out.print("Inserisci l'ID della stazione dove vuoi effettuare la ricarica: ");
+		int csID = in.nextInt();
+		while (true) {
+			if (chargingStationList.get(csID - 1).isCompatibleWithVehicle(currentVehicle)) {
+				currentCS = chargingStationList.get(csID);
+				break;
+			} else {
+				System.out.print("La stazione scelta non è compatibile con il tuo veicolo. Scegline un'altra: ");
+				csID = in.nextInt();
+			}
+		}
+		return currentCS;
 	}
 }
