@@ -29,14 +29,6 @@ public class GreenHub {
 
 		boolean adminMode = false;
 
-		/*
-		 * String[] replace = new String[48]; replace[1]="antonio";
-		 * 
-		 * for (ChargingStation cs : chargingStationList) { cs.setTimeTable(replace);
-		 * System.out.println("Old " + cs.getTimeTable()); cs.resetTimeTable();
-		 * System.out.println("New " + cs.getTimeTable()); }
-		 */
-
 		System.out
 				.print("Se non sei registrato, inserisci 0 per registrarti, altrimenti inserisci il tuo nome utente: ");
 		String currentUsername = in.next();
@@ -165,7 +157,8 @@ public class GreenHub {
 				boolean slotAvailable = true;
 
 				slotAvailable = checkSlotAvailability(currentCS, startingSlot, endingSlot, slotAvailable);
-				Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable,reservationList);
+				Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable,
+						reservationList);
 
 				break;
 			}
@@ -188,7 +181,7 @@ public class GreenHub {
 	private static void adminOp() {
 		int scelta;
 		int i;
-		
+
 		do {
 			System.out.println("-------------ADMIN MODE-------------");
 			System.out.println("Effettuare una scelta:");
