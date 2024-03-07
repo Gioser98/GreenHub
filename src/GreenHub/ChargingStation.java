@@ -137,18 +137,8 @@ public class ChargingStation implements Serializable {
 		System.out.println("Il vettore timeTable è stato azzerato.");
 	}
 	
-	public static void getNearAvailableStation(User currentUser, ArrayList<ChargingStation> chargingStationList) {
-		Scanner in = new Scanner(System.in);
-		System.out.println("Dove ti trovi?");
-		Location locCurrUser = new Location();
-		System.out.print("X: ");
-		locCurrUser.setLatitude(in.nextInt());
-		System.out.print("Y: ");
-		locCurrUser.setLongitude(in.nextInt());
-		currentUser.setLocation(locCurrUser);
-		System.out.print("Distanza massima della stazione: ");
-		int range = in.nextInt();
-
+	public static void getNearAvailableStation(User currentUser, int range, ArrayList<ChargingStation> chargingStationList) {
+		Location locCurrUser = currentUser.getLocation();
 		System.out.println("Ecco la lista delle stazioni disponibili intorno a te");
 		for (ChargingStation cs : chargingStationList) {
 			if (!cs.isMaintenance()) {
