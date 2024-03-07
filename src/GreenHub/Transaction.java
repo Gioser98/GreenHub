@@ -1,9 +1,6 @@
 package GreenHub;
 
 import java.io.Serializable;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Transaction implements Serializable {
 	
@@ -62,34 +59,6 @@ public class Transaction implements Serializable {
 	// Methods
 	public String toString() {
 		return "totti";
-	}
-	
-	static void payment(User currentUser, Vehicle currentVehicle, LocalTime currentTime,
-			Charge newCharge, Transaction newTransaction, ArrayList<Transaction> transactionList, RewardSystem currentRewardSystem) {
-		Scanner in = new Scanner(System.in);
-		double chargeAmount = currentVehicle.getCapacity() * currentVehicle.getSupportedRate().getPrice();
-		System.out.println("Il totale è " + chargeAmount + "€. Come vuoi pagare?");
-		System.out.println("Inserisci 0 per contanti");
-		System.out.println("Inserisci 1 per carta di credito");
-		System.out.println("Inserisci 2 per carta di debito");
-		System.out.print("Scelta: ");
-
-		newTransaction.setType(in.nextInt());
-		newTransaction.setCharge(newCharge);
-		newTransaction.setAmount(chargeAmount);
-		newTransaction.setTimestamp(new Time(currentTime.getHour(), currentTime.getMinute()));
-		int maxID = 0;
-		for (Transaction t : transactionList) {
-			if (t.getId() > maxID) {
-				maxID = t.getId();
-			}
-		}
-		newTransaction.setId(maxID + 1);
-		transactionList.add(newTransaction);
-
-		int newPoints = (int) (chargeAmount * currentRewardSystem.getRechargeFactor());
-		currentUser.increaseGPBalance(newPoints);
-		System.out.println("Ricarica effettuata! Con questa ricarica hai guadagnato " + newPoints + " punti.");
 	}
 
 }

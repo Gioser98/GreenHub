@@ -2,7 +2,6 @@ package GreenHub;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class User implements Serializable {
 
@@ -111,17 +110,6 @@ public class User implements Serializable {
 	
 	public void increaseGPBalance(int points) {
 		this.greenPointsBalance = this.greenPointsBalance + points;
-	}
-	
-	public static Location sendPosition() {
-		Scanner in = new Scanner(System.in);
-		Location locCurrUser = new Location();
-		System.out.println("Dove ti trovi?");
-		System.out.print("X: ");
-		locCurrUser.setLatitude(in.nextInt());
-		System.out.print("Y: ");
-		locCurrUser.setLongitude(in.nextInt());
-		return locCurrUser;
 	}
 
 }
