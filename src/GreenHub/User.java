@@ -13,7 +13,6 @@ public class User implements Serializable {
 	private String surname;
 	private Location location;
 	private Vehicle personalVehicle;
-	// private String email;
 
 	// Getter&Setter
 	public String getUsername() {
@@ -21,6 +20,9 @@ public class User implements Serializable {
 	}
 
 	public void setUsername(String username) {
+		if(username == null || username.isEmpty()) {
+			throw new IllegalArgumentException("Username cannot be null or empty");
+		}
 		this.username = username;
 	}
 
@@ -29,6 +31,9 @@ public class User implements Serializable {
 	}
 
 	public void setGreenPointsBalance(int greenPointsBalance) {
+		if(greenPointsBalance < 0) {
+			throw new IllegalArgumentException("Green points balance cannot be negative");
+		}
 		this.greenPointsBalance = greenPointsBalance;
 	}
 
@@ -72,11 +77,11 @@ public class User implements Serializable {
 		this.personalVehicle = personalVehicle;
 	}
 
-	// Constructors
-	public User() {
-		// Costruttore vuoto
+	public void increaseGPBalance(int points) {
+		this.greenPointsBalance += points;
 	}
 
+	// Constructors
 	public User(String username, int greenPointsBalance, int type, String name, String surname, Location location) {
 		this.username = username;
 		this.greenPointsBalance = greenPointsBalance;
@@ -87,6 +92,7 @@ public class User implements Serializable {
 	}
 
 	// Methods
+	@Override
 	public String toString() {
 		return username + ". Bilancio GP: " + greenPointsBalance;
 	}
@@ -97,19 +103,6 @@ public class User implements Serializable {
 			System.out.println(i + ") " + u);
 			i++;
 		}
-	}
-
-	public static User getUserByUsername(ArrayList<User> userList, String targetUsername) {
-		for (User u : userList) {
-			if (u.getUsername().equals(targetUsername)) {
-				return u;
-			}
-		}
-		return null;
-	}
-	
-	public void increaseGPBalance(int points) {
-		this.greenPointsBalance = this.greenPointsBalance + points;
 	}
 
 }

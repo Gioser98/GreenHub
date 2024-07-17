@@ -1,29 +1,22 @@
 package GreenHub;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+// import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GreenHub {
 
-	private static Scanner in = new Scanner(System.in);
-	private static ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
-	private static ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
-	private static ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
-	private static ArrayList<Reward> rewardList = new ArrayList<Reward>();
-	private static ArrayList<User> userList = new ArrayList<User>();
-	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
-	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	private static RewardSystem currentRewardSystem = new RewardSystem();
+	
 
 	public static void main(String[] args) throws IOException {
-
-		System.out.println("-------------BENVENUTO IN GREENHUB-------------");
-		System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
-		System.out.println("Per salvare le modifiche sul file, terminare il programma scegliendo "
-				+ "l'apposita opzione, altrimenti verranno perse.");
 
 		readAll();
 
@@ -32,31 +25,6 @@ public class GreenHub {
 		System.out
 				.print("Se non sei registrato, inserisci 0 per registrarti, altrimenti inserisci il tuo nome utente: ");
 		String currentUsername = in.next();
-
-		if (currentUsername.equals("0")) {
-			System.out.println("Benvenuto al processo di registrazione per GreenHub!");
-
-			User newUser = new User();
-			System.out.print("Inserisci il tuo nome: ");
-			newUser.setName(in.next());
-			System.out.print("Inserisci il tuo cognome: ");
-			newUser.setSurname(in.next());
-
-			boolean nameOk = false;
-			String username;
-			do {
-				System.out.print("Scegli ora il tuo username: ");
-				username = in.next();
-				nameOk = true;
-
-				for (User u : userList) {
-					if (u.getUsername().equals(username)) {
-						System.out.println("L'username inserito non è disponibile!");
-						nameOk = false;
-						break;
-					}
-				}
-			} while (!nameOk);
 
 			newUser.setUsername(username);
 			System.out.println("Se hai un veicolo elettrico, inserisci 0");
