@@ -7,15 +7,15 @@ import java.util.ResourceBundle.Control;
 
 
 public class Controller {
-	private static ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
-	private static ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
-	private static ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
-	private static ArrayList<Reward> rewardList = new ArrayList<Reward>();
-	private static ArrayList<User> userList = new ArrayList<User>();
-	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
-	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	private DataSaver dataSaver;
+	public ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
+	public ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
+	public ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
+	public ArrayList<Reward> rewardList = new ArrayList<Reward>();
+	public ArrayList<User> userList = new ArrayList<User>();
+	public ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
+	public ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+	public ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
+	public DataSaver dataSaver;
 
 	public Controller(){
 		//
@@ -33,6 +33,25 @@ public class Controller {
             throw new IllegalStateException("DataSaver non è stato inizializzato.");
         }
     }
+
+	// Metodo per gestire il caricamento dei dati
+    public void loadData() throws IOException, ClassNotFoundException {
+        if (dataSaver != null) {
+            dataSaver.loadAll();
+        } else {
+            throw new IllegalStateException("DataSaver non è stato inizializzato.");
+        }
+    }
+
+	public void printino() throws IOException, ClassNotFoundException {
+      if (dataSaver != null) {
+            dataSaver.printUsers();
+        } else {
+            throw new IllegalStateException("DataSaver non è stato inizializzato.");
+        }
+    }  
+
+
 
 
 	// User methods

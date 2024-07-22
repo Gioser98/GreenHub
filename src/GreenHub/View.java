@@ -5,42 +5,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
+
 public class View {
 	private Controller controller = new Controller();
 	private Scanner scanner = new Scanner(System.in);
-
+	
 
 	public View() {
-        // Crea liste vuote o carica dati da file qui
-        List<ChargingRate> chargingRateList = new ArrayList<>();
-        List<EnergySupplier> energySupplierList = new ArrayList<>();
-        List<ChargingStation> chargingStationList = new ArrayList<>();
-        List<Reward> rewardList = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
-        List<Vehicle> vehicleList = new ArrayList<>();
-        List<Transaction> transactionList = new ArrayList<>();
-        List<Reservation> reservationList = new ArrayList<>();
-        RewardSystem rewardSystem = new RewardSystem();
+        scanner = new Scanner(System.in);
 
         // Inizializza DataSaver
-        DataSaver dataSaver = new DataSaver(
-            chargingRateList,
-            energySupplierList,
-            chargingStationList,
-            rewardList,
-            userList,
-            vehicleList,
-            transactionList,
-            reservationList,
-            rewardSystem
-        );
+        DataSaver dataSaver = new DataSaver();
 
         // Inizializza Controller con DataSaver
         this.controller = new Controller(dataSaver);
+
+        // Carica i dati all'inizio
+        try {
+            controller.loadData();  // Carica i dati esistenti
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Errore durante il caricamento dei dati.");
+        }
     }
+	
 
-
-	public void WelcomeMenu() throws IOException {
+	public void WelcomeMenu() throws IOException, ClassNotFoundException {
 		while (true) {
 			System.out.println("-------------BENVENUTO IN GREENHUB-------------");
 			System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
@@ -49,6 +40,7 @@ public class View {
 			System.out.println("1. Registrazione nuovo utente");
 			System.out.println("2. Login utente già registrato");
 			System.out.println("3. Exit");
+			System.out.println("4. Leggi contenuti dei file");
 			System.out.print("Scelta: ");
 			int choice = scanner.nextInt();
 
@@ -69,6 +61,15 @@ public class View {
 				break;
 			case 3:
 				System.exit(0);
+
+			case 4:
+				try {
+					controller.printino();  // Legge i dati
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+					System.out.println("Errore durante il caricamento dei dati.");
+				}
+				break;
 			default:
 				System.out.println("Opzione non valida, riprova.");
 			}
@@ -139,12 +140,13 @@ public class View {
 		System.out.println("Green points updated successfully!");
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
         View view = new View();
         try {
             view.WelcomeMenu();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-}
+    
+	}}
+
