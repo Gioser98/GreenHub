@@ -1,12 +1,46 @@
 package GreenHub;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
 	private Controller controller = new Controller();
 	private Scanner scanner = new Scanner(System.in);
 
-	public void WelcomeMenu() {
+
+	public View() {
+        // Crea liste vuote o carica dati da file qui
+        List<ChargingRate> chargingRateList = new ArrayList<>();
+        List<EnergySupplier> energySupplierList = new ArrayList<>();
+        List<ChargingStation> chargingStationList = new ArrayList<>();
+        List<Reward> rewardList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        List<Vehicle> vehicleList = new ArrayList<>();
+        List<Transaction> transactionList = new ArrayList<>();
+        List<Reservation> reservationList = new ArrayList<>();
+        RewardSystem rewardSystem = new RewardSystem();
+
+        // Inizializza DataSaver
+        DataSaver dataSaver = new DataSaver(
+            chargingRateList,
+            energySupplierList,
+            chargingStationList,
+            rewardList,
+            userList,
+            vehicleList,
+            transactionList,
+            reservationList,
+            rewardSystem
+        );
+
+        // Inizializza Controller con DataSaver
+        this.controller = new Controller(dataSaver);
+    }
+
+
+	public void WelcomeMenu() throws IOException {
 		while (true) {
 			System.out.println("-------------BENVENUTO IN GREENHUB-------------");
 			System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
@@ -21,6 +55,12 @@ public class View {
 			switch (choice) {
 			case 1:
 				registerUser();
+				try {
+                        controller.saveRequest();  // Salva i dati
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Errore durante il salvataggio dei dati.");
+                    }
 				break;
 			case 2:
 				System.out.print("Inserisci il tuo username: ");
@@ -100,7 +140,11 @@ public class View {
 	}
 
 	public static void main(String[] args) {
-		View view = new View();
-		view.WelcomeMenu();
-	}
+        View view = new View();
+        try {
+            view.WelcomeMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

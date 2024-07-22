@@ -1,6 +1,10 @@
 package GreenHub;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ResourceBundle.Control;
+
+
 
 public class Controller {
 	private static ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
@@ -11,9 +15,25 @@ public class Controller {
 	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
 	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	
+	private DataSaver dataSaver;
 
-	
+	public Controller(){
+		//
+	}
+
+	public Controller(DataSaver dataSaver){
+		this.dataSaver = dataSaver;
+	}
+
+
+	public void saveRequest() throws IOException {
+        if (dataSaver != null) {
+            dataSaver.saveAll();
+        } else {
+            throw new IllegalStateException("DataSaver non è stato inizializzato.");
+        }
+    }
+
 
 	// User methods
 	public void addUser(User user) {
@@ -105,6 +125,6 @@ public class Controller {
 	// ChargingRate methods
 	// EnergySupplier methods
 	// ChargingStation methods
-	
+
 
 }
