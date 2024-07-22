@@ -1,11 +1,11 @@
 package GreenHub;
 
-public class CreditCardPayment implements PaymentStrategy {
+public class CreditCardStrategy implements PaymentStrategy {
     private String cardNumber;
     private String expiryDate;
     private String cvv;
 
-    public CreditCardPayment(String cardNumber, String expiryDate, String cvv) {
+    public CreditCardStrategy(String cardNumber, String expiryDate, String cvv) {
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
         this.cvv = cvv;
