@@ -11,7 +11,7 @@ public class Controller {
 	private static ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
 	private static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 	private static ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	private static RewardSystem currentRewardSystem = new RewardSystem();
+	
 
 	
 
@@ -41,67 +41,58 @@ public class Controller {
 
 	
 	// Transaction methods
-	public void addTransaction(Transaction transaction) {
-        transactionList.add(transaction);
-    }
+	public String pay(double amount, String method, String email, String password, String cardNumber, String expirationDate, String cvv)
+	{
 
-	public Transaction getTransactionById(int id) {
-        for (Transaction t : transactionList) {
-            if (t.getId() == id) {
-                return t;
-            }
+		PaymentStrategy strategy;
+
+        switch (method.toLowerCase()) {
+            case "paypal":
+                strategy = new PayPalStrategy(email, password);
+                break;
+            case "creditcard":
+                strategy = new CreditCardStrategy(cardNumber, expirationDate, cvv);
+                break;
+            default:
+                return "Errore: Metodo di pagamento non supportato.";
         }
-        return null;
-    }
 
-	public void processTransaction(int id, Time timestamp, int type, double amount, Charge charge, PaymentStrategy paymentStrategy) {
-        // Creare una nuova transazione con la strategia di pagamento
-        Transaction transaction = new Transaction(id, timestamp, type, amount, charge, paymentStrategy);
-        
-        // Processare il pagamento
-        transaction.processPayment();
-        
-        // Aggiungere la transazione alla lista delle transazioni
-        addTransaction(transaction);
-        
-        System.out.println("Transazione creata e pagamento processato: " + transaction);
-    }
+		Transaction transaction = new Transaction(strategy);
 
+	try {
+		transaction.processPayment(amount);
+		return "Pagamento effettuato con successo";
+	} catch (Exception e){
+		return "Errore durante il pagamento" + e.getMessage();
+	}
+	
+	}
 	
 	// Reward methods
 
-	// ci sono dei dubbi su questa sezione, discutere nel briefing
+    public String calculateGreenPoints(int value, String strategy) {
 
-	
-    public void addReward(Reward reward) {
-        rewardList.add(reward);
-    }
+        GreenPointsStrategy greenPointsStrategy;
 
-    public Reward getRewardByName(String name) {
-        for (Reward r : rewardList) {
-            if (r.getName().equals(name)) {
-                return r;
-            }
+        // Seleziona la strategia in base al parametro 'strategy'
+        switch (strategy.toLowerCase()) {
+            case "reservation":
+                greenPointsStrategy = new ReservationStrategy();
+                break;
+            case "recharge":
+                greenPointsStrategy = new RechargeStrategy();
+                break;
+            default:
+                return "Errore: Strategia di calcolo dei punti non supportata.";
         }
-        return null;
-    }
 
-    public void createReward(String name, String description, int greenPointsCost, int remainingQuantity, GreenPointsStrategy strategy) {
-        Reward reward = new Reward(name, description, greenPointsCost, remainingQuantity, strategy);
-        addReward(reward);
-        System.out.println("Ricompensa creata: " + reward);
+        // Crea un oggetto Reward con la strategia selezionata
+        Reward reward = new Reward(greenPointsStrategy);
+        int points = reward.calculateGreenPoints(value);
+
+        return "Green points calcolati: " + points;
     }
 	
-    public void rewardSystem(String rewardName, int value) {
-        Reward reward = getRewardByName(rewardName);
-        if (reward != null) {
-            int points = reward.calculateGreenPoints(value);
-            System.out.println("Punti calcolati per la ricompensa " + rewardName + ": " + points);
-        } else {
-            System.out.println("Ricompensa non trovata.");
-        }
-    }
-
 
 	// Reservation methods
 	public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {

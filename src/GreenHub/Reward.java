@@ -61,6 +61,9 @@ public class Reward implements Serializable {
         this.remainingQuantity = remainingQuantity;
         this.greenPointsStrategy = greenPointsStrategy;
     }
+    public Reward (GreenPointsStrategy greenPointsStrategy){
+        this.greenPointsStrategy = greenPointsStrategy;
+    }
 
     // Methods
 
