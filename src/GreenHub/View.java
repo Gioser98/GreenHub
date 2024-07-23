@@ -16,15 +16,15 @@ public class View {
         scanner = new Scanner(System.in);
 
         // Inizializza DataSaver
-        DataSaver dataSaver = new DataSaver();
+        //DataSaver dataSaver = new DataSaver();
 
         // Inizializza Controller con DataSaver
-        this.controller = new Controller(dataSaver);
+        //this.controller = new Controller(dataSaver);
 
         // Carica i dati all'inizio
         try {
-            controller.loadData();  // Carica i dati esistenti
-        } catch (IOException | ClassNotFoundException e) {
+            controller.readAll();  // Carica i dati esistenti
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Errore durante il caricamento dei dati.");
         }
@@ -48,7 +48,7 @@ public class View {
 			case 1:
 				registerUser();
 				try {
-                        controller.saveRequest();  // Salva i dati
+                        controller.saveAll();  // Salva i dati
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.out.println("Errore durante il salvataggio dei dati.");
@@ -63,12 +63,7 @@ public class View {
 				System.exit(0);
 
 			case 4:
-				try {
 					controller.printino();  // Legge i dati
-				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
-					System.out.println("Errore durante il caricamento dei dati.");
-				}
 				break;
 			default:
 				System.out.println("Opzione non valida, riprova.");

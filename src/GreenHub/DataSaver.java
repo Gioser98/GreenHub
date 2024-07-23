@@ -1,7 +1,9 @@
+/*
 package GreenHub;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,15 +13,15 @@ import java.util.List;
 
 public class DataSaver {
 
-    private List<ChargingRate> chargingRateList;
-    private List<EnergySupplier> energySupplierList;
-    private List<ChargingStation> chargingStationList;
-    private List<Reward> rewardList;
-    private List<User> userList;
-    private List<Vehicle> vehicleList;
-    private List<Transaction> transactionList;
-    private List<Reservation> reservationList;
-    private RewardSystem currentRewardSystem;
+    private  List<ChargingRate> chargingRateList;
+    private  List<EnergySupplier> energySupplierList;
+    private  List<ChargingStation> chargingStationList;
+    private  List<Reward> rewardList;
+    private  List<User> userList;
+    private  List<Vehicle> vehicleList;
+    private  List<Transaction> transactionList;
+    private  List<Reservation> reservationList;
+    private  RewardSystem currentRewardSystem;
 
     // Costruttore per inizializzare le liste e l'oggetto RewardSystem
     public DataSaver() {
@@ -115,110 +117,99 @@ public class DataSaver {
 
 
     // Metodo per caricare tutti i dati dai file
-    public void loadAll() throws IOException, ClassNotFoundException {
-        // Caricamento di chargingRateList
-        File file = new File("ChargingRate.txt");
-        if (file.exists()) {
-            try (FileInputStream chargingRateFIS = new FileInputStream(file);
-                 ObjectInputStream chargingRateOIS = new ObjectInputStream(chargingRateFIS)) {
-                chargingRateList = (List<ChargingRate>) chargingRateOIS.readObject();
-            }
-        } else {
-            System.out.println("File ChargingRate.txt non trovato.");
-        }
+    @SuppressWarnings("unchecked")
+	public void readAll() throws FileNotFoundException, IOException {
+		// Lettura chargingRateList
+		FileInputStream FIS = new FileInputStream("ChargingRate.txt");
+		ObjectInputStream OIS = new ObjectInputStream(FIS);
+		try {
+			chargingRateList = (ArrayList<ChargingRate>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di energySupplierList
-        file = new File("EnergySupplier.txt");
-        if (file.exists()) {
-            try (FileInputStream energySupplierFIS = new FileInputStream(file);
-                 ObjectInputStream energySupplierOIS = new ObjectInputStream(energySupplierFIS)) {
-                energySupplierList = (List<EnergySupplier>) energySupplierOIS.readObject();
-            }
-        } else {
-            System.out.println("File EnergySupplier.txt non trovato.");
-        }
+		// Lettura energySupplierList
+		FIS = new FileInputStream("EnergySupplier.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			energySupplierList = (ArrayList<EnergySupplier>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di chargingStationList
-        file = new File("ChargingStation.txt");
-        if (file.exists()) {
-            try (FileInputStream chargingStationFIS = new FileInputStream(file);
-                 ObjectInputStream chargingStationOIS = new ObjectInputStream(chargingStationFIS)) {
-                chargingStationList = (List<ChargingStation>) chargingStationOIS.readObject();
-            }
-        } else {
-            System.out.println("File ChargingStation.txt non trovato.");
-        }
+		// Lettura chargingStationList
+		FIS = new FileInputStream("ChargingStation.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			chargingStationList = (ArrayList<ChargingStation>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di rewardList
-        file = new File("Reward.txt");
-        if (file.exists()) {
-            try (FileInputStream rewardFIS = new FileInputStream(file);
-                 ObjectInputStream rewardOIS = new ObjectInputStream(rewardFIS)) {
-                rewardList = (List<Reward>) rewardOIS.readObject();
-            }
-        } else {
-            System.out.println("File Reward.txt non trovato.");
-        }
+		// Lettura rewardList
+		FIS = new FileInputStream("Reward.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			rewardList = (ArrayList<Reward>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di userList
-        file = new File("User.txt");
-        if (file.exists()) {
-            try (FileInputStream userFIS = new FileInputStream(file);
-                 ObjectInputStream userOIS = new ObjectInputStream(userFIS)) {
-                userList = (List<User>) userOIS.readObject();
-            }
-        } else {
-            System.out.println("File User.txt non trovato.");
-        }
+		// Lettura userList
+		FIS = new FileInputStream("User.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			userList = (ArrayList<User>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di vehicleList
-        file = new File("Vehicle.txt");
-        if (file.exists()) {
-            try (FileInputStream vehicleFIS = new FileInputStream(file);
-                 ObjectInputStream vehicleOIS = new ObjectInputStream(vehicleFIS)) {
-                vehicleList = (List<Vehicle>) vehicleOIS.readObject();
-            }
-        } else {
-            System.out.println("File Vehicle.txt non trovato.");
-        }
+		// Lettura vehicleList
+		FIS = new FileInputStream("Vehicle.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			vehicleList = (ArrayList<Vehicle>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di transactionList
-        file = new File("Transaction.txt");
-        if (file.exists()) {
-            try (FileInputStream transactionFIS = new FileInputStream(file);
-                 ObjectInputStream transactionOIS = new ObjectInputStream(transactionFIS)) {
-                transactionList = (List<Transaction>) transactionOIS.readObject();
-            }
-        } else {
-            System.out.println("File Transaction.txt non trovato.");
-        }
+		// Lettura transactionList
+		FIS = new FileInputStream("Transaction.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			transactionList = (ArrayList<Transaction>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di reservationList
-        file = new File("Reservation.txt");
-        if (file.exists()) {
-            try (FileInputStream reservationFIS = new FileInputStream(file);
-                 ObjectInputStream reservationOIS = new ObjectInputStream(reservationFIS)) {
-                reservationList = (List<Reservation>) reservationOIS.readObject();
-            }
-        } else {
-            System.out.println("File Reservation.txt non trovato.");
-        }
+		// Lettura reservationList
+		FIS = new FileInputStream("Reservation.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			reservationList = (ArrayList<Reservation>) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        // Caricamento di RewardSystem
-        file = new File("RewardSystem.txt");
-        if (file.exists()) {
-            try (FileInputStream rewardSystemFIS = new FileInputStream(file);
-                 ObjectInputStream rewardSystemOIS = new ObjectInputStream(rewardSystemFIS)) {
-                currentRewardSystem = (RewardSystem) rewardSystemOIS.readObject();
-            }
-        } else {
-            System.out.println("File RewardSystem.txt non trovato.");
-        }
+		// Lettura rewardSystem
+		FIS = new FileInputStream("RewardSystem.txt");
+		OIS = new ObjectInputStream(FIS);
+		try {
+			currentRewardSystem = (RewardSystem) OIS.readObject();
+			OIS.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
-        System.out.println("\n\n----------------------------------------------------------------");
-        System.out.println("Tutti i dati sono stati correttamente caricati dai file.");
-        System.out.println("----------------------------------------------------------------");
-    }
+	}
 
     
 
@@ -251,3 +242,4 @@ public class DataSaver {
 
 }
 
+*/
