@@ -1,27 +1,23 @@
 package GreenHub;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
 
 
 
 public class View {
 	private Controller controller = new Controller();
 	private Scanner scanner = new Scanner(System.in);
+	private Random random = new Random();
+	
 	
 
 	public View() {
         scanner = new Scanner(System.in);
 
-        // Inizializza DataSaver
-        //DataSaver dataSaver = new DataSaver();
-
-        // Inizializza Controller con DataSaver
-        //this.controller = new Controller(dataSaver);
-
-        // Carica i dati all'inizio
         try {
             controller.readAll();  // Carica i dati esistenti
         } catch (IOException e) {
@@ -29,6 +25,7 @@ public class View {
             System.out.println("Errore durante il caricamento dei dati.");
         }
     }
+
 	
 
 	public void WelcomeMenu() throws IOException, ClassNotFoundException {
@@ -109,10 +106,12 @@ public class View {
 		String name = scanner.next();
 		System.out.print("Inserisci il tuo cognome: ");
 		String surname = scanner.next();
-		System.out.print("Posizione X: ");
-		int latitude = scanner.nextInt();
-		System.out.print("Posizione Y: ");
-		int longitude = scanner.nextInt();
+		//System.out.print("Posizione X: ");
+		//int latitude = scanner.nextInt();
+		//System.out.print("Posizione Y: ");
+		//int longitude = scanner.nextInt();
+		int latitude = random.nextInt(100);
+		int longitude = random.nextInt(100);
 		Location location = new Location(latitude, longitude);
 		User user = new User(username, 0, 2, name, surname, location);
 
