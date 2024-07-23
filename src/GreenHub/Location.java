@@ -22,10 +22,16 @@ public class Location implements Serializable {
 		this.longitude = longitude;
 	}
 	
+	
+
 	// Constructors
 	public Location(int latitude, int longitude) {
 	    this.latitude = latitude;
 	    this.longitude = longitude;
+	}
+	
+	public Location() {
+		//
 	}
 	
 	// Methods	
