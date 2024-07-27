@@ -152,7 +152,34 @@ public class Controller {
 
 
 	// Vehicle methods
+	public void addVehicle(User owner, Vehicle vehicle) {
+        if (owner == null || vehicle == null) {
+            throw new IllegalArgumentException("Owner or vehicle cannot be null");
+        }
+
+        // Imposta il proprietario del veicolo
+        vehicle.setOwner(owner);
+
+        // Aggiungi il veicolo alla lista
+        vehicleList.add(vehicle);
+
+        // Aggiorna il veicolo dell'utente se necessario
+        if (owner.getPersonalVehicle() == null) {
+            owner.setPersonalVehicle(vehicle);
+        }
+
+        System.out.println("Veicolo registrato correttamente!");
+    }
+	
+	
+	
+	
 	// ChargingRate methods
+	public ArrayList<ChargingRate> getChargingRateList() {
+		return chargingRateList;
+	}
+	
+	
 	// EnergySupplier methods
 	// ChargingStation methods
 
@@ -160,7 +187,7 @@ public class Controller {
 
 
 
-// Metodo per salvare tutti i dati su file
+	//Metodo per salvare tutti i dati su file
     public void saveAll() throws IOException {
         // Salvataggio di chargingRateList
         try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));

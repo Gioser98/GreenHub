@@ -49,6 +49,7 @@ public class View {
             System.out.println("2. Login utente già registrato");
             System.out.println("3. Exit");
             System.out.println("4. Leggi contenuti dei file");
+            
             System.out.print("Scelta: ");
             int choice = scanner.nextInt();
 
@@ -72,6 +73,7 @@ public class View {
                 case 4:
                     controller.printino();  // Legge i dati
                     break;
+              
                 default:
                     System.out.println("Opzione non valida, riprova.");
             }
