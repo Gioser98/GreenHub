@@ -1,7 +1,5 @@
 package GreenHub;
 
 interface GreenPointsStrategy {
-    int calculatePoints(int value);
+	int calculatePoints(int value);
 }
-
-

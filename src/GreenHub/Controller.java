@@ -28,7 +28,7 @@ public class Controller {
 	}
 
 
-/* 
+	/* 
 	public Controller(DataSaver dataSaver){
 		this.dataSaver = dataSaver;
 	}
@@ -58,7 +58,7 @@ public class Controller {
             throw new IllegalStateException("DataSaver non è stato inizializzato.");
         }
     }  
-*/	
+	 */	
 
 
 
@@ -89,97 +89,97 @@ public class Controller {
 		System.out.println("Saldo GP aggiornato correttamente!");
 	}
 
-	
+
 	// Transaction methods
 	public String pay(double amount, String method, String email, String password, String cardNumber, String expirationDate, String cvv)
 	{
 
 		PaymentStrategy strategy;
 
-        switch (method.toLowerCase()) {
-            case "paypal":
-                strategy = new PayPalStrategy(email, password);
-                break;
-            case "creditcard":
-                strategy = new CreditCardStrategy(cardNumber, expirationDate, cvv);
-                break;
-            default:
-                return "Errore: Metodo di pagamento non supportato.";
-        }
+		switch (method.toLowerCase()) {
+		case "paypal":
+			strategy = new PayPalStrategy(email, password);
+			break;
+		case "creditcard":
+			strategy = new CreditCardStrategy(cardNumber, expirationDate, cvv);
+			break;
+		default:
+			return "Errore: Metodo di pagamento non supportato.";
+		}
 
 		Transaction transaction = new Transaction(strategy);
 
-	try {
-		transaction.processPayment(amount);
-		return "Pagamento effettuato con successo";
-	} catch (Exception e){
-		return "Errore durante il pagamento" + e.getMessage();
+		try {
+			transaction.processPayment(amount);
+			return "Pagamento effettuato con successo";
+		} catch (Exception e){
+			return "Errore durante il pagamento" + e.getMessage();
+		}
+
 	}
-	
-	}
-	
+
 	// Reward methods
 
-    public String calculateGreenPoints(int value, String strategy) {
+	public String calculateGreenPoints(int value, String strategy) {
 
-        GreenPointsStrategy greenPointsStrategy;
+		GreenPointsStrategy greenPointsStrategy;
 
-        // Seleziona la strategia in base al parametro 'strategy'
-        switch (strategy.toLowerCase()) {
-            case "reservation":
-                greenPointsStrategy = new ReservationStrategy();
-                break;
-            case "recharge":
-                greenPointsStrategy = new RechargeStrategy();
-                break;
-            default:
-                return "Errore: Strategia di calcolo dei punti non supportata.";
-        }
+		// Seleziona la strategia in base al parametro 'strategy'
+		switch (strategy.toLowerCase()) {
+		case "reservation":
+			greenPointsStrategy = new ReservationStrategy();
+			break;
+		case "recharge":
+			greenPointsStrategy = new RechargeStrategy();
+			break;
+		default:
+			return "Errore: Strategia di calcolo dei punti non supportata.";
+		}
 
-        // Crea un oggetto Reward con la strategia selezionata
-        Reward reward = new Reward(greenPointsStrategy);
-        int points = reward.calculateGreenPoints(value);
+		// Crea un oggetto Reward con la strategia selezionata
+		Reward reward = new Reward(greenPointsStrategy);
+		int points = reward.calculateGreenPoints(value);
 
-        return "Green points calcolati: " + points;
-    }
-	
+		return "Green points calcolati: " + points;
+	}
+
 
 	// Reservation methods
 	public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
-        boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
-        Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
-    }
+		boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
+		Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
+	}
 
 
 	// Vehicle methods
 	public void addVehicle(User owner, Vehicle vehicle) {
-        if (owner == null || vehicle == null) {
-            throw new IllegalArgumentException("Owner or vehicle cannot be null");
-        }
+		if (owner == null || vehicle == null) {
+			throw new IllegalArgumentException("Owner or vehicle cannot be null");
+		}
 
-        // Imposta il proprietario del veicolo
-        vehicle.setOwner(owner);
+		// Imposta il proprietario del veicolo
+		vehicle.setOwner(owner);
 
-        // Aggiungi il veicolo alla lista
-        vehicleList.add(vehicle);
+		// Aggiungi il veicolo alla lista
+		vehicleList.add(vehicle);
 
-        // Aggiorna il veicolo dell'utente se necessario
-        if (owner.getPersonalVehicle() == null) {
-            owner.setPersonalVehicle(vehicle);
-        }
+		// Aggiorna il veicolo dell'utente se necessario
+		if (owner.getPersonalVehicle() == null) {
+			owner.setPersonalVehicle(vehicle);
+		}
 
-        System.out.println("Veicolo registrato correttamente!");
-    }
-	
-	
-	
-	
+		System.out.println("Veicolo registrato correttamente!");
+	}
+
+
+
+
 	// ChargingRate methods
 	public ArrayList<ChargingRate> getChargingRateList() {
 		return chargingRateList;
 	}
-	
-	
+
+
 	// EnergySupplier methods
 	// ChargingStation methods
 
@@ -188,54 +188,54 @@ public class Controller {
 
 
 	//Metodo per salvare tutti i dati su file
-    public void saveAll() throws IOException {
-        // Salvataggio di chargingRateList
-        try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
-             ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
-            chargingRateOOS.writeObject(chargingRateList);
-        }
+	public void saveAll() throws IOException {
+		// Salvataggio di chargingRateList
+		try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
+				ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
+			chargingRateOOS.writeObject(chargingRateList);
+		}
 
-        // Salvataggio di energySupplierList
-        try (FileOutputStream energySupplierFOS = new FileOutputStream(new File("EnergySupplier.txt"));
-             ObjectOutputStream energySupplierOOS = new ObjectOutputStream(energySupplierFOS)) {
-            energySupplierOOS.writeObject(energySupplierList);
-        }
+		// Salvataggio di energySupplierList
+		try (FileOutputStream energySupplierFOS = new FileOutputStream(new File("EnergySupplier.txt"));
+				ObjectOutputStream energySupplierOOS = new ObjectOutputStream(energySupplierFOS)) {
+			energySupplierOOS.writeObject(energySupplierList);
+		}
 
-        // Salvataggio di chargingStationList
-        try (FileOutputStream chargingStationFOS = new FileOutputStream(new File("ChargingStation.txt"));
-             ObjectOutputStream chargingStationOOS = new ObjectOutputStream(chargingStationFOS)) {
-            chargingStationOOS.writeObject(chargingStationList);
-        }
+		// Salvataggio di chargingStationList
+		try (FileOutputStream chargingStationFOS = new FileOutputStream(new File("ChargingStation.txt"));
+				ObjectOutputStream chargingStationOOS = new ObjectOutputStream(chargingStationFOS)) {
+			chargingStationOOS.writeObject(chargingStationList);
+		}
 
-        // Salvataggio di rewardList
-        try (FileOutputStream rewardFOS = new FileOutputStream(new File("Reward.txt"));
-             ObjectOutputStream rewardOOS = new ObjectOutputStream(rewardFOS)) {
-            rewardOOS.writeObject(rewardList);
-        }
+		// Salvataggio di rewardList
+		try (FileOutputStream rewardFOS = new FileOutputStream(new File("Reward.txt"));
+				ObjectOutputStream rewardOOS = new ObjectOutputStream(rewardFOS)) {
+			rewardOOS.writeObject(rewardList);
+		}
 
-        // Salvataggio di userList
-        try (FileOutputStream userFOS = new FileOutputStream(new File("User.txt"));
-             ObjectOutputStream userOOS = new ObjectOutputStream(userFOS)) {
-            userOOS.writeObject(userList);
-        }
+		// Salvataggio di userList
+		try (FileOutputStream userFOS = new FileOutputStream(new File("User.txt"));
+				ObjectOutputStream userOOS = new ObjectOutputStream(userFOS)) {
+			userOOS.writeObject(userList);
+		}
 
-        // Salvataggio di vehicleList
-        try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Vehicle.txt"));
-             ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
-            vehicleOOS.writeObject(vehicleList);
-        }
+		// Salvataggio di vehicleList
+		try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Vehicle.txt"));
+				ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
+			vehicleOOS.writeObject(vehicleList);
+		}
 
-        // Salvataggio di transactionList
-        try (FileOutputStream transactionFOS = new FileOutputStream(new File("Transaction.txt"));
-             ObjectOutputStream transactionOOS = new ObjectOutputStream(transactionFOS)) {
-            transactionOOS.writeObject(transactionList);
-        }
+		// Salvataggio di transactionList
+		try (FileOutputStream transactionFOS = new FileOutputStream(new File("Transaction.txt"));
+				ObjectOutputStream transactionOOS = new ObjectOutputStream(transactionFOS)) {
+			transactionOOS.writeObject(transactionList);
+		}
 
-        // Salvataggio di reservationList
-        try (FileOutputStream reservationFOS = new FileOutputStream(new File("Reservation.txt"));
-             ObjectOutputStream reservationOOS = new ObjectOutputStream(reservationFOS)) {
-            reservationOOS.writeObject(reservationList);
-        }
+		// Salvataggio di reservationList
+		try (FileOutputStream reservationFOS = new FileOutputStream(new File("Reservation.txt"));
+				ObjectOutputStream reservationOOS = new ObjectOutputStream(reservationFOS)) {
+			reservationOOS.writeObject(reservationList);
+		}
 
 		/* 
         // Salvataggio di RewardSystem
@@ -243,18 +243,18 @@ public class Controller {
              ObjectOutputStream rewardSystemOOS = new ObjectOutputStream(rewardSystemFOS)) {
             rewardSystemOOS.writeObject(currentRewardSystem);
         }*/
-		
-
-        System.out.println("\n\n----------------------------------------------------------------");
-        System.out.println("Tutti i dati sono stati correttamente salvati su file.");
-        System.out.println("----------------------------------------------------------------");
-    }
 
 
+		System.out.println("\n\n----------------------------------------------------------------");
+		System.out.println("Tutti i dati sono stati correttamente salvati su file.");
+		System.out.println("----------------------------------------------------------------");
+	}
 
 
-    // Metodo per caricare tutti i dati dai file
-    @SuppressWarnings("unchecked")
+
+
+	// Metodo per caricare tutti i dati dai file
+	@SuppressWarnings("unchecked")
 	public void readAll() throws FileNotFoundException, IOException {
 		// Lettura chargingRateList
 		FileInputStream FIS = new FileInputStream("ChargingRate.txt");
@@ -345,22 +345,22 @@ public class Controller {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		*/
+		 */
 
 	}
 
 	// Metodo per stampare tutti i dati
-    public void printino() {
+	public void printino() {
 
-        System.out.println("Charging Rate List: " + chargingRateList);
-        System.out.println("Energy Supplier List: " + energySupplierList);
-        System.out.println("Charging Station List: " + chargingStationList);
-        System.out.println("Reward List: " + rewardList);
-        System.out.println("User List: " + userList);
-        System.out.println("Vehicle List: " + vehicleList);
-        System.out.println("Transaction List: " + transactionList);
-        System.out.println("Reservation List: " + reservationList);
-        //.out.println("Reward System: " + currentRewardSystem);
-    }
+		System.out.println("Charging Rate List: " + chargingRateList);
+		System.out.println("Energy Supplier List: " + energySupplierList);
+		System.out.println("Charging Station List: " + chargingStationList);
+		System.out.println("Reward List: " + rewardList);
+		System.out.println("User List: " + userList);
+		System.out.println("Vehicle List: " + vehicleList);
+		System.out.println("Transaction List: " + transactionList);
+		System.out.println("Reservation List: " + reservationList);
+		//.out.println("Reward System: " + currentRewardSystem);
+	}
 
 }
