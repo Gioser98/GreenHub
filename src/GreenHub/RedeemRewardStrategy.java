@@ -1,7 +1,5 @@
 package GreenHub;
 
-import java.io.IOException;
-
 public class RedeemRewardStrategy implements MainMenuStrategy {
     @Override
     public void execute(View view, User user) {
