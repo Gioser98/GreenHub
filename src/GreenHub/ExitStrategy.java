@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class ExitStrategy implements MainMenuStrategy {
     @Override
-    public void execute(View view, User user) {
+    public void execute(UserInterface view, User user) {
         System.exit(0);
     }
 }

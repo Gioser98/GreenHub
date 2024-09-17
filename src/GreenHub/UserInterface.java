@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
-public class View {
+public class UserInterface {
 	private Controller controller = new Controller();
 	private Scanner scanner = new Scanner(System.in);
 	private Random random = new Random();
 	private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
 
-	public View() {
+	public UserInterface() {
 		scanner = new Scanner(System.in);
 
 		try {
@@ -31,7 +31,7 @@ public class View {
 		strategies.put(6, new ExitStrategy());
 	}
 
-	public Controller getController() {
+	public static Controller getController() {
 		return controller;
 	}
 
@@ -137,7 +137,7 @@ public class View {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		View view = new View();
+		UserInterface view = new UserInterface();
 		try {
 			view.WelcomeMenu();
 		} catch (IOException e) {

@@ -82,6 +82,13 @@ public class Charge implements Serializable {
 		this.ChargingRate = ChargingRate;
 	}
 	
+	public Charge(ChargingStation chargingStation, Vehicle vehicle, Time startTime) {
+		this.chargingStation = chargingStation;
+		this.vehicle = vehicle;
+		this.startTime = startTime;
+	}
+	
+	
 	// Methods
 	public String toString() {
 		return "totti";

@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class RegisterCarStrategy implements MainMenuStrategy {
 	@Override
-	public void execute(View view, User user) throws IOException {
+	public void execute(UserInterface view, User user) throws IOException {
 		Scanner scanner = view.getScanner();
 		Controller controller = view.getController();
 
