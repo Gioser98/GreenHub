@@ -31,10 +31,9 @@ public class UserInterface {
 		strategies.put(6, new ExitStrategy());
 	}
 
-	public static Controller getController() {
+	public Controller getController() {
 		return controller;
 	}
-
 	public Scanner getScanner() {
 		return scanner;
 	}
@@ -137,9 +136,9 @@ public class UserInterface {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		UserInterface view = new UserInterface();
+		UserInterface ui = new UserInterface();
 		try {
-			view.WelcomeMenu();
+			ui.WelcomeMenu();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

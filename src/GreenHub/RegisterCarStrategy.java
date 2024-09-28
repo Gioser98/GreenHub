@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class RegisterCarStrategy implements MainMenuStrategy {
 	@Override
-	public void execute(UserInterface view, User user) throws IOException {
-		Scanner scanner = view.getScanner();
-		Controller controller = view.getController();
+	public void execute(UserInterface ui, User user) throws IOException {
+		Scanner scanner = ui.getScanner();
+		Controller controller = ui.getController();
 
 		System.out.print("Inserisci il maker dell'auto: ");
 		String maker = scanner.next();
