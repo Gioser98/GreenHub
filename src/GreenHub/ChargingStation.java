@@ -87,6 +87,7 @@ public class ChargingStation implements Serializable {
         }
     }
 
+    /* 
     public boolean isCompatibleWith(Vehicle vehicle) {
         for (ChargingRate rate : availableRates) {
             if (rate.getSocketType().equals(vehicle.getSocketType())) {
@@ -95,9 +96,17 @@ public class ChargingStation implements Serializable {
         }
         return false;
     }
+     */
+
+     public boolean isCompatibleWith(Vehicle vehicle) {
+        // Rimuoviamo il controllo sul socket type
+        return true; // La stazione è sempre compatibile
+    }
+    
+    
 
     public static void getNearAvailableStation(User user, List<ChargingStation> chargingStationList) {
-        Location userLocation = user.getPersonalVehicle().getPosition();
+        Location userLocation = user.getPersonalVehicle().getLocation();
         System.out.println("Stazioni di ricarica disponibili vicino a " + userLocation + ":");
         for (ChargingStation cs : chargingStationList) {
             if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
@@ -121,4 +130,33 @@ public class ChargingStation implements Serializable {
         System.out.println("Stazione non disponibile o non compatibile.");
         return null;
     }
+
+    public void printTimeTableWithTimeSlots() {
+		System.out.println("Stato attuale della colonnina di ricarica:");
+
+		for (int i = 0; i < timeTable.length; i++) {
+			String startTime = formatTime(i * 30);
+			String endTime = formatTime((i + 1) * 30);
+			String slotStatus = (timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
+
+			System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
+
+			if ((i + 1) % 4 == 0) {
+				System.out.println();
+			}
+		}
+	}
+
+	public static String formatTime(int minutes) {
+		int hours = minutes / 60;
+		int mins = minutes % 60;
+		return String.format("%02d:%02d", hours, mins);
+	}
+
+	public void resetTimeTable() {
+		for (int i = 0; i < 48; i++) {
+			this.timeTable[i] = "";
+		}
+		System.out.println("Il vettore timeTable è stato azzerato.");
+	}
 }

@@ -4,7 +4,7 @@ public class RedeemRewardStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface view, User user) {
         // Implementazione del riscatto di una ricompensa
-        System.out.println("Riscatto di una ricompensa in corso...");
+        System.out.println("Questa funzionalità arrivarà nei prossimi aggiornamenti... forse");
         // Codice per riscattare una ricompensa
     }
 }

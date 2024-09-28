@@ -82,6 +82,7 @@ public class Reservation implements Serializable {
 			}
 			newReservation.setId(maxID + 1);
 			reservationList.add(newReservation);
+			
 		} else {
 			System.out.println("Slot non disponibili!");
 		}

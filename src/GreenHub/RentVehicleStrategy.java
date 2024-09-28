@@ -4,7 +4,7 @@ public class RentVehicleStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface view, User user) {
         // Implementazione del noleggio del veicolo
-        System.out.println("Noleggio del veicolo in corso...");
+        System.out.println("SECONDA ITERAZIONE");
         // Codice per noleggiare il veicolo
     }
 }

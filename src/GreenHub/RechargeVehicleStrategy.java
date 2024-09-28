@@ -7,12 +7,15 @@ import java.util.List;
 public class RechargeVehicleStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface ui, User user) throws IOException {
-        if (user.getType() != 0) {  // Verifica che l'utente abbia un veicolo elettrico
-            System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico.");
-            return;
-        }
-
         Vehicle currentVehicle = user.getPersonalVehicle();
+        if (currentVehicle == null || currentVehicle.getType() != 0) {  // Verifica che l'utente abbia un veicolo elettrico
+        System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico.");
+        return;
+}
+
+       
+
+        
         List<ChargingStation> chargingStationList = ui.getController().getChargingStationList();  // Assumi che il controller gestisca la lista
 
         ChargingStation.getNearAvailableStation(user, chargingStationList);  // Mostra le stazioni vicine
@@ -26,13 +29,14 @@ public class RechargeVehicleStrategy implements MainMenuStrategy {
         registerTransaction(user, currentVehicle, currentTime, newCharge);
     }
 
+
     private void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, LocalDateTime startTime) {
         // Logica per registrare la ricarica
-        System.out.println("Ricarica registrata con successo.");
+        System.out.println("Ricarica registrata con successo. Ma penso che sia meglio collocare questo metodo nel controller");
     }
 
     private void registerTransaction(User user, Vehicle vehicle, LocalDateTime currentTime, Charge newCharge) {
         // Logica per registrare la transazione
-        System.out.println("Transazione registrata con successo.");
+        System.out.println("Transazione registrata con successo. Ma penso che sia meglio collocare questo metodo nel controller");
     }
 }

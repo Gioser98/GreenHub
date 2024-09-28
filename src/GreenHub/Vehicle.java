@@ -15,6 +15,7 @@ public class Vehicle implements Serializable {
 	private Location location;
 	private User owner;
 	
+	
 	// Getter&Setter
 	public int getId() {
 		return id;
@@ -34,12 +35,14 @@ public class Vehicle implements Serializable {
 	public void setModel(String model) {
 		this.model = model;
 	}
+	
 	public int getType() {
 		return type;
 	}
 	public void setType(int type) {
 		this.type = type;
 	}
+		
 	public int getCapacity() {
 		return capacity;
 	}

@@ -27,44 +27,6 @@ public class Controller {
 		//
 	}
 
-
-	/* 
-	public Controller(DataSaver dataSaver){
-		this.dataSaver = dataSaver;
-	}
-
-
-	public void saveRequest() throws IOException {
-        if (dataSaver != null) {
-            dataSaver.saveAll();
-        } else {
-            throw new IllegalStateException("DataSaver non è stato inizializzato.");
-        }
-    }
-
-	// Metodo per gestire il caricamento dei dati
-    public void loadData() throws IOException, ClassNotFoundException {
-        if (dataSaver != null) {
-            dataSaver.readAll();
-        } else {
-            throw new IllegalStateException("DataSaver non è stato inizializzato.");
-        }
-    }
-
-	public void printino() throws IOException, ClassNotFoundException {
-      if (dataSaver != null) {
-            dataSaver.printUsers();
-        } else {
-            throw new IllegalStateException("DataSaver non è stato inizializzato.");
-        }
-    }  
-	 */	
-
-
-
-
-
-
 	// User methods
 	public void addUser(User user) {
 		if (getUserByUsername(user.getUsername()) == null) {
@@ -188,6 +150,8 @@ public class Controller {
 	public ArrayList<ChargingStation> getChargingStationList() {
     return chargingStationList;
 	}
+
+	
 
 
 

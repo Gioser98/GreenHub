@@ -9,6 +9,7 @@ public class ChargingRate implements Serializable {
 	private int id;
 	private int power;
 	private double price;
+	
 
 	// Getter&Setter
 	public int getId() {
@@ -29,7 +30,7 @@ public class ChargingRate implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+		
 	// Constructors
 	public ChargingRate() {
 	    // Costruttore vuoto

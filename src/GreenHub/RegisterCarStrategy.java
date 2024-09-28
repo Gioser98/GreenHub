@@ -45,5 +45,9 @@ public class RegisterCarStrategy implements MainMenuStrategy {
 
 		// Aggiungi il veicolo al controller
 		controller.addVehicle(user, vehicle);
+
+		// Salva lo stato aggiornato dei dati
+        controller.saveAll(); // Aggiunta questa chiamata per salvare i dati
+
 	}
 }
