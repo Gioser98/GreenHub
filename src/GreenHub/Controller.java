@@ -148,6 +148,7 @@ public class Controller {
 
 	
 	// ChargingStation methods
+	
 	// Metodo per ottenere la lista delle stazioni di ricarica
 	public ArrayList<ChargingStation> getChargingStationList() {
     return chargingStationList;

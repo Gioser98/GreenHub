@@ -15,7 +15,7 @@ public class ChargingStation implements Serializable {
     private ArrayList<ChargingRate> availableRates;
     private boolean maintenance;
     private EnergySupplier owner;
-    private static ArrayList<ChargingStation> chargingStationList = new ArrayList<>();
+    
 
     // Getters&Setters
     public int getId() {
@@ -66,15 +66,7 @@ public class ChargingStation implements Serializable {
         this.owner = owner;
     }
 
-    // Metodo statico per ottenere la lista
-    public static ArrayList<ChargingStation> getChargingStationList() {
-        return chargingStationList;
-    }
 
-    // Metodo statico per impostare la lista
-    public static void setChargingStationList(ArrayList<ChargingStation> chargingStationList) {
-        ChargingStation.chargingStationList = chargingStationList;
-    }
 
     // Constructors
     public ChargingStation() {
