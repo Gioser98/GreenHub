@@ -3,7 +3,7 @@ package GreenHub;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class RegisterCarStrategy implements MainMenuStrategy {
+public class MMRegisterCarStrategy implements MainMenuStrategy {
 	@Override
 	public void execute(UserInterface ui, User user) throws IOException {
 		Scanner scanner = ui.getScanner();

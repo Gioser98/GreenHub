@@ -1,6 +1,6 @@
 package GreenHub;
 
-public class RedeemRewardStrategy implements MainMenuStrategy {
+public class MMRedeemRewardStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface view, User user) {
         // Implementazione del riscatto di una ricompensa

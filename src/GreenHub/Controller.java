@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 //import java.util.ResourceBundle.Control;
 
@@ -60,10 +62,10 @@ public class Controller {
 
 		switch (method.toLowerCase()) {
 		case "paypal":
-			strategy = new PayPalStrategy(email, password);
+			strategy = new PPayPalStrategy(email, password);
 			break;
 		case "creditcard":
-			strategy = new CreditCardStrategy(cardNumber, expirationDate, cvv);
+			strategy = new PCreditCardStrategy(cardNumber, expirationDate, cvv);
 			break;
 		default:
 			return "Errore: Metodo di pagamento non supportato.";
@@ -89,10 +91,10 @@ public class Controller {
 		// Seleziona la strategia in base al parametro 'strategy'
 		switch (strategy.toLowerCase()) {
 		case "reservation":
-			greenPointsStrategy = new ReservationStrategy();
+			greenPointsStrategy = new GPReservationStrategy();
 			break;
 		case "recharge":
-			greenPointsStrategy = new RechargeStrategy();
+			greenPointsStrategy = new GPRechargeStrategy();
 			break;
 		default:
 			return "Errore: Strategia di calcolo dei punti non supportata.";
@@ -150,6 +152,46 @@ public class Controller {
 	public ArrayList<ChargingStation> getChargingStationList() {
     return chargingStationList;
 	}
+
+
+
+
+	public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
+        newCharge.setChargingStation(cs);
+		newCharge.setVehicle(vehicle);
+		newCharge.setChargingRate(vehicle.getSupportedRate());
+		newCharge.setUser(user);
+		newCharge.setEnergy(vehicle.getCapacity());
+		newCharge.setId(0); //chiedere a Skabboz!!!
+
+		startTime.setHour(currentTime.getHour());
+		startTime.setMinute(currentTime.getMinute());
+		float timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
+		int hour = (int) timeToCharge;
+		int minute = (int) (timeToCharge - hour * 60);
+		int endHour = startTime.getHour() + hour;
+		int endMinute = startTime.getMinute() + minute;
+		if (endMinute > 59) {
+			endHour = endHour + 1;
+			endMinute = endMinute - 60;
+		}
+		newCharge.setStartTime(startTime);
+		newCharge.setEndTime(new Time(endHour, endMinute));
+    }
+
+
+		
+	
+
+
+    public void registerTransaction(User user, Vehicle vehicle, LocalDateTime currentTime, Charge newCharge) {
+        // Logica per registrare la transazione
+        System.out.println("Transazione registrata con successo. Ma penso che sia meglio collocare questo metodo nel controller");
+    }
+
+	
+
+
 
 	
 

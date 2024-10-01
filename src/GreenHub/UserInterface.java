@@ -23,12 +23,12 @@ public class UserInterface {
 		}
 
 		// Popola la mappa con le strategie
-		strategies.put(1, new RechargeVehicleStrategy());
-		strategies.put(2, new BookRechargeStrategy());
-		strategies.put(3, new RentVehicleStrategy());
-		strategies.put(4, new RedeemRewardStrategy());
-		strategies.put(5, new RegisterCarStrategy());
-		strategies.put(6, new ExitStrategy());
+		strategies.put(1, new MMRechargeVehicleStrategy());
+		strategies.put(2, new MMBookRechargeStrategy());
+		strategies.put(3, new MMRentVehicleStrategy());
+		strategies.put(4, new MMRedeemRewardStrategy());
+		strategies.put(5, new MMRegisterCarStrategy());
+		strategies.put(6, new MMExitStrategy());
 	}
 
 	public Controller getController() {

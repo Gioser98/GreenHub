@@ -1,6 +1,6 @@
 package GreenHub;
 
-public class RentVehicleStrategy implements MainMenuStrategy {
+public class MMRentVehicleStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface view, User user) {
         // Implementazione del noleggio del veicolo

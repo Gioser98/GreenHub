@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class BookRechargeStrategy implements MainMenuStrategy {
+public class MMBookRechargeStrategy implements MainMenuStrategy {
 	@Override
 	public void execute(UserInterface ui, User user) {
 
 		ChargingStation currentCS; 
         Vehicle currentVehicle = user.getPersonalVehicle(); // Ottieni il veicolo personale dell'utente
-        List<ChargingStation> chargingStationList = ui.getController().getChargingStationList(); // Ottieni la lista delle stazioni di ricarica
+        List<ChargingStation> chargingStationList = ui.getController().getChargingStationList();
 		ArrayList<Reservation> reservationList = new ArrayList<>();
         Scanner in = ui.getScanner(); // Assumi che UserInterface fornisca un oggetto Scanner
 		

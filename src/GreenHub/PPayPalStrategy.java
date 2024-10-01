@@ -1,10 +1,10 @@
 package GreenHub;
 
-public class PayPalStrategy implements PaymentStrategy {
+public class PPayPalStrategy implements PaymentStrategy {
     private String email;
     private String password;
 
-    public PayPalStrategy(String email, String password) {
+    public PPayPalStrategy(String email, String password) {
         this.email = email;
         this.password = password;
     }
