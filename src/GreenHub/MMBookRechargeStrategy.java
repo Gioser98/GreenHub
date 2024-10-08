@@ -16,10 +16,10 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
         Scanner in = ui.getScanner(); // Assumi che UserInterface fornisca un oggetto Scanner
 		
 
-		if (currentVehicle == null || currentVehicle.getType() != 0) {  // Verifica che l'utente abbia un veicolo elettrico
-        	System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico.");
-        	return;
-		}
+		//if (currentVehicle == null || currentVehicle.getType() != 0) {  // Verifica che l'utente abbia un veicolo elettrico
+        //	System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico.");
+        //	return;
+		//}
 		ChargingStation.getNearAvailableStation(user, chargingStationList);
 		currentCS = ChargingStation.chooseStation(currentVehicle, chargingStationList);
 		currentCS.printTimeTableWithTimeSlots();

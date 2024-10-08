@@ -14,8 +14,16 @@ public class Charge implements Serializable {
 	private Time endTime;
 	private int energy;
 	private ChargingRate ChargingRate;
+	private double cost;
 	
 	// Getter&Setter
+	public double getCost(){
+		return cost;
+	}
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
 	public int getId() {
 		return id;
 	}

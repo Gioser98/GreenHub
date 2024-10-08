@@ -15,62 +15,59 @@ public class ChargingStation implements Serializable {
     private ArrayList<ChargingRate> availableRates;
     private boolean maintenance;
     private EnergySupplier owner;
-    
 
     // Getters&Setters
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public Location getLocation() {
         return location;
     }
-
     public void setLocation(Location location) {
         this.location = location;
     }
-
     public String[] getTimeTable() {
         return timeTable;
     }
-
     public void setTimeTable(String string, int pos) {
         this.timeTable[pos] = string;
     }
-
     public ArrayList<ChargingRate> getAvailableRates() {
         return availableRates;
     }
-
     public void setAvailableRates(ArrayList<ChargingRate> availableRates) {
         this.availableRates = availableRates;
     }
-
     public boolean isMaintenance() {
         return maintenance;
     }
-
     public void setMaintenance(boolean maintenance) {
         this.maintenance = maintenance;
     }
-
     public EnergySupplier getOwner() {
         return owner;
     }
-
     public void setOwner(EnergySupplier owner) {
         this.owner = owner;
     }
 
+    // Nuovo metodo per ottenere il tasso di ricarica per il veicolo
+    public double getChargingRateForVehicle(Vehicle vehicle) {
+        if (availableRates.isEmpty()) {
+            throw new IllegalArgumentException("Nessuna tariffa di ricarica disponibile.");
+        }
 
+        // Assumiamo di restituire la tariffa della prima opzione disponibile
+        return availableRates.get(0).getRatePerKWh(); // Tariffa della prima tariffa disponibile
+    }
 
     // Constructors
     public ChargingStation() {
         this.timeTable = new String[48];
+        this.availableRates = new ArrayList<>(); // Inizializziamo la lista
     }
 
     // Methods
@@ -90,8 +87,6 @@ public class ChargingStation implements Serializable {
         }
     }
 
-    
-    
 
     /* 
     public boolean isCompatibleWith(Vehicle vehicle) {

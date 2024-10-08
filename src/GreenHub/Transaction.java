@@ -11,6 +11,8 @@ public class Transaction implements Serializable {
     private double amount;
     private Charge charge;
     private PaymentStrategy paymentStrategy;
+    private User user; // Aggiunto
+    private Vehicle vehicle; // Aggiunto
 
     // Getter&Setter
     public int getId() {
@@ -49,12 +51,29 @@ public class Transaction implements Serializable {
     public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
         this.paymentStrategy = paymentStrategy;
     }
+    
+    // Aggiunti i metodi setUser e setVehicle
+    public User getUser() {
+        return user;
+    }
 
-    // Constructors
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    // Costruttori
     public Transaction() {
         // Costruttore vuoto
     }
-    
+
     public Transaction(int id, Time timestamp, int type, double amount, Charge charge) {
         this.id = id;
         this.timestamp = timestamp;
@@ -62,7 +81,7 @@ public class Transaction implements Serializable {
         this.amount = amount;
         this.charge = charge;
     }
-    
+
     public Transaction(int id, Time timestamp, int type, double amount, Charge charge, PaymentStrategy paymentStrategy) {
         this.id = id;
         this.timestamp = timestamp;
@@ -87,6 +106,6 @@ public class Transaction implements Serializable {
 
     @Override
     public String toString() {
-        return "Transaction{id=" + id + ", timestamp=" + timestamp + ", type=" + type + ", amount=" + amount + ", charge=" + charge + ", paymentStrategy=" + paymentStrategy + '}';
+        return "Transaction{id=" + id + ", timestamp=" + timestamp + ", type=" + type + ", amount=" + amount + ", charge=" + charge + ", paymentStrategy=" + paymentStrategy + ", user=" + user + ", vehicle=" + vehicle + '}';
     }
 }

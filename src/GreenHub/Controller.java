@@ -7,10 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.channels.NetworkChannel;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Random;
 //import java.util.ResourceBundle.Control;
+import java.util.Scanner;
 
 
 
@@ -55,32 +58,46 @@ public class Controller {
 
 
 	// Transaction methods
-	public String pay(double amount, String method, String email, String password, String cardNumber, String expirationDate, String cvv)
-	{
-
-		PaymentStrategy strategy;
-
-		switch (method.toLowerCase()) {
-		case "paypal":
-			strategy = new PPayPalStrategy(email, password);
-			break;
-		case "creditcard":
-			strategy = new PCreditCardStrategy(cardNumber, expirationDate, cvv);
-			break;
-		default:
-			return "Errore: Metodo di pagamento non supportato.";
-		}
-
-		Transaction transaction = new Transaction(strategy);
-
+	public String registerTransaction(User user, Vehicle vehicle, ChargingStation chargingStation, Charge charge, double amount, PaymentStrategy strategy, int paymentType) {
+		// Crea una nuova transazione
+		Transaction transaction = new Transaction();
+	
 		try {
-			transaction.processPayment(amount);
-			return "Pagamento effettuato con successo";
-		} catch (Exception e){
-			return "Errore durante il pagamento" + e.getMessage();
+			// Processa il pagamento usando la strategia selezionata
+			strategy.pay(amount);
+			
+			// Imposta i dettagli della transazione
+			transaction.setUser(user);
+			transaction.setVehicle(vehicle);
+			transaction.setCharge(charge);
+			transaction.setAmount(amount);
+			transaction.setPaymentStrategy(strategy);
+			transaction.setType(paymentType); // Imposta il tipo di pagamento (es. carta di credito, PayPal, ecc.)
+	
+			// Crea un timestamp basato sull'ora corrente
+			LocalDateTime now = LocalDateTime.now();
+			Time timestamp = new Time(now.getHour(), now.getMinute()); 
+			transaction.setTimestamp(timestamp);
+	
+			// Genera un ID unico per la transazione
+			int newId = transactionList.isEmpty() ? 1 : transactionList.get(transactionList.size() - 1).getId() + 1;
+			transaction.setId(newId);
+	
+			// Aggiungi la transazione alla lista delle transazioni
+			transactionList.add(transaction);
+	
+			// Mostra un messaggio di successo
+			System.out.println("Pagamento completato con successo!");
+			return "Pagamento effettuato con successo e transazione registrata.";
+	
+		} catch (Exception e) {
+			// In caso di errore, mostra un messaggio e non registra la transazione
+			return "Errore durante il pagamento: " + e.getMessage();
 		}
-
 	}
+	
+	
+	
 
 	// Reward methods
 
@@ -135,6 +152,8 @@ public class Controller {
 		System.out.println("Veicolo registrato correttamente!");
 	}
 
+	
+
 
 
 
@@ -155,41 +174,116 @@ public class Controller {
 	}
 
 
+	public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
+        double batteryCapacity = vehicle.getCapacity(); // Capacità della batteria in kWh
+        double currentBatteryLevel = vehicle.generateRandomBatteryLevel(); // Usa il metodo per ottenere il livello di batteria
+        double chargingRate = chargingStation.getChargingRateForVehicle(vehicle); // Tariffa per kWh della stazione
+		System.out.println(batteryCapacity);
+		System.out.println(currentBatteryLevel);
+        // Calcola l'energia ricaricabile
+        double energyToRecharge = batteryCapacity - currentBatteryLevel;
+        if (energyToRecharge <= 0) {
+            System.out.println("La batteria è già carica o sopra il massimo.");
+            return 0; // Non serve ricaricare
+        }
 
+        // Calcola il costo totale della ricarica
+        double cost = energyToRecharge * chargingRate;
+        return cost; // Ritorna l'importo da utilizzare nel metodo di registrazione
+    }
+	
+
+	public void updateBatteryLevel(User user) {
+		Vehicle vehicle = user.getPersonalVehicle(); // Supponendo che tu abbia un metodo per ottenere il veicolo
+		if (vehicle != null) {
+			double newBatteryLevel = user.getPersonalVehicle().generateRandomBatteryLevel(); // Usa il tuo metodo per generare un livello casuale
+			vehicle.setBatteryLevel(newBatteryLevel);
+		} else {
+			System.out.println("Nessun veicolo associato a questo utente.");
+		}
+	}
+	
+	
+	
 
 	public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
-        newCharge.setChargingStation(cs);
+		newCharge.setChargingStation(cs);
 		newCharge.setVehicle(vehicle);
 		newCharge.setChargingRate(vehicle.getSupportedRate());
 		newCharge.setUser(user);
-		newCharge.setEnergy(vehicle.getCapacity());
 		newCharge.setId(0); //chiedere a Skabboz!!!
-
+	
 		startTime.setHour(currentTime.getHour());
 		startTime.setMinute(currentTime.getMinute());
+	
 		float timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
 		int hour = (int) timeToCharge;
-		int minute = (int) (timeToCharge - hour * 60);
+		int minute = (int) (timeToCharge * 60) % 60; // Modifica per ottenere i minuti corretti
 		int endHour = startTime.getHour() + hour;
 		int endMinute = startTime.getMinute() + minute;
-		if (endMinute > 59) {
-			endHour = endHour + 1;
-			endMinute = endMinute - 60;
+	
+		// Gestisci il caso in cui i minuti superano 59
+		if (endMinute >= 60) {
+			endHour += endMinute / 60;
+			endMinute = endMinute % 60;
 		}
+	
 		newCharge.setStartTime(startTime);
 		newCharge.setEndTime(new Time(endHour, endMinute));
-    }
+	
+		// Calcola il costo della ricarica e impostalo nel nuovoCharge
+		double cost = calculateRechargeCost(vehicle, cs);
+		newCharge.setCost(cost); 
+	}
+	
 
 
 		
 	
 
-
+	/* 
     public void registerTransaction(User user, Vehicle vehicle, LocalDateTime currentTime, Charge newCharge) {
         // Logica per registrare la transazione
         System.out.println("Transazione registrata con successo. Ma penso che sia meglio collocare questo metodo nel controller");
     }
+	*/
 
+/*
+
+	private static void registerTransaction(User currentUser, Vehicle currentVehicle, LocalTime currentTime,
+			Charge newCharge, Transaction newTransaction) {
+		double chargeAmount = currentVehicle.getCapacity() * currentVehicle.getSupportedRate().getPrice();
+		System.out.println("Il totale è " + chargeAmount + "€. Come vuoi pagare?");
+		System.out.println("Inserisci 0 per contanti");
+		System.out.println("Inserisci 1 per carta di credito");
+		System.out.println("Inserisci 2 per carta di debito");
+		System.out.print("Scelta: ");
+
+		
+		newTransaction.setType(in.nextInt());
+		newTransaction.setCharge(newCharge);
+		newTransaction.setAmount(chargeAmount);
+		newTransaction.setTimestamp(new Time(currentTime.getHour(), currentTime.getMinute()));
+		int maxID = 0;
+		for (Transaction t : transactionList) {
+			if (t.getId() > maxID) {
+				maxID = t.getId();
+			}
+		}
+		newTransaction.setId(maxID + 1);
+		transactionList.add(newTransaction);
+
+		
+		int newPoints = (int) (chargeAmount * currentRewardSystem.getRechargeFactor());
+		currentUser.increaseGPBalance(newPoints);
+		System.out.println("Ricarica effettuata! Con questa ricarica hai guadagnato " + newPoints + " punti.");
+		 
+
+	
+	}
+
+ */
+	
 	
 
 

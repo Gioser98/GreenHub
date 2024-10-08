@@ -41,7 +41,7 @@ public class MMRegisterCarStrategy implements MainMenuStrategy {
 		Location location = user.getLocation();
 
 		// Crea un nuovo veicolo
-		Vehicle vehicle = new Vehicle(0, maker, model, type, selectedRate, location);
+		Vehicle vehicle = new Vehicle(0, maker, model, selectedRate, location, capacity);
 
 		// Aggiungi il veicolo al controller
 		controller.addVehicle(user, vehicle);

@@ -65,6 +65,7 @@ public class UserInterface {
 				System.out.print("Inserisci il tuo username: ");
 				String username = scanner.next();
 				loginUser(username);
+				
 				break;
 			case 3:
 				System.exit(0);
