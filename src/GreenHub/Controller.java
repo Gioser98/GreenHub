@@ -216,7 +216,7 @@ public class Controller {
 		startTime.setHour(currentTime.getHour());
 		startTime.setMinute(currentTime.getMinute());
 	
-		float timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
+		double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
 		int hour = (int) timeToCharge;
 		int minute = (int) (timeToCharge * 60) % 60; // Modifica per ottenere i minuti corretti
 		int endHour = startTime.getHour() + hour;

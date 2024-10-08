@@ -11,7 +11,7 @@ public class Vehicle implements Serializable {
     private String maker;
     private String model;
 	
-    private int capacity; // Capacity in kWh
+    private double capacity; // Capacity in kWh
     private ChargingRate supportedRate;
     private Location location;
     private User owner;
@@ -36,7 +36,7 @@ public class Vehicle implements Serializable {
     public void setModel(String model) {
         this.model = model;
     }
-    public int getCapacity() {
+    public double getCapacity() {
         return capacity;
     }
     public void setCapacity(int capacity) {
