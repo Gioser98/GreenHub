@@ -57,6 +57,26 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
     
         // Mostra il risultato della registrazione della transazione
         System.out.println(result);
+
+         /// **Assegnazione Green Points per la ricarica**
+        GreenPointsStrategy gpStrategy = new GPRechargeStrategy();  // Usa la strategia di ricarica
+        int chargePercentage = (int) amount;  // Supponiamo che sia la percentuale di ricarica
+
+        // Calcola i punti verdi usando la strategia
+        int greenPoints = gpStrategy.calculatePoints(chargePercentage);
+
+        // Usa il metodo del controller per assegnare i punti
+        ui.getController().assignGreenPoints(user, gpStrategy, chargePercentage);
+
+        // Stampa il messaggio con i punti verdi calcolati
+        System.out.println("Ricarica completata. Hai guadagnato " + greenPoints + " Green Points!");
+        
+        try {
+			ui.getController().saveAll();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     private PaymentStrategy choosePaymentMethod() {

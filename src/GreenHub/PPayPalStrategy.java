@@ -1,8 +1,9 @@
 package GreenHub;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class PPayPalStrategy implements PaymentStrategy {
+public class PPayPalStrategy implements PaymentStrategy, Serializable {
     private String email;
     private String password;
 

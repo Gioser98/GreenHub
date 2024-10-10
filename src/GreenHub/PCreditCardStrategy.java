@@ -1,8 +1,9 @@
 package GreenHub;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class PCreditCardStrategy implements PaymentStrategy {
+public class PCreditCardStrategy implements PaymentStrategy, Serializable {
     private String cardNumber;
     private String expiryDate;
     private String cvv;

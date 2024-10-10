@@ -26,6 +26,7 @@ public class Controller {
 	public ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
 	public ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 	public ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
+	private Reward rewards = new Reward();
 	//public DataSaver dataSaver;
 
 	public Controller(){
@@ -99,30 +100,10 @@ public class Controller {
 	
 
 	// Reward methods
-
-	public String calculateGreenPoints(int value, String strategy) {
-
-		GreenPointsStrategy greenPointsStrategy;
-
-		// Seleziona la strategia in base al parametro 'strategy'
-		switch (strategy.toLowerCase()) {
-		case "reservation":
-			greenPointsStrategy = new GPReservationStrategy();
-			break;
-		case "recharge":
-			greenPointsStrategy = new GPRechargeStrategy();
-			break;
-		default:
-			return "Errore: Strategia di calcolo dei punti non supportata.";
-		}
-
-		// Crea un oggetto Reward con la strategia selezionata
-		Reward reward = new Reward(greenPointsStrategy);
-		int points = reward.calculateGreenPoints(value);
-
-		return "Green points calcolati: " + points;
-	}
-
+	public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
+        rewards.setStrategy(strategy);  // Imposta la strategia corretta (Recharge o Reservation)
+        rewards.addPoints(user, value);  // Aggiungi i punti all'utente
+    }
 
 	// Reservation methods
 	public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {

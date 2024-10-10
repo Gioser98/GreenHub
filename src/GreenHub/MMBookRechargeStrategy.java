@@ -33,6 +33,26 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 		slotAvailable = checkSlotAvailability(currentCS, startingSlot, endingSlot, slotAvailable);
 		Reservation.reserveSlot(user, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable,
 				reservationList);
+
+		 // **Assegnazione Green Points per la prenotazione**
+		GreenPointsStrategy gpStrategy = new GPReservationStrategy();  // Usa la strategia di prenotazione
+		int value = 1;  // Per la prenotazione, possiamo usare un valore fisso
+
+		// Calcola i punti verdi usando la strategia
+		int greenPoints = gpStrategy.calculatePoints(value);
+
+		// Usa il metodo del controller per assegnare i punti
+		ui.getController().assignGreenPoints(user, gpStrategy, value);
+
+		// Stampa il messaggio con i punti verdi calcolati
+		System.out.println("Prenotazione completata. Hai guadagnato " + greenPoints + " Green Point!");
+
+		try {
+			ui.getController().saveAll();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static boolean checkSlotAvailability(ChargingStation currentCS, int startingSlot, int endingSlot,
