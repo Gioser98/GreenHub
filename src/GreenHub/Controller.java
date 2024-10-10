@@ -58,30 +58,29 @@ public class Controller {
 
 
 	// Transaction methods
-	public String registerTransaction(User user, Vehicle vehicle, ChargingStation chargingStation, Charge charge, double amount, PaymentStrategy strategy, int paymentType) {
+	public String registerTransaction(User user, Vehicle vehicle, ChargingStation chargingStation, Charge charge, double amount, PaymentStrategy strategy) {
 		// Crea una nuova transazione
 		Transaction transaction = new Transaction();
 	
 		try {
-			// Processa il pagamento usando la strategia selezionata
-			strategy.pay(amount);
-			
 			// Imposta i dettagli della transazione
 			transaction.setUser(user);
 			transaction.setVehicle(vehicle);
 			transaction.setCharge(charge);
 			transaction.setAmount(amount);
 			transaction.setPaymentStrategy(strategy);
-			transaction.setType(paymentType); // Imposta il tipo di pagamento (es. carta di credito, PayPal, ecc.)
 	
 			// Crea un timestamp basato sull'ora corrente
 			LocalDateTime now = LocalDateTime.now();
-			Time timestamp = new Time(now.getHour(), now.getMinute()); 
+			Time timestamp = new Time(now.getHour(), now.getMinute());
 			transaction.setTimestamp(timestamp);
 	
 			// Genera un ID unico per la transazione
 			int newId = transactionList.isEmpty() ? 1 : transactionList.get(transactionList.size() - 1).getId() + 1;
 			transaction.setId(newId);
+	
+			// Processa il pagamento usando la transazione
+			transaction.processPayment();
 	
 			// Aggiungi la transazione alla lista delle transazioni
 			transactionList.add(transaction);
@@ -240,60 +239,6 @@ public class Controller {
 
 		
 	
-
-	/* 
-    public void registerTransaction(User user, Vehicle vehicle, LocalDateTime currentTime, Charge newCharge) {
-        // Logica per registrare la transazione
-        System.out.println("Transazione registrata con successo. Ma penso che sia meglio collocare questo metodo nel controller");
-    }
-	*/
-
-/*
-
-	private static void registerTransaction(User currentUser, Vehicle currentVehicle, LocalTime currentTime,
-			Charge newCharge, Transaction newTransaction) {
-		double chargeAmount = currentVehicle.getCapacity() * currentVehicle.getSupportedRate().getPrice();
-		System.out.println("Il totale è " + chargeAmount + "€. Come vuoi pagare?");
-		System.out.println("Inserisci 0 per contanti");
-		System.out.println("Inserisci 1 per carta di credito");
-		System.out.println("Inserisci 2 per carta di debito");
-		System.out.print("Scelta: ");
-
-		
-		newTransaction.setType(in.nextInt());
-		newTransaction.setCharge(newCharge);
-		newTransaction.setAmount(chargeAmount);
-		newTransaction.setTimestamp(new Time(currentTime.getHour(), currentTime.getMinute()));
-		int maxID = 0;
-		for (Transaction t : transactionList) {
-			if (t.getId() > maxID) {
-				maxID = t.getId();
-			}
-		}
-		newTransaction.setId(maxID + 1);
-		transactionList.add(newTransaction);
-
-		
-		int newPoints = (int) (chargeAmount * currentRewardSystem.getRechargeFactor());
-		currentUser.increaseGPBalance(newPoints);
-		System.out.println("Ricarica effettuata! Con questa ricarica hai guadagnato " + newPoints + " punti.");
-		 
-
-	
-	}
-
- */
-	
-	
-
-
-
-	
-
-
-
-
-
 
 	//Metodo per salvare tutti i dati su file
 	public void saveAll() throws IOException {

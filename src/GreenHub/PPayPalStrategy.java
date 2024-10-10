@@ -1,17 +1,23 @@
 package GreenHub;
 
+import java.util.Scanner;
+
 public class PPayPalStrategy implements PaymentStrategy {
     private String email;
     private String password;
 
-    public PPayPalStrategy(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public PPayPalStrategy() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Inserisci l'email di PayPal: ");
+        this.email = scanner.next();
+        System.out.print("Inserisci la password di PayPal: ");
+        this.password = scanner.next();
     }
 
     @Override
     public void pay(double amount) {
-        // Logica di pagamento con PayPal
-        System.out.println("Pagamento di " + amount + " effettuato con PayPal.");
+        System.out.println("Pagando " + amount + " tramite PayPal con l'email " + email);
+        // Logica per eseguire il pagamento con PayPal
     }
 }
+
