@@ -1,7 +1,7 @@
 package GreenHub;
 
 // Implementazione della strategia Reservation
-class ReservationStrategy implements GreenPointsStrategy {
+class GPReservationStrategy implements GreenPointsStrategy {
     @Override
     public int calculatePoints(int value) {
         // Implementazione della logica per calcolare i punti per il noleggio
