@@ -14,13 +14,15 @@ public class Controller {
     public ArrayList<Vehicle> vehicleList = new ArrayList<>();
     public ArrayList<Transaction> transactionList = new ArrayList<>();
     public ArrayList<Reservation> reservationList = new ArrayList<>();
-    
     private Reward rewards = new Reward();
     private DataSaver dataSaver = new DataSaver();
+    private View view = new View();  // Riferimento alla View
 
     public Controller() {
-        // Costruttore
+        this.view = view;  // Inizializza la View
     }
+	
+
 
     // ==============================
     // User methods
@@ -29,7 +31,7 @@ public class Controller {
         if (getUserByUsername(user.getUsername()) == null) {
             userList.add(user);
         } else {
-            System.out.println("Username già esistente.");
+            view.showMessage("Username già esistente.");
         }
     }
 
@@ -45,7 +47,7 @@ public class Controller {
     public void increaseUserGPBalance(String username, int points) {
         User user = getUserByUsername(username);
         user.increaseGPBalance(points);
-        System.out.println("Saldo GP aggiornato correttamente!");
+        view.showMessage("Saldo GP aggiornato correttamente!");
     }
 
     // ==============================
@@ -69,7 +71,7 @@ public class Controller {
 
             transaction.processPayment();
             transactionList.add(transaction);
-            System.out.println("Pagamento completato con successo!");
+            view.showMessage("Pagamento completato con successo!");
             return "Pagamento effettuato con successo e transazione registrata.";
         } catch (Exception e) {
             return "Errore durante il pagamento: " + e.getMessage();
@@ -107,7 +109,7 @@ public class Controller {
             owner.setPersonalVehicle(vehicle);
         }
 
-        System.out.println("Veicolo registrato correttamente!");
+        view.showMessage("Veicolo registrato correttamente!");
     }
 
     // ==============================
@@ -135,7 +137,7 @@ public class Controller {
         
         double energyToRecharge = batteryCapacity - currentBatteryLevel;
         if (energyToRecharge <= 0) {
-            System.out.println("La batteria è già carica o sopra il massimo.");
+            view.showMessage("La batteria è già carica o sopra il massimo.");
             return 0; // Non serve ricaricare
         }
 
@@ -149,7 +151,7 @@ public class Controller {
             double newBatteryLevel = vehicle.generateRandomBatteryLevel();
             vehicle.setBatteryLevel(newBatteryLevel);
         } else {
-            System.out.println("Nessun veicolo associato a questo utente.");
+            view.showMessage("Nessun veicolo associato a questo utente.");
         }
     }
 
@@ -198,7 +200,7 @@ public class Controller {
 
             dataSaver.saveAll();
         } catch (IOException e) {
-            System.out.println("Errore durante il salvataggio: " + e.getMessage());
+            view.showMessage("Errore durante il salvataggio: " + e.getMessage());
         }
     }
 
@@ -215,20 +217,19 @@ public class Controller {
             this.transactionList = dataSaver.transactionList;
             this.reservationList = dataSaver.reservationList;
         } catch (IOException e) {
-            System.out.println("Errore durante la lettura: " + e.getMessage());
+            view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
     }
-	// Metodo per stampare tutti i dati
-	public void printino() {
 
-		System.out.println("Charging Rate List: " + chargingRateList);
-		System.out.println("Energy Supplier List: " + energySupplierList);
-		System.out.println("Charging Station List: " + chargingStationList);
-		System.out.println("Reward List: " + rewardList);
-		System.out.println("User List: " + userList);
-		System.out.println("Vehicle List: " + vehicleList);
-		System.out.println("Transaction List: " + transactionList);
-		System.out.println("Reservation List: " + reservationList);
-		//.out.println("Reward System: " + currentRewardSystem);
-	}
+    // Metodo per stampare tutti i dati
+    public void printino() {
+        view.printChargingRateList(chargingRateList);
+        view.printEnergySupplierList(energySupplierList);
+        view.printChargingStationList(chargingStationList);
+        view.printRewardList(rewardList);
+        view.printUserList(userList);
+        view.printVehicleList(vehicleList);
+        view.printTransactionList(transactionList);
+        view.printReservationList(reservationList);
+    }
 }
