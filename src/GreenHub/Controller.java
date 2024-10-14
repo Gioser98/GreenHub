@@ -1,388 +1,223 @@
 package GreenHub;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.channels.NetworkChannel;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Random;
-//import java.util.ResourceBundle.Control;
-import java.util.Scanner;
-
-
 
 public class Controller {
-	public ArrayList<ChargingRate> chargingRateList = new ArrayList<ChargingRate>();
-	public ArrayList<EnergySupplier> energySupplierList = new ArrayList<EnergySupplier>();
-	public ArrayList<ChargingStation> chargingStationList = new ArrayList<ChargingStation>();
-	public ArrayList<Reward> rewardList = new ArrayList<Reward>();
-	public ArrayList<User> userList = new ArrayList<User>();
-	public ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
-	public ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-	public ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	private Reward rewards = new Reward();
-	//public DataSaver dataSaver;
+    // Liste per i dati
+    public ArrayList<ChargingRate> chargingRateList = new ArrayList<>();
+    public ArrayList<EnergySupplier> energySupplierList = new ArrayList<>();
+    public ArrayList<ChargingStation> chargingStationList = new ArrayList<>();
+    public ArrayList<Reward> rewardList = new ArrayList<>();
+    public ArrayList<User> userList = new ArrayList<>();
+    public ArrayList<Vehicle> vehicleList = new ArrayList<>();
+    public ArrayList<Transaction> transactionList = new ArrayList<>();
+    public ArrayList<Reservation> reservationList = new ArrayList<>();
+    
+    private Reward rewards = new Reward();
+    private DataSaver dataSaver = new DataSaver();
 
-	public Controller(){
-		//
-	}
-
-	// User methods
-	public void addUser(User user) {
-		if (getUserByUsername(user.getUsername()) == null) {
-			userList.add(user);
-		} else {
-			System.out.println("Username già esistente.");
-		}
-	}
-
-	public User getUserByUsername(String username) {
-		for (User u : userList) {
-			if (u.getUsername().equals(username)) {
-				return u;
-			}
-		}
-		return null;
-	}
-
-	public void increaseUserGPBalance(String username, int points) {
-		User user = getUserByUsername(username);
-		user.increaseGPBalance(points);
-		System.out.println("Saldo GP aggiornato correttamente!");
-	}
-
-
-	// Transaction methods
-	public String registerTransaction(User user, Vehicle vehicle, ChargingStation chargingStation, Charge charge, double amount, PaymentStrategy strategy) {
-		// Crea una nuova transazione
-		Transaction transaction = new Transaction();
-	
-		try {
-			// Imposta i dettagli della transazione
-			transaction.setUser(user);
-			transaction.setVehicle(vehicle);
-			transaction.setCharge(charge);
-			transaction.setAmount(amount);
-			transaction.setPaymentStrategy(strategy);
-	
-			// Crea un timestamp basato sull'ora corrente
-			LocalDateTime now = LocalDateTime.now();
-			Time timestamp = new Time(now.getHour(), now.getMinute());
-			transaction.setTimestamp(timestamp);
-	
-			// Genera un ID unico per la transazione
-			int newId = transactionList.isEmpty() ? 1 : transactionList.get(transactionList.size() - 1).getId() + 1;
-			transaction.setId(newId);
-	
-			// Processa il pagamento usando la transazione
-			transaction.processPayment();
-	
-			// Aggiungi la transazione alla lista delle transazioni
-			transactionList.add(transaction);
-	
-			// Mostra un messaggio di successo
-			System.out.println("Pagamento completato con successo!");
-			return "Pagamento effettuato con successo e transazione registrata.";
-	
-		} catch (Exception e) {
-			// In caso di errore, mostra un messaggio e non registra la transazione
-			return "Errore durante il pagamento: " + e.getMessage();
-		}
-	}
-	
-	
-	
-
-	// Reward methods
-	public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
-        rewards.setStrategy(strategy);  // Imposta la strategia corretta (Recharge o Reservation)
-        rewards.addPoints(user, value);  // Aggiungi i punti all'utente
+    public Controller() {
+        // Costruttore
     }
 
-	// Reservation methods
-	public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
-		boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
-		Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
-	}
+    // ==============================
+    // User methods
+    // ==============================
+    public void addUser(User user) {
+        if (getUserByUsername(user.getUsername()) == null) {
+            userList.add(user);
+        } else {
+            System.out.println("Username già esistente.");
+        }
+    }
 
+    public User getUserByUsername(String username) {
+        for (User u : userList) {
+            if (u.getUsername().equals(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
 
-	// Vehicle methods
-	public void addVehicle(User owner, Vehicle vehicle) {
-		if (owner == null || vehicle == null) {
-			throw new IllegalArgumentException("Owner or vehicle cannot be null");
-		}
+    public void increaseUserGPBalance(String username, int points) {
+        User user = getUserByUsername(username);
+        user.increaseGPBalance(points);
+        System.out.println("Saldo GP aggiornato correttamente!");
+    }
 
-		// Imposta il proprietario del veicolo
-		vehicle.setOwner(owner);
+    // ==============================
+    // Transaction methods
+    // ==============================
+    public String registerTransaction(User user, Vehicle vehicle, ChargingStation chargingStation, Charge charge, double amount, PaymentStrategy strategy) {
+        Transaction transaction = new Transaction();
+        try {
+            transaction.setUser(user);
+            transaction.setVehicle(vehicle);
+            transaction.setCharge(charge);
+            transaction.setAmount(amount);
+            transaction.setPaymentStrategy(strategy);
 
-		// Aggiungi il veicolo alla lista
-		vehicleList.add(vehicle);
+            LocalDateTime now = LocalDateTime.now();
+            Time timestamp = new Time(now.getHour(), now.getMinute());
+            transaction.setTimestamp(timestamp);
 
-		// Aggiorna il veicolo dell'utente se necessario
-		if (owner.getPersonalVehicle() == null) {
-			owner.setPersonalVehicle(vehicle);
-		}
+            int newId = transactionList.isEmpty() ? 1 : transactionList.get(transactionList.size() - 1).getId() + 1;
+            transaction.setId(newId);
 
-		System.out.println("Veicolo registrato correttamente!");
-	}
+            transaction.processPayment();
+            transactionList.add(transaction);
+            System.out.println("Pagamento completato con successo!");
+            return "Pagamento effettuato con successo e transazione registrata.";
+        } catch (Exception e) {
+            return "Errore durante il pagamento: " + e.getMessage();
+        }
+    }
 
-	
+    // ==============================
+    // Reward methods
+    // ==============================
+    public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
+        rewards.setStrategy(strategy);
+        rewards.addPoints(user, value);
+    }
 
+    // ==============================
+    // Reservation methods
+    // ==============================
+    public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
+        boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
+        Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
+    }
 
+    // ==============================
+    // Vehicle methods
+    // ==============================
+    public void addVehicle(User owner, Vehicle vehicle) {
+        if (owner == null || vehicle == null) {
+            throw new IllegalArgumentException("Owner or vehicle cannot be null");
+        }
 
+        vehicle.setOwner(owner);
+        vehicleList.add(vehicle);
 
-	// ChargingRate methods
-	public ArrayList<ChargingRate> getChargingRateList() {
-		return chargingRateList;
-	}
+        if (owner.getPersonalVehicle() == null) {
+            owner.setPersonalVehicle(vehicle);
+        }
 
+        System.out.println("Veicolo registrato correttamente!");
+    }
 
-	// EnergySupplier methods
+    // ==============================
+    // ChargingRate methods
+    // ==============================
+    public ArrayList<ChargingRate> getChargingRateList() {
+        return chargingRateList;
+    }
 
-	
-	// ChargingStation methods
-	
-	// Metodo per ottenere la lista delle stazioni di ricarica
-	public ArrayList<ChargingStation> getChargingStationList() {
-    return chargingStationList;
-	}
+    // ==============================
+    // EnergySupplier methods
+    // ==============================
 
+    // ==============================
+    // ChargingStation methods
+    // ==============================
+    public ArrayList<ChargingStation> getChargingStationList() {
+        return chargingStationList;
+    }
 
-	public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
-        double batteryCapacity = vehicle.getCapacity(); // Capacità della batteria in kWh
-        double currentBatteryLevel = vehicle.generateRandomBatteryLevel(); // Usa il metodo per ottenere il livello di batteria
-        double chargingRate = chargingStation.getChargingRateForVehicle(vehicle); // Tariffa per kWh della stazione
-		System.out.println(batteryCapacity);
-		System.out.println(currentBatteryLevel);
-        // Calcola l'energia ricaricabile
+    public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
+        double batteryCapacity = vehicle.getCapacity();
+        double currentBatteryLevel = vehicle.generateRandomBatteryLevel();
+        double chargingRate = chargingStation.getChargingRateForVehicle(vehicle);
+        
         double energyToRecharge = batteryCapacity - currentBatteryLevel;
         if (energyToRecharge <= 0) {
             System.out.println("La batteria è già carica o sopra il massimo.");
             return 0; // Non serve ricaricare
         }
 
-        // Calcola il costo totale della ricarica
         double cost = energyToRecharge * chargingRate;
-        return cost; // Ritorna l'importo da utilizzare nel metodo di registrazione
+        return cost;
     }
-	
 
-	public void updateBatteryLevel(User user) {
-		Vehicle vehicle = user.getPersonalVehicle(); // Supponendo che tu abbia un metodo per ottenere il veicolo
-		if (vehicle != null) {
-			double newBatteryLevel = user.getPersonalVehicle().generateRandomBatteryLevel(); // Usa il tuo metodo per generare un livello casuale
-			vehicle.setBatteryLevel(newBatteryLevel);
-		} else {
-			System.out.println("Nessun veicolo associato a questo utente.");
-		}
-	}
-	
-	
-	
+    public void updateBatteryLevel(User user) {
+        Vehicle vehicle = user.getPersonalVehicle();
+        if (vehicle != null) {
+            double newBatteryLevel = vehicle.generateRandomBatteryLevel();
+            vehicle.setBatteryLevel(newBatteryLevel);
+        } else {
+            System.out.println("Nessun veicolo associato a questo utente.");
+        }
+    }
 
-	public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
-		newCharge.setChargingStation(cs);
-		newCharge.setVehicle(vehicle);
-		newCharge.setChargingRate(vehicle.getSupportedRate());
-		newCharge.setUser(user);
-		newCharge.setId(0); //chiedere a Skabboz!!!
-	
-		startTime.setHour(currentTime.getHour());
-		startTime.setMinute(currentTime.getMinute());
-	
-		double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
-		int hour = (int) timeToCharge;
-		int minute = (int) (timeToCharge * 60) % 60; // Modifica per ottenere i minuti corretti
-		int endHour = startTime.getHour() + hour;
-		int endMinute = startTime.getMinute() + minute;
-	
-		// Gestisci il caso in cui i minuti superano 59
-		if (endMinute >= 60) {
-			endHour += endMinute / 60;
-			endMinute = endMinute % 60;
-		}
-	
-		newCharge.setStartTime(startTime);
-		newCharge.setEndTime(new Time(endHour, endMinute));
-	
-		// Calcola il costo della ricarica e impostalo nel nuovoCharge
-		double cost = calculateRechargeCost(vehicle, cs);
-		newCharge.setCost(cost); 
-	}
-	
+    public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
+        newCharge.setChargingStation(cs);
+        newCharge.setVehicle(vehicle);
+        newCharge.setChargingRate(vehicle.getSupportedRate());
+        newCharge.setUser(user);
+        newCharge.setId(0); // Placeholder, da modificare
 
+        startTime.setHour(currentTime.getHour());
+        startTime.setMinute(currentTime.getMinute());
 
-		
-	
+        double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
+        int hour = (int) timeToCharge;
+        int minute = (int) (timeToCharge * 60) % 60;
+        int endHour = startTime.getHour() + hour;
+        int endMinute = startTime.getMinute() + minute;
 
-	//Metodo per salvare tutti i dati su file
-	public void saveAll() throws IOException {
-		// Salvataggio di chargingRateList
-		try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
-				ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
-			chargingRateOOS.writeObject(chargingRateList);
-		}
+        // Gestisci il caso in cui i minuti superano 59
+        if (endMinute >= 60) {
+            endHour += endMinute / 60;
+            endMinute = endMinute % 60;
+        }
 
-		// Salvataggio di energySupplierList
-		try (FileOutputStream energySupplierFOS = new FileOutputStream(new File("EnergySupplier.txt"));
-				ObjectOutputStream energySupplierOOS = new ObjectOutputStream(energySupplierFOS)) {
-			energySupplierOOS.writeObject(energySupplierList);
-		}
+        newCharge.setStartTime(startTime);
+        newCharge.setEndTime(new Time(endHour, endMinute));
 
-		// Salvataggio di chargingStationList
-		try (FileOutputStream chargingStationFOS = new FileOutputStream(new File("ChargingStation.txt"));
-				ObjectOutputStream chargingStationOOS = new ObjectOutputStream(chargingStationFOS)) {
-			chargingStationOOS.writeObject(chargingStationList);
-		}
+        double cost = calculateRechargeCost(vehicle, cs);
+        newCharge.setCost(cost);
+    }
 
-		// Salvataggio di rewardList
-		try (FileOutputStream rewardFOS = new FileOutputStream(new File("Reward.txt"));
-				ObjectOutputStream rewardOOS = new ObjectOutputStream(rewardFOS)) {
-			rewardOOS.writeObject(rewardList);
-		}
+    // ==============================
+    // Data management methods
+    // ==============================
+    public void saveAll() {
+        try {
+            dataSaver.chargingRateList = this.chargingRateList;
+            dataSaver.energySupplierList = this.energySupplierList;
+            dataSaver.chargingStationList = this.chargingStationList;
+            dataSaver.rewardList = this.rewardList;
+            dataSaver.userList = this.userList;
+            dataSaver.vehicleList = this.vehicleList;
+            dataSaver.transactionList = this.transactionList;
+            dataSaver.reservationList = this.reservationList;
 
-		// Salvataggio di userList
-		try (FileOutputStream userFOS = new FileOutputStream(new File("User.txt"));
-				ObjectOutputStream userOOS = new ObjectOutputStream(userFOS)) {
-			userOOS.writeObject(userList);
-		}
+            dataSaver.saveAll();
+        } catch (IOException e) {
+            System.out.println("Errore durante il salvataggio: " + e.getMessage());
+        }
+    }
 
-		// Salvataggio di vehicleList
-		try (FileOutputStream vehicleFOS = new FileOutputStream(new File("Vehicle.txt"));
-				ObjectOutputStream vehicleOOS = new ObjectOutputStream(vehicleFOS)) {
-			vehicleOOS.writeObject(vehicleList);
-		}
+    public void readAll() {
+        try {
+            dataSaver.readAll();
 
-		// Salvataggio di transactionList
-		try (FileOutputStream transactionFOS = new FileOutputStream(new File("Transaction.txt"));
-				ObjectOutputStream transactionOOS = new ObjectOutputStream(transactionFOS)) {
-			transactionOOS.writeObject(transactionList);
-		}
-
-		// Salvataggio di reservationList
-		try (FileOutputStream reservationFOS = new FileOutputStream(new File("Reservation.txt"));
-				ObjectOutputStream reservationOOS = new ObjectOutputStream(reservationFOS)) {
-			reservationOOS.writeObject(reservationList);
-		}
-
-		/* 
-        // Salvataggio di RewardSystem
-        try (FileOutputStream rewardSystemFOS = new FileOutputStream(new File("RewardSystem.txt"));
-             ObjectOutputStream rewardSystemOOS = new ObjectOutputStream(rewardSystemFOS)) {
-            rewardSystemOOS.writeObject(currentRewardSystem);
-        }*/
-
-
-		System.out.println("\n\n----------------------------------------------------------------");
-		System.out.println("Tutti i dati sono stati correttamente salvati su file.");
-		System.out.println("----------------------------------------------------------------");
-	}
-
-
-
-
-	// Metodo per caricare tutti i dati dai file
-	@SuppressWarnings("unchecked")
-	public void readAll() throws FileNotFoundException, IOException {
-		// Lettura chargingRateList
-		FileInputStream FIS = new FileInputStream("ChargingRate.txt");
-		ObjectInputStream OIS = new ObjectInputStream(FIS);
-		try {
-			chargingRateList = (ArrayList<ChargingRate>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura energySupplierList
-		FIS = new FileInputStream("EnergySupplier.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			energySupplierList = (ArrayList<EnergySupplier>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura chargingStationList
-		FIS = new FileInputStream("ChargingStation.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			chargingStationList = (ArrayList<ChargingStation>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura rewardList
-		FIS = new FileInputStream("Reward.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			rewardList = (ArrayList<Reward>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura userList
-		FIS = new FileInputStream("User.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			userList = (ArrayList<User>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura vehicleList
-		FIS = new FileInputStream("Vehicle.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			vehicleList = (ArrayList<Vehicle>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura transactionList
-		FIS = new FileInputStream("Transaction.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			transactionList = (ArrayList<Transaction>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		// Lettura reservationList
-		FIS = new FileInputStream("Reservation.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			reservationList = (ArrayList<Reservation>) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		/*  Lettura rewardSystem
-		FIS = new FileInputStream("RewardSystem.txt");
-		OIS = new ObjectInputStream(FIS);
-		try {
-			currentRewardSystem = (RewardSystem) OIS.readObject();
-			OIS.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		 */
-
-	}
-
+            this.chargingRateList = dataSaver.chargingRateList;
+            this.energySupplierList = dataSaver.energySupplierList;
+            this.chargingStationList = dataSaver.chargingStationList;
+            this.rewardList = dataSaver.rewardList;
+            this.userList = dataSaver.userList;
+            this.vehicleList = dataSaver.vehicleList;
+            this.transactionList = dataSaver.transactionList;
+            this.reservationList = dataSaver.reservationList;
+        } catch (IOException e) {
+            System.out.println("Errore durante la lettura: " + e.getMessage());
+        }
+    }
 	// Metodo per stampare tutti i dati
 	public void printino() {
 
@@ -396,5 +231,4 @@ public class Controller {
 		System.out.println("Reservation List: " + reservationList);
 		//.out.println("Reward System: " + currentRewardSystem);
 	}
-
 }

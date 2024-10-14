@@ -48,6 +48,6 @@ public class MMRegisterCarStrategy implements MainMenuStrategy {
 
 		// Salva lo stato aggiornato dei dati
         controller.saveAll(); // Aggiunta questa chiamata per salvare i dati
-
+		
 	}
 }

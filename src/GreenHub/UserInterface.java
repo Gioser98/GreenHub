@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+//import javax.xml.crypto.Data;
+
 import java.util.Random;
 
 public class UserInterface {
@@ -15,12 +18,7 @@ public class UserInterface {
 	public UserInterface() {
 		scanner = new Scanner(System.in);
 
-		try {
-			controller.readAll();  // Carica i dati esistenti
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Errore durante il caricamento dei dati.");
-		}
+		controller.readAll();  // Carica i dati esistenti
 
 		// Popola la mappa con le strategie
 		strategies.put(1, new MMRechargeVehicleStrategy());
@@ -37,6 +35,8 @@ public class UserInterface {
 	public Scanner getScanner() {
 		return scanner;
 	}
+	
+	
 
 	public void WelcomeMenu() throws IOException, ClassNotFoundException {
 		while (true) {
@@ -54,12 +54,7 @@ public class UserInterface {
 			switch (choice) {
 			case 1:
 				registerUser();
-				try {
 					controller.saveAll();  // Salva i dati
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("Errore durante il salvataggio dei dati.");
-				}
 				break;
 			case 2:
 				System.out.print("Inserisci il tuo username: ");

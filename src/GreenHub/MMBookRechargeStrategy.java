@@ -47,12 +47,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 		// Stampa il messaggio con i punti verdi calcolati
 		System.out.println("Prenotazione completata. Hai guadagnato " + greenPoints + " Green Point!");
 
-		try {
-			ui.getController().saveAll();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ui.getController().saveAll();
 	}
 
 	private static boolean checkSlotAvailability(ChargingStation currentCS, int startingSlot, int endingSlot,

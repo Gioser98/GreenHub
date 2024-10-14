@@ -71,12 +71,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Stampa il messaggio con i punti verdi calcolati
         System.out.println("Ricarica completata. Hai guadagnato " + greenPoints + " Green Points!");
         
-        try {
-			ui.getController().saveAll();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        ui.getController().saveAll();
     }
 
     private PaymentStrategy choosePaymentMethod() {
