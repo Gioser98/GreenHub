@@ -13,8 +13,8 @@ public class MMRegisterCarStrategy implements MainMenuStrategy {
 		String maker = scanner.next();
 		System.out.print("Inserisci il modello dell'auto: ");
 		String model = scanner.next();
-		System.out.print("Inserisci il tipo dell'auto (0: Elettrica, 1: Ibrida, 2: Combustione): ");
-		int type = scanner.nextInt();
+		//System.out.print("Inserisci il tipo dell'auto (0: Elettrica, 1: Ibrida, 2: Combustione): ");
+		//int type = scanner.nextInt();
 		System.out.print("Inserisci la capacità dell'auto: ");
 		int capacity = scanner.nextInt();
 

@@ -1,10 +1,9 @@
 package GreenHub;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class ChargingStation implements Serializable {
 
@@ -116,21 +115,7 @@ public class ChargingStation implements Serializable {
         }
     }
 
-    public static ChargingStation chooseStation(Vehicle vehicle, List<ChargingStation> chargingStationList) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Inserisci l'ID della stazione di ricarica scelta: ");
-        int stationId = scanner.nextInt();
-
-        for (ChargingStation cs : chargingStationList) {
-            if (cs.getId() == stationId && cs.isCompatibleWith(vehicle) && !cs.isMaintenance()) {
-                System.out.println("Hai scelto: " + cs);
-                return cs;
-            }
-        }
-
-        System.out.println("Stazione non disponibile o non compatibile.");
-        return null;
-    }
+ 
 
     public void printTimeTableWithTimeSlots() {
 		System.out.println("Stato attuale della colonnina di ricarica:");

@@ -12,10 +12,10 @@ public class Charge implements Serializable {
 	private ChargingStation chargingStation;
 	private Time startTime;
 	private Time endTime;
-	private int energy;
-	private ChargingRate ChargingRate;
+	//private int energy;
+	private ChargingRate chargingRate;
 	private double cost;
-	
+
 	// Getter&Setter
 	public double getCost(){
 		return cost;
@@ -60,53 +60,38 @@ public class Charge implements Serializable {
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
-	public int getEnergy() {
-		return energy;
-	}
-	public void setEnergy(int energy) {
-		this.energy = energy;
-	}
 	public ChargingRate getChargingRate() {
-		return ChargingRate;
+		return chargingRate;
 	}
 	public void setChargingRate(ChargingRate chargingRate) {
-		ChargingRate = chargingRate;
+		this.chargingRate = chargingRate;
 	}
-	
+
 	// Constructors
 	public Charge() {
-		    // Costruttore vuoto
+		// Costruttore vuoto
 	}
 	
 	public Charge(int id, User user, Vehicle vehicle, ChargingStation chargingStation, Time startTime, 
-			Time endTime, int energy, ChargingRate ChargingRate) {
-		
+			Time endTime, int energy, ChargingRate chargingRate) {
 		this.id = id;
 		this.user = user;
 		this.vehicle = vehicle;
 		this.chargingStation = chargingStation;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.energy = energy;
-		this.ChargingRate = ChargingRate;
+		//this.energy = energy;
+		this.chargingRate = chargingRate;
 	}
-	/* 
-	public Charge(ChargingStation chargingStation, Vehicle vehicle, Time startTime) {
+
+	public Charge(ChargingStation chargingStation, Vehicle vehicle, LocalDateTime startTime) {
 		this.chargingStation = chargingStation;
 		this.vehicle = vehicle;
-		this.startTime = startTime;
+		this.startTime = new Time(startTime.getHour(), startTime.getMinute());
 	}
-	*/
-	
-	public Charge(ChargingStation chargingStation, Vehicle vehicle, LocalDateTime startTime) {
-    this.chargingStation = chargingStation;
-    this.vehicle = vehicle;
-    this.startTime = new Time(startTime.getHour(), startTime.getMinute());  // Conversione da LocalDateTime a Time
-}
 
-	
-	
 	// Methods
+	@Override
 	public String toString() {
 		return "totti";
 	}

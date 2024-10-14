@@ -7,13 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.channels.NetworkChannel;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Random;
-//import java.util.ResourceBundle.Control;
-import java.util.Scanner;
+
+
 
 
 
@@ -26,7 +22,7 @@ public class DataSaver {
 	public ArrayList<Vehicle> vehicleList = new ArrayList<Vehicle>();
 	public ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 	public ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
-	private Reward rewards = new Reward();
+	//private Reward rewards = new Reward();
 
 
     public DataSaver(){

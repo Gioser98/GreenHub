@@ -30,7 +30,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Procedi con la selezione della stazione di ricarica
         List<ChargingStation> chargingStationList = ui.getController().getChargingStationList();  
         ChargingStation.getNearAvailableStation(user, chargingStationList);  
-        ChargingStation currentCS = ChargingStation.chooseStation(currentVehicle, chargingStationList);  
+        ChargingStation currentCS = ui.getController().chooseStation(currentVehicle);  
         
         // Imposta l'ora corrente e crea una nuova carica
         LocalDateTime currentTime = LocalDateTime.now();  

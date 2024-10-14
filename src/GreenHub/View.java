@@ -1,8 +1,11 @@
 package GreenHub;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class View {
+
+    private Scanner scanner = new Scanner(System.in);
 
     public View() {
         // Costruttore vuoto, puoi aggiungere logica se necessario
@@ -12,6 +15,13 @@ public class View {
     public void showMessage(String message) {
         System.out.println(message);
     }
+
+     // Metodo per ottenere l'ID della stazione dall'utente
+     public int getStationIdFromUser() {
+        System.out.print("Inserisci l'ID della stazione di ricarica scelta: ");
+        return scanner.nextInt();
+    }
+
 
     // Metodi per stampare le varie liste
     public void printChargingRateList(ArrayList<ChargingRate> chargingRateList) {

@@ -19,7 +19,7 @@ public class Controller {
     private View view = new View();  // Riferimento alla View
 
     public Controller() {
-        this.view = view;  // Inizializza la View
+        //;  // Inizializza la View
     }
 	
 
@@ -129,6 +129,22 @@ public class Controller {
     public ArrayList<ChargingStation> getChargingStationList() {
         return chargingStationList;
     }
+
+    public ChargingStation chooseStation(Vehicle vehicle) {
+        int stationId = view.getStationIdFromUser(); // Chiede alla View l'ID della stazione
+    
+        for (ChargingStation cs : chargingStationList) {
+            if (cs.getId() == stationId && cs.isCompatibleWith(vehicle) && !cs.isMaintenance()) {
+                view.showMessage("Hai scelto: " + cs);
+                return cs;
+            }
+        }
+    
+        view.showMessage("Stazione non disponibile o non compatibile.");
+        return null;
+    }
+    
+    
 
     public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
         double batteryCapacity = vehicle.getCapacity();

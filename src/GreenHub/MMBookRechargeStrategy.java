@@ -1,6 +1,5 @@
 package GreenHub;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,7 +20,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
         //	return;
 		//}
 		ChargingStation.getNearAvailableStation(user, chargingStationList);
-		currentCS = ChargingStation.chooseStation(currentVehicle, chargingStationList);
+		currentCS = ui.getController().chooseStation(currentVehicle);
 		currentCS.printTimeTableWithTimeSlots();
 
 		System.out.print("Quali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
