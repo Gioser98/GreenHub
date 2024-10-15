@@ -95,24 +95,13 @@ public class Vehicle implements Serializable {
         return random.nextDouble() * capacity; // Generates a value between 0 and capacity
     }
     
-    // Convert battery level to percentage
-    public double getBatteryPercentage() {
-        return (batteryLevel / capacity) * 100; // Return percentage
-    }
     
-    // Method to recharge the battery
-    public void rechargeBattery(double amount) {
-        if (amount < 0) {
-            System.out.println("L'importo di ricarica non può essere negativo.");
-            return;
-        }
-        setBatteryLevel(batteryLevel + amount); // Update battery level
-        System.out.println("Batteria ricaricata di " + amount + " kWh. Livello attuale: " + batteryLevel + " kWh (" + getBatteryPercentage() + "%).");
-    }
+    
+    
     
     // Methods
     public String toString() {
-        return maker + " " + model + " (Battery Level: " + getBatteryPercentage() + "%)"; // Use percentage
+        return maker + " " + model  ;
     }
     
     public static void printAll(ArrayList<Vehicle> vehicleList) {

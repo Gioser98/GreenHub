@@ -28,7 +28,7 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
         System.out.println("Elaborazione pagamento tramite PayPal...");
         simulatePaymentDelay();  // Simula un'attesa per il pagamento
         
-        System.out.println("Pagamento di Euro" + String.format("%.2f", amount) + " approvato tramite PayPal (email: " + maskEmail(email) + ")");
+        System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato tramite PayPal (email: " + maskEmail(email) + ")");
         /* 
                 if (processPayment()) {
             System.out.println("Pagamento di " + String.format("%.2f", amount) + " \u20AC44 approvato tramite PayPal (email: " + maskEmail(email) + ")");

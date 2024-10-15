@@ -68,8 +68,14 @@ public class UserInterface {
 
     public void MainMenu(User user) throws InterruptedException {
         while (true) {
-            System.out.println("Ciao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
-            System.out.println("1) Ricarica il tuo veicolo elettrico");
+            System.out.println("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
+            if (user.getPersonalVehicle() != null) {
+                System.out.println("\nLa tua " + user.getPersonalVehicle().getMaker() + " " + user.getPersonalVehicle().getModel() + 
+                    " ha una percentuale di carica pari a " + controller.randomBatteryPercentage(user) + " %");
+            } else {
+                System.out.println("\nNon hai un veicolo personale associato.");
+            }
+            System.out.println("\n1) Ricarica il tuo veicolo elettrico");
             System.out.println("2) Prenota una ricarica");
             System.out.println("3) Noleggia un veicolo");
             System.out.println("4) Riscatta una ricompensa");

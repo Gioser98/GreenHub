@@ -145,9 +145,18 @@ public class Controller {
         return null;
     }
 
-    public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
-        double batteryCapacity = vehicle.getCapacity();
-        double currentBatteryLevel = vehicle.generateRandomBatteryLevel();
+    public double randomBattery (User user){
+        return user.getPersonalVehicle().generateRandomBatteryLevel();
+    }
+
+    public double randomBatteryPercentage (User user){
+        double value =  (randomBattery(user) / user.getPersonalVehicle().getCapacity() ) * 100;
+        return value;
+    }
+
+    public double calculateRechargeCost(User user,Vehicle vehicle, ChargingStation chargingStation) {
+        double batteryCapacity = user.getPersonalVehicle().getCapacity();
+        double currentBatteryLevel = randomBattery(user);
         double chargingRate = chargingStation.getChargingRateForVehicle(vehicle);
         
         double energyToRecharge = batteryCapacity - currentBatteryLevel;
@@ -194,14 +203,9 @@ public class Controller {
         newCharge.setStartTime(startTime);
         newCharge.setEndTime(new Time(endHour, endMinute));
     
-        double cost = calculateRechargeCost(vehicle, cs);
+        double cost = calculateRechargeCost(user,vehicle, cs);
         newCharge.setCost(cost);
-    
-        // Simula la ricarica della batteria
-        double amountToRecharge = vehicle.getCapacity() - vehicle.getBatteryLevel();
-        if (amountToRecharge > 0) {
-            vehicle.rechargeBattery(amountToRecharge); // Ricarica la batteria fino al massimo
-        }
+
     }
     
     

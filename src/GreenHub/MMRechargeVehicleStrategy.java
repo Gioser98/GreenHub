@@ -41,7 +41,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ChargingStation currentCS = ui.getController().chooseStation(currentVehicle);
 
         // Chiedi se l'utente è già alla stazione o deve arrivarci
-        System.out.println("Sei già alla stazione di ricarica " + currentCS.getOwner() + " o devi ancora arrivarci? (1. Sono già qui / 2. Devo arrivare)");
+        System.out.println("Sei già alla stazione di ricarica di " + currentCS.getOwner() + " o devi ancora arrivarci? (1. Sono già qui / 2. Devo arrivare)");
         int travelOption = scanner.nextInt();
 
         if (travelOption == 2) {
@@ -66,7 +66,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
 
         // Simulazione della ricarica
         try {
-            simulateCharging(newCharge);
+            simulateCharging(ui, user);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -123,8 +123,8 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
     }
 
     // Simulazione della ricarica con una barra di avanzamento
-    private void simulateCharging(Charge newCharge) throws InterruptedException {
-        int initialCharge = (int) newCharge.getVehicle().getBatteryPercentage(); // Ottieni la percentuale iniziale di carica
+    private void simulateCharging(UserInterface ui, User user) throws InterruptedException {
+        int initialCharge = (int) ui.getController().randomBatteryPercentage(user); // Ottieni la percentuale iniziale di carica
         int targetCharge = 100; // Ricarica fino al 100%
     
         System.out.println("Inizio ricarica...");

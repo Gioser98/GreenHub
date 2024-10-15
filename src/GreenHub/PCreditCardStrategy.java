@@ -35,7 +35,7 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
     public void pay(double amount) {
         System.out.println("Elaborazione pagamento...");
         simulatePaymentDelay();  // Simula un'attesa per il pagamento
-        System.out.println("Pagamento di Euro" + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
+        System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
         //if (processPayment()) {
         //    System.out.println("Pagamento di Euro" + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
         //} else {
