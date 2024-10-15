@@ -31,7 +31,7 @@ public class UserInterface {
 		return scanner;
 	}
 
-    public void WelcomeMenu() throws IOException, ClassNotFoundException {
+    public void WelcomeMenu() throws IOException, ClassNotFoundException, InterruptedException {
         while (true) {
             System.out.println("-------------BENVENUTO IN GREENHUB-------------");
             System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
@@ -66,7 +66,7 @@ public class UserInterface {
         }
     }
 
-    public void MainMenu(User user) {
+    public void MainMenu(User user) throws InterruptedException {
         while (true) {
             System.out.println("Ciao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
             System.out.println("1) Ricarica il tuo veicolo elettrico");
@@ -108,7 +108,7 @@ public class UserInterface {
         System.out.println("Utente registrato correttamente!");
     }
 
-    public void loginUser(String username) {
+    public void loginUser(String username) throws InterruptedException {
         User user = controller.getUserByUsername(username);
         if (user != null) {
             MainMenu(user);
@@ -117,7 +117,7 @@ public class UserInterface {
         }
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
         UserInterface ui = new UserInterface();
         try {
             ui.WelcomeMenu();

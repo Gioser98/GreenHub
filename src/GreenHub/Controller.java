@@ -71,7 +71,7 @@ public class Controller {
 
             transaction.processPayment();
             transactionList.add(transaction);
-            view.showMessage("Pagamento completato con successo!");
+            //view.showMessage("Pagamento completato con successo!");
             return "Pagamento effettuato con successo e transazione registrata.";
         } catch (Exception e) {
             return "Errore durante il pagamento: " + e.getMessage();

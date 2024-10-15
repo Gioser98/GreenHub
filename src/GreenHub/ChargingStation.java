@@ -145,4 +145,5 @@ public class ChargingStation implements Serializable {
 		}
 		System.out.println("Il vettore timeTable è stato azzerato.");
 	}
+  
 }
