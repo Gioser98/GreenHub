@@ -175,29 +175,36 @@ public class Controller {
         newCharge.setVehicle(vehicle);
         newCharge.setChargingRate(vehicle.getSupportedRate());
         newCharge.setUser(user);
-        newCharge.setId(0); // Placeholder, da modificare
-
+    
         startTime.setHour(currentTime.getHour());
         startTime.setMinute(currentTime.getMinute());
-
+    
         double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
         int hour = (int) timeToCharge;
         int minute = (int) (timeToCharge * 60) % 60;
         int endHour = startTime.getHour() + hour;
         int endMinute = startTime.getMinute() + minute;
-
+    
         // Gestisci il caso in cui i minuti superano 59
         if (endMinute >= 60) {
             endHour += endMinute / 60;
             endMinute = endMinute % 60;
         }
-
+    
         newCharge.setStartTime(startTime);
         newCharge.setEndTime(new Time(endHour, endMinute));
-
+    
         double cost = calculateRechargeCost(vehicle, cs);
         newCharge.setCost(cost);
+    
+        // Simula la ricarica della batteria
+        double amountToRecharge = vehicle.getCapacity() - vehicle.getBatteryLevel();
+        if (amountToRecharge > 0) {
+            vehicle.rechargeBattery(amountToRecharge); // Ricarica la batteria fino al massimo
+        }
     }
+    
+    
 
     // ==============================
     // Data management methods
