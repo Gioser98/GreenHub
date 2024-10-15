@@ -24,9 +24,20 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             return;
         }
 
+        // Richiedi la distanza massima per trovare le stazioni di ricarica disponibili
+        System.out.print("Stazioni di ricarica vicino a te: " + user.getLocation() + "\n ") ;
+        
+
+        // Recupera la lista delle stazioni di ricarica nelle vicinanze
+        List<ChargingStation> nearStations = ui.getController().getNearAvailableStation(user);
+        
+        // Verifica se ci sono stazioni disponibili
+        if (nearStations.isEmpty()) {
+            System.out.println("Nessuna stazione di ricarica disponibile nella distanza specificata.");
+            return; // Esci se non ci sono stazioni disponibili
+        }
+
         // Procedi con la selezione della stazione di ricarica
-        List<ChargingStation> chargingStationList = ui.getController().getChargingStationList();
-        ChargingStation.getNearAvailableStation(user, chargingStationList);
         ChargingStation currentCS = ui.getController().chooseStation(currentVehicle);
 
         // Chiedi se l'utente è già alla stazione o deve arrivarci
@@ -89,8 +100,6 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getController().saveAll();
     }
 
-   
-
     // Metodo per scegliere il metodo di pagamento
     private PaymentStrategy choosePaymentMethod() {
         System.out.println("Scegli un metodo di pagamento:");
@@ -122,7 +131,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         for (int i = initialCharge; i <= targetCharge; i++) {
             // Simula la barra di avanzamento
             System.out.print("\r[");
-    
+
             // Determina il colore in base alla percentuale
             String color;
             if (i <= 30) {
@@ -132,7 +141,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             } else {
                 color = "\u001B[32m"; // Verde
             }
-    
+
             // Stampa la barra di avanzamento con il colore appropriato
             int progress = i / 10;  // Ogni 10% aggiunge un segmento alla barra
             for (int j = 0; j < 10; j++) {
@@ -144,7 +153,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             }
             System.out.print("\u001B[0m"); // Resetta il colore
             System.out.print("] " + i + "%");
-    
+
             // Attesa per simulare il tempo di ricarica
             Thread.sleep(300);  // Attesa di 300 millisecondi per ogni incremento di 1%
         }

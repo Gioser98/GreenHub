@@ -87,7 +87,7 @@ public class DataSaver {
         }*/
 
 
-		System.out.println("\n\n----------------------------------------------------------------");
+		System.out.println("\n----------------------------------------------------------------");
 		System.out.println("Tutti i dati sono stati correttamente salvati su file.");
 		System.out.println("----------------------------------------------------------------");
 	}

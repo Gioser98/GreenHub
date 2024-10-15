@@ -40,7 +40,7 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
         //    System.out.println("Pagamento di Euro" + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
         //} else {
         //    System.out.println("Pagamento rifiutato. Controlla i dettagli della carta e riprova.");
-        }
+        //}
     }
 
     // Validazione del numero della carta (verifica che siano 16 cifre)

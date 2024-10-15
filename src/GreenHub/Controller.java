@@ -3,6 +3,9 @@ package GreenHub;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
     // Liste per i dati
@@ -21,9 +24,7 @@ public class Controller {
     public Controller() {
         //;  // Inizializza la View
     }
-	
-
-
+    
     // ==============================
     // User methods
     // ==============================
@@ -143,8 +144,6 @@ public class Controller {
         view.showMessage("Stazione non disponibile o non compatibile.");
         return null;
     }
-    
-    
 
     public double calculateRechargeCost(Vehicle vehicle, ChargingStation chargingStation) {
         double batteryCapacity = vehicle.getCapacity();
@@ -236,6 +235,59 @@ public class Controller {
             view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
     }
+
+    // ==============================
+    // Near Available Charging Stations
+    // ==============================
+    public List<ChargingStation> getNearAvailableStation(User user) {
+    List<ChargingStation> availableStations = new ArrayList<>(); // Lista per le stazioni disponibili
+
+    // Controlla che l'utente abbia un veicolo personale
+    if (user.getPersonalVehicle() == null) {
+        view.showMessage("L'utente non ha un veicolo personale.");
+        return availableStations; // Restituisce una lista vuota
+    }
+    
+    // Ottieni la posizione dell'utente
+    Location userLocation = user.getPersonalVehicle().getLocation();
+
+    // Mappa per memorizzare le stazioni e le loro distanze
+    Map<ChargingStation, Double> distanceMap = new HashMap<>();
+
+    // Itera attraverso le stazioni di ricarica
+    for (ChargingStation cs : chargingStationList) {
+        // Controlla che la stazione non sia in manutenzione e sia compatibile con il veicolo dell'utente
+        if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
+            // Calcola la distanza tra l'utente e la stazione di ricarica
+            double distance = userLocation.distance(cs.getLocation());
+            distanceMap.put(cs, distance); // Aggiungi la stazione e la sua distanza alla mappa
+        }
+    }
+
+    // Ordina le stazioni in base alla distanza
+    List<Map.Entry<ChargingStation, Double>> sortedStations = new ArrayList<>(distanceMap.entrySet());
+    sortedStations.sort((entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue()));
+
+    // Aggiungi le prime 3 stazioni alla lista disponibile
+    for (int i = 0; i < Math.min(3, sortedStations.size()); i++) {
+        availableStations.add(sortedStations.get(i).getKey());
+    }
+
+    // Controlla se ci sono stazioni disponibili
+    if (availableStations.isEmpty()) {
+        view.showMessage("Non ci sono stazioni di ricarica disponibili.");
+    } else {
+        for (ChargingStation station : availableStations) {
+            view.showMessage(station.toString()); // Mostra le stazioni disponibili
+        }
+    }
+
+    return availableStations; // Restituisce la lista delle stazioni disponibili
+}
+
+    
+    
+    
 
     // Metodo per stampare tutti i dati
     public void printino() {
