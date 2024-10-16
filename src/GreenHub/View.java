@@ -22,17 +22,7 @@ public class View {
         return scanner.nextInt();
     }
     
-    public void printPayPalASCII() {
-        System.out.println("  _____                               ");
-        System.out.println(" |  __ \\                             ");
-        System.out.println(" | |__) | __ ___  _ __ _   _ _ __ ___ ");
-        System.out.println(" |  ___/ '__/ _ \\| '__| | | | '_ ` _ \\");
-        System.out.println(" | |   | | | (_) | |  | |_| | | | | | |");
-        System.out.println(" |_|   |_|  \\___/|_|   \\__,_|_| |_| |_|");
-        System.out.println();
-        System.out.println("Benvenuto su PayPal!");
-        System.out.println();
-    }
+   
 
     // Metodi per stampare le varie liste
     public void printChargingRateList(ArrayList<ChargingRate> chargingRateList) {

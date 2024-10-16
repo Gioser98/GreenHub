@@ -215,16 +215,8 @@ public class Controller {
     // ==============================
     public void saveAll() {
         try {
-            dataSaver.chargingRateList = this.chargingRateList;
-            dataSaver.energySupplierList = this.energySupplierList;
-            dataSaver.chargingStationList = this.chargingStationList;
-            dataSaver.rewardList = this.rewardList;
-            dataSaver.userList = this.userList;
-            dataSaver.vehicleList = this.vehicleList;
-            dataSaver.transactionList = this.transactionList;
-            dataSaver.reservationList = this.reservationList;
-
-            dataSaver.saveAll();
+            dataSaver.saveAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
+                              userList, vehicleList, transactionList, reservationList);
         } catch (IOException e) {
             view.showMessage("Errore durante il salvataggio: " + e.getMessage());
         }
@@ -232,16 +224,8 @@ public class Controller {
 
     public void readAll() {
         try {
-            dataSaver.readAll();
-
-            this.chargingRateList = dataSaver.chargingRateList;
-            this.energySupplierList = dataSaver.energySupplierList;
-            this.chargingStationList = dataSaver.chargingStationList;
-            this.rewardList = dataSaver.rewardList;
-            this.userList = dataSaver.userList;
-            this.vehicleList = dataSaver.vehicleList;
-            this.transactionList = dataSaver.transactionList;
-            this.reservationList = dataSaver.reservationList;
+            dataSaver.readAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
+                              userList, vehicleList, transactionList, reservationList);
         } catch (IOException e) {
             view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
