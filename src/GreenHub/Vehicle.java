@@ -86,7 +86,7 @@ public class Vehicle implements Serializable {
         this.supportedRate = supportedRate;
         this.location = location;
         this.capacity = capacity;
-        this.batteryLevel = generateRandomBatteryLevel(); // Set random battery level
+        this.batteryLevel = batteryLevel;
     }
     
     // Method to generate a random battery level based on capacity

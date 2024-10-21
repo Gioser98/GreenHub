@@ -124,10 +124,15 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
 
     // Simulazione della ricarica con una barra di avanzamento
     private void simulateCharging(UserInterface ui, User user) throws InterruptedException {
-        int initialCharge = (int) ui.getController().randomBatteryPercentage(user); // Ottieni la percentuale iniziale di carica
+
+        int max = (int) user.getPersonalVehicle().getCapacity();
+        int marco = (int) user.getPersonalVehicle().getBatteryLevel();
+        int percentuale = (int) ((marco / (double) max) * 100);
+
+        int initialCharge = percentuale; // Ottieni la percentuale iniziale di carica
         int targetCharge = 100; // Ricarica fino al 100%
     
-        System.out.println("Inizio ricarica...");
+        System.out.println("Inizio ricarica..." + percentuale);
         for (int i = initialCharge; i <= targetCharge; i++) {
             // Simula la barra di avanzamento
             System.out.print("\r[");

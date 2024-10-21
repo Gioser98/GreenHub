@@ -46,13 +46,14 @@ public class UserInterface {
 
             switch (choice) {
             case 1:
-                registerUser();
+                controller.registerUser();
                 controller.saveAll();  // Salva i dati
                 break;
             case 2:
-                System.out.print("Inserisci il tuo username: ");
-                String username = scanner.next();
-                loginUser(username);
+                User user = controller.loginUser();
+                if (user != null) {
+                    MainMenu(user);
+                }
                 break;
             case 3:
                 System.exit(0);
@@ -69,21 +70,32 @@ public class UserInterface {
     public void MainMenu(User user) throws InterruptedException {
         while (true) {
             System.out.println("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
+            
+            int max = (int) user.getPersonalVehicle().getCapacity();
+            int marco = (int) user.getPersonalVehicle().getBatteryLevel();
+            int percentuale = (int) ((marco / (double) max) * 100);
+
             if (user.getPersonalVehicle() != null) {
                 System.out.println("\nLa tua " + user.getPersonalVehicle().getMaker() + " " + user.getPersonalVehicle().getModel() + 
-                    " ha una percentuale di carica pari a " + controller.randomBatteryPercentage(user) + " %");
+                    " ha una percentuale di carica pari a " + percentuale + " %");
             } else {
                 System.out.println("\nNon hai un veicolo personale associato.");
             }
+            System.out.println("\n" + user.getLocation() + "\n");
+            
             System.out.println("\n1) Ricarica il tuo veicolo elettrico");
             System.out.println("2) Prenota una ricarica");
             System.out.println("3) Noleggia un veicolo");
             System.out.println("4) Riscatta una ricompensa");
-            System.out.println("5) Registrazione nuova auto");
+            
+            // Mostra l'opzione di registrazione solo se l'utente non ha un veicolo
+            if (user.getPersonalVehicle() == null) {
+                System.out.println("5) Registrazione nuova auto");
+            }
+            
             System.out.println("6) Esci");
             System.out.print("Scelta: ");
             int choice = scanner.nextInt();
-
             MainMenuStrategy strategy = strategies.get(choice);
             if (strategy != null) {
                 try {
@@ -98,30 +110,7 @@ public class UserInterface {
         }
     }
 
-    public void registerUser() {
-        System.out.print("Inserisci il tuo username: ");
-        String username = scanner.next();
-        System.out.print("Inserisci il tuo nome: ");
-        String name = scanner.next();
-        System.out.print("Inserisci il tuo cognome: ");
-        String surname = scanner.next();
-        int latitude = random.nextInt(100);
-        int longitude = random.nextInt(100);
-        Location location = new Location(latitude, longitude);
-        User user = new User(username, 0, 2, name, surname, location);
-
-        controller.addUser(user);
-        System.out.println("Utente registrato correttamente!");
-    }
-
-    public void loginUser(String username) throws InterruptedException {
-        User user = controller.getUserByUsername(username);
-        if (user != null) {
-            MainMenu(user);
-        } else {
-            System.out.println("Utente non trovato.");
-        }
-    }
+    
 
     public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
         UserInterface ui = new UserInterface();

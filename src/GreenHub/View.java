@@ -21,6 +21,27 @@ public class View {
         System.out.print("Inserisci l'ID della stazione di ricarica scelta: ");
         return scanner.nextInt();
     }
+
+
+    // Metodo per ottenere l'username dall'utente
+    public String getInputUsername() {
+        System.out.print("Inserisci il tuo username: ");
+        return scanner.next();
+    }
+
+    // Metodo per ottenere il nome dall'utente
+    public String getInputName() {
+        System.out.print("Inserisci il tuo nome: ");
+        return scanner.next();
+    }
+
+    // Metodo per ottenere il cognome dall'utente
+    public String getInputSurname() {
+        System.out.print("Inserisci il tuo cognome: ");
+        return scanner.next();
+    }
+
+    
     
    
 

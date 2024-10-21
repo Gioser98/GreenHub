@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Controller {
     // Liste per i dati
@@ -17,14 +18,15 @@ public class Controller {
     public ArrayList<Vehicle> vehicleList = new ArrayList<>();
     public ArrayList<Transaction> transactionList = new ArrayList<>();
     public ArrayList<Reservation> reservationList = new ArrayList<>();
+    
     private Reward rewards = new Reward();
     private DataSaver dataSaver = new DataSaver();
     private View view = new View();  // Riferimento alla View
 
     public Controller() {
-        //;  // Inizializza la View
+        // Costruttore vuoto
     }
-    
+
     // ==============================
     // User methods
     // ==============================
@@ -33,6 +35,57 @@ public class Controller {
             userList.add(user);
         } else {
             view.showMessage("Username già esistente.");
+        }
+    }
+
+    // Metodo per registrare un utente
+    public void registerUser() {
+        String username;
+        while (true) {  // Ciclo fino a quando non si ottiene un username valido
+            username = view.getInputUsername();  // Ottiene l'username dall'utente
+
+            // Controlla se l'username esiste già
+            if (getUserByUsername(username) != null) {
+                view.showMessage("Username già esistente. Scegline un altro.");
+            } else {
+                break;  // Esci dal ciclo se l'username è unico
+            }
+        }
+
+        String name = view.getInputName();          // Usa il metodo esistente per ottenere il nome
+        String surname = view.getInputSurname();    // Usa il metodo esistente per ottenere il cognome
+        int latitude = new Random().nextInt(100);   // Genera casualmente latitudine
+        int longitude = new Random().nextInt(100);  // Genera casualmente longitudine
+        Location location = new Location(latitude, longitude);
+        User user = new User(username, 0, 2, name, surname, location);
+
+        addUser(user);
+        view.showMessage("Utente registrato correttamente!");
+    }
+
+    // Metodo per il login di un utente
+    public User loginUser() {
+        String username = view.getInputUsername();  // Ottieni l'username dalla View
+        User user = getUserByUsername(username);
+        
+        if (user != null) {
+            
+            // Genera una nuova posizione casuale
+            int latitude = new Random().nextInt(100);   // Genera casualmente latitudine
+            int longitude = new Random().nextInt(100);  // Genera casualmente longitudine
+            Location newLocation = new Location(latitude, longitude);
+            user.setLocation(newLocation);  // Aggiorna la posizione dell'utente
+
+            // Genera un livello di batteria casuale
+            
+            int maxBatteryLevel = (int) user.getPersonalVehicle().getCapacity(); // Ottieni la capacità del veicolo
+            int newBatteryLevel = new Random().nextInt(maxBatteryLevel + 1); // Genera un livello casuale tra 0 e capacity
+            user.getPersonalVehicle().setBatteryLevel(newBatteryLevel);
+            
+            return user;  // Ritorna l'utente se trovato
+        } else {
+            view.showMessage("Utente non trovato.");
+            return null;  // Ritorna null se non trovato
         }
     }
 
@@ -72,7 +125,6 @@ public class Controller {
 
             transaction.processPayment();
             transactionList.add(transaction);
-            //view.showMessage("Pagamento completato con successo!");
             return "Pagamento effettuato con successo e transazione registrata.";
         } catch (Exception e) {
             return "Errore durante il pagamento: " + e.getMessage();
@@ -85,14 +137,6 @@ public class Controller {
     public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
         rewards.setStrategy(strategy);
         rewards.addPoints(user, value);
-    }
-
-    // ==============================
-    // Reservation methods
-    // ==============================
-    public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
-        boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
-        Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
     }
 
     // ==============================
@@ -121,10 +165,6 @@ public class Controller {
     }
 
     // ==============================
-    // EnergySupplier methods
-    // ==============================
-
-    // ==============================
     // ChargingStation methods
     // ==============================
     public ArrayList<ChargingStation> getChargingStationList() {
@@ -145,23 +185,16 @@ public class Controller {
         return null;
     }
 
-    public double randomBattery (User user){
-        return user.getPersonalVehicle().generateRandomBatteryLevel();
-    }
+    
 
-    public double randomBatteryPercentage (User user){
-        double value =  (randomBattery(user) / user.getPersonalVehicle().getCapacity() ) * 100;
-        return value;
-    }
-
-    public double calculateRechargeCost(User user,Vehicle vehicle, ChargingStation chargingStation) {
+    public double calculateRechargeCost(User user, ChargingStation chargingStation) {
         double batteryCapacity = user.getPersonalVehicle().getCapacity();
-        double currentBatteryLevel = randomBattery(user);
-        double chargingRate = chargingStation.getChargingRateForVehicle(vehicle);
+        double currentBatteryLevel = user.getPersonalVehicle().getBatteryLevel();
+        double chargingRate = chargingStation.getChargingRateForVehicle(user.getPersonalVehicle());
         
         double energyToRecharge = batteryCapacity - currentBatteryLevel;
         if (energyToRecharge <= 0) {
-            view.showMessage("La batteria è già carica o sopra il massimo.");
+            view.showMessage("La batteria è già carica");
             return 0; // Non serve ricaricare
         }
 
@@ -179,36 +212,84 @@ public class Controller {
         }
     }
 
+    public List<ChargingStation> getNearAvailableStation(User user) {
+        List<ChargingStation> availableStations = new ArrayList<>(); // Lista per le stazioni disponibili
+
+        // Controlla che l'utente abbia un veicolo personale
+        if (user.getPersonalVehicle() == null) {
+            view.showMessage("L'utente non ha un veicolo personale.");
+            return availableStations; // Restituisce una lista vuota
+        }
+
+        // Ottieni la posizione dell'utente
+        Location userLocation = user.getLocation();
+
+        // Mappa per memorizzare le stazioni e le loro distanze
+        Map<ChargingStation, Double> distanceMap = new HashMap<>();
+
+        // Itera attraverso le stazioni di ricarica
+        for (ChargingStation cs : chargingStationList) {
+            // Controlla che la stazione non sia in manutenzione e sia compatibile con il veicolo dell'utente
+            if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
+                // Calcola la distanza tra l'utente e la stazione di ricarica
+                double distance = userLocation.distance(cs.getLocation());
+                distanceMap.put(cs, distance); // Aggiungi la stazione e la sua distanza alla mappa
+            }
+        }
+
+        // Ordina le stazioni in base alla distanza
+        List<Map.Entry<ChargingStation, Double>> sortedStations = new ArrayList<>(distanceMap.entrySet());
+        sortedStations.sort((entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue()));
+
+        // Aggiungi le prime 3 stazioni alla lista disponibile
+        for (int i = 0; i < Math.min(3, sortedStations.size()); i++) {
+            availableStations.add(sortedStations.get(i).getKey());
+        }
+
+        // Controlla se ci sono stazioni disponibili
+        if (availableStations.isEmpty()) {
+            view.showMessage("Non ci sono stazioni di ricarica disponibili.");
+        } else {
+            for (ChargingStation station : availableStations) {
+                view.showMessage(station.toString()); // Mostra le stazioni disponibili
+            }
+        }
+
+        return availableStations; // Restituisce la lista delle stazioni disponibili
+    }
+
     public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
         newCharge.setChargingStation(cs);
         newCharge.setVehicle(vehicle);
         newCharge.setChargingRate(vehicle.getSupportedRate());
         newCharge.setUser(user);
-    
+
+        // Imposta l'ora di inizio ricarica
         startTime.setHour(currentTime.getHour());
         startTime.setMinute(currentTime.getMinute());
-    
-        double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
-        int hour = (int) timeToCharge;
-        int minute = (int) (timeToCharge * 60) % 60;
-        int endHour = startTime.getHour() + hour;
-        int endMinute = startTime.getMinute() + minute;
-    
-        // Gestisci il caso in cui i minuti superano 59
-        if (endMinute >= 60) {
-            endHour += endMinute / 60;
-            endMinute = endMinute % 60;
-        }
-    
-        newCharge.setStartTime(startTime);
-        newCharge.setEndTime(new Time(endHour, endMinute));
-    
-        double cost = calculateRechargeCost(user,vehicle, cs);
-        newCharge.setCost(cost);
 
+        // Calcola il tempo necessario per la ricarica in ore
+        double timeToCharge = vehicle.getCapacity() / vehicle.getSupportedRate().getPower();
+
+        // Utilizza il metodo di Time per calcolare l'ora di fine
+        Time endTime = startTime.addDuration(timeToCharge);
+
+        // Imposta l'ora di inizio e fine ricarica
+        newCharge.setStartTime(startTime);
+        newCharge.setEndTime(endTime);
+
+        // Calcola il costo della ricarica
+        double cost = calculateRechargeCost(user, cs);
+        newCharge.setCost(cost);
     }
-    
-    
+
+    // ==============================
+    // Reservation methods
+    // ==============================
+    public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
+        boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
+        Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
+    }
 
     // ==============================
     // Data management methods
@@ -230,59 +311,6 @@ public class Controller {
             view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
     }
-
-    // ==============================
-    // Near Available Charging Stations
-    // ==============================
-    public List<ChargingStation> getNearAvailableStation(User user) {
-    List<ChargingStation> availableStations = new ArrayList<>(); // Lista per le stazioni disponibili
-
-    // Controlla che l'utente abbia un veicolo personale
-    if (user.getPersonalVehicle() == null) {
-        view.showMessage("L'utente non ha un veicolo personale.");
-        return availableStations; // Restituisce una lista vuota
-    }
-    
-    // Ottieni la posizione dell'utente
-    Location userLocation = user.getPersonalVehicle().getLocation();
-
-    // Mappa per memorizzare le stazioni e le loro distanze
-    Map<ChargingStation, Double> distanceMap = new HashMap<>();
-
-    // Itera attraverso le stazioni di ricarica
-    for (ChargingStation cs : chargingStationList) {
-        // Controlla che la stazione non sia in manutenzione e sia compatibile con il veicolo dell'utente
-        if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
-            // Calcola la distanza tra l'utente e la stazione di ricarica
-            double distance = userLocation.distance(cs.getLocation());
-            distanceMap.put(cs, distance); // Aggiungi la stazione e la sua distanza alla mappa
-        }
-    }
-
-    // Ordina le stazioni in base alla distanza
-    List<Map.Entry<ChargingStation, Double>> sortedStations = new ArrayList<>(distanceMap.entrySet());
-    sortedStations.sort((entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue()));
-
-    // Aggiungi le prime 3 stazioni alla lista disponibile
-    for (int i = 0; i < Math.min(3, sortedStations.size()); i++) {
-        availableStations.add(sortedStations.get(i).getKey());
-    }
-
-    // Controlla se ci sono stazioni disponibili
-    if (availableStations.isEmpty()) {
-        view.showMessage("Non ci sono stazioni di ricarica disponibili.");
-    } else {
-        for (ChargingStation station : availableStations) {
-            view.showMessage(station.toString()); // Mostra le stazioni disponibili
-        }
-    }
-
-    return availableStations; // Restituisce la lista delle stazioni disponibili
-}
-
-    
-    
-    
 
     // Metodo per stampare tutti i dati
     public void printino() {
