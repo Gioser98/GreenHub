@@ -81,7 +81,7 @@ public class UserInterface {
             } else {
                 System.out.println("\nNon hai un veicolo personale associato.");
             }
-            System.out.println("\n" + user.getLocation() + "\n");
+            
             
             System.out.println("\n1) Ricarica il tuo veicolo elettrico");
             System.out.println("2) Prenota una ricarica");
