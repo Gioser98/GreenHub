@@ -9,7 +9,7 @@ public class UserInterface {
     private Controller controller = new Controller();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
     private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
-
+    
     public UserInterface() {
         controller.readAll();  // Carica i dati esistenti
 
@@ -58,7 +58,7 @@ public class UserInterface {
             case 4:
                 controller.printino();  // Legge i dati attraverso il Controller
                 break;
-
+        
             default:
                 System.out.println("Opzione non valida, riprova.");
             }

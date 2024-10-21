@@ -145,5 +145,14 @@ public class ChargingStation implements Serializable {
 		}
 		System.out.println("Il vettore timeTable è stato azzerato.");
 	}
+
+    public static void resetAllTimeTables(List<ChargingStation> chargingStationList) {
+        for (ChargingStation station : chargingStationList) {
+            station.resetTimeTable();
+        }
+        System.out.println("Tutte le timeTable delle stazioni di ricarica sono state azzerate.");
+    }
+    
+
   
 }

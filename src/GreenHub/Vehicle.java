@@ -88,6 +88,16 @@ public class Vehicle implements Serializable {
         this.capacity = capacity;
         this.batteryLevel = batteryLevel;
     }
+    public Vehicle(int id, String maker, String model, ChargingRate supportedRate, Location location, int capacity) {
+        this.id = id;
+        this.maker = maker;
+        this.model = model;
+        this.supportedRate = supportedRate;
+        this.location = location;
+        this.capacity = capacity;
+        
+    }
+
     
     // Method to generate a random battery level based on capacity
     public double generateRandomBatteryLevel() {

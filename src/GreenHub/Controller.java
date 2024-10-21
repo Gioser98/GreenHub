@@ -2,6 +2,7 @@ package GreenHub;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,17 +78,19 @@ public class Controller {
             user.setLocation(newLocation);  // Aggiorna la posizione dell'utente
 
             // Genera un livello di batteria casuale
-            
             int maxBatteryLevel = (int) user.getPersonalVehicle().getCapacity(); // Ottieni la capacità del veicolo
             int newBatteryLevel = new Random().nextInt(maxBatteryLevel + 1); // Genera un livello casuale tra 0 e capacity
             user.getPersonalVehicle().setBatteryLevel(newBatteryLevel);
             
+            
+
             return user;  // Ritorna l'utente se trovato
         } else {
             view.showMessage("Utente non trovato.");
             return null;  // Ritorna null se non trovato
         }
     }
+    
 
     public User getUserByUsername(String username) {
         for (User u : userList) {
@@ -315,4 +318,12 @@ public class Controller {
         view.printTransactionList(transactionList);
         view.printReservationList(reservationList);
     }
+
+
+
+    // Metodo per resettare tutte le prenotazioni
+    public void resettone() {
+        ChargingStation.resetAllTimeTables(chargingStationList);
+    }
 }
+
