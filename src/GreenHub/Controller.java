@@ -202,15 +202,7 @@ public class Controller {
         return cost;
     }
 
-    public void updateBatteryLevel(User user) {
-        Vehicle vehicle = user.getPersonalVehicle();
-        if (vehicle != null) {
-            double newBatteryLevel = vehicle.generateRandomBatteryLevel();
-            vehicle.setBatteryLevel(newBatteryLevel);
-        } else {
-            view.showMessage("Nessun veicolo associato a questo utente.");
-        }
-    }
+    
 
     public List<ChargingStation> getNearAvailableStation(User user) {
         List<ChargingStation> availableStations = new ArrayList<>(); // Lista per le stazioni disponibili

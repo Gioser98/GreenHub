@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Random;
 
 public class UserInterface {
     private Controller controller = new Controller();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
-    private Random random = new Random();
     private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
 
     public UserInterface() {

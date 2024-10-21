@@ -79,7 +79,7 @@ public class Vehicle implements Serializable {
         // Default constructor
     }
     
-    public Vehicle(int id, String maker, String model, ChargingRate supportedRate, Location location, int capacity) {
+    public Vehicle(int id, String maker, String model, ChargingRate supportedRate, Location location, int capacity, int batteryLevel) {
         this.id = id;
         this.maker = maker;
         this.model = model;
