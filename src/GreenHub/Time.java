@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 public class Time implements Serializable {
 
@@ -70,4 +71,5 @@ public class Time implements Serializable {
     public String toString() {
         return hour + ":" + (minute < 10 ? "0" + minute : minute); // Aggiungi uno 0 ai minuti se necessario
     }
+
 }

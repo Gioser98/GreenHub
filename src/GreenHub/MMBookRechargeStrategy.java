@@ -1,7 +1,5 @@
 package GreenHub;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MMBookRechargeStrategy implements MainMenuStrategy {
@@ -10,8 +8,6 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 
 		ChargingStation currentCS; 
         Vehicle currentVehicle = user.getPersonalVehicle(); // Ottieni il veicolo personale dell'utente
-        List<ChargingStation> chargingStationList = ui.getController().getChargingStationList();
-		ArrayList<Reservation> reservationList = new ArrayList<>();
         Scanner in = ui.getScanner(); // Assumi che UserInterface fornisca un oggetto Scanner
 		
 
@@ -19,7 +15,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
         //	System.out.println("Funzione non disponibile! Devi avere un veicolo elettrico.");
         //	return;
 		//}
-		ChargingStation.getNearAvailableStation(user, chargingStationList);
+		ui.getController().getNearAvailableStation(user);
 		currentCS = ui.getController().chooseStation(currentVehicle);
 		currentCS.printTimeTableWithTimeSlots();
 
@@ -30,8 +26,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 		boolean slotAvailable = true;
 
 		slotAvailable = checkSlotAvailability(currentCS, startingSlot, endingSlot, slotAvailable);
-		Reservation.reserveSlot(user, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable,
-				reservationList);
+		ui.getController().reserveSlot(user, currentVehicle, currentCS, startingSlot, endingSlot);
 
 		 // **Assegnazione Green Points per la prenotazione**
 		GreenPointsStrategy gpStrategy = new GPReservationStrategy();  // Usa la strategia di prenotazione

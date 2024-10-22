@@ -11,23 +11,22 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
     @Override
     public void execute(UserInterface ui, User user) throws IOException {
         Vehicle currentVehicle = user.getPersonalVehicle();
-
+    
         // Mostra il nome del veicolo e chiedi conferma
         System.out.println("Stai per ricaricare il veicolo: " 
             + (currentVehicle.getMaker() != null ? currentVehicle.getMaker() : "Produttore sconosciuto") + " " 
             + (currentVehicle.getModel() != null ? currentVehicle.getModel() : "Modello sconosciuto") 
             + ". Vuoi continuare? (s/n)");
-
+    
         String confirmation = scanner.next();
         if (!confirmation.equalsIgnoreCase("s")) {
             System.out.println("Operazione annullata.");
             return;
         }
-
+    
         // Richiedi la distanza massima per trovare le stazioni di ricarica disponibili
-        System.out.print("Stazioni di ricarica vicino a te: " + user.getLocation() + "\n ") ;
-        
-
+        System.out.print("Stazioni di ricarica vicino a te: " + user.getLocation() + "\n");
+    
         // Recupera la lista delle stazioni di ricarica nelle vicinanze
         List<ChargingStation> nearStations = ui.getController().getNearAvailableStation(user);
         
@@ -36,50 +35,64 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             System.out.println("Nessuna stazione di ricarica disponibile nella distanza specificata.");
             return; // Esci se non ci sono stazioni disponibili
         }
-
+    
         // Procedi con la selezione della stazione di ricarica
         ChargingStation currentCS = ui.getController().chooseStation(currentVehicle);
+    
+        // Controlla se la stazione è attualmente occupata
+            
 
+        List<Reservation> allReservations  = ui.getController().getAllReservations();
+        System.out.println(allReservations);
+        // Verifica se la stazione è occupata
+        if (currentCS.isCurrentlyOccupied(allReservations, user)) {
+            System.out.println("La stazione è occupata. Scegli un'altra stazione o attendi.");
+            return;
+        } else {
+            System.out.println("La stazione è disponibile. Puoi procedere con la ricarica.");
+}
+
+    
         // Chiedi se l'utente è già alla stazione o deve arrivarci
         System.out.println("Sei già alla stazione di ricarica di " + currentCS.getOwner() + " o devi ancora arrivarci? (1. Sono già qui / 2. Devo arrivare)");
         int travelOption = scanner.nextInt();
-
+    
         if (travelOption == 2) {
             // Simula la connessione a un'app di navigazione
             simulateNavigationToStation(currentCS);
         }
-
+    
         // Guida l'utente nel collegamento della presa
         guidePlugInProcess();
-
+    
         // Imposta l'ora corrente e crea una nuova carica
         LocalDateTime currentTime = LocalDateTime.now();
         Charge newCharge = new Charge(currentCS, currentVehicle, currentTime);
         Time startTime = new Time(currentTime.getHour(), currentTime.getMinute());
-
+    
         // Scegli il metodo di pagamento
         PaymentStrategy paymentStrategy = choosePaymentMethod();
         if (paymentStrategy == null) {
             System.out.println("Operazione annullata: nessun metodo di pagamento selezionato.");
             return;
         }
-
+    
         // Simulazione della ricarica
         try {
             simulateCharging(ui, user);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+    
         // Dopo la ricarica, chiedi all'utente di scollegare la presa
         guidePlugOutProcess();
-
+    
         // Registra la carica
         ui.getController().registerCharge(user, currentVehicle, currentCS, currentTime, newCharge, startTime);
-
+    
         // Calcola il costo della ricarica
         double amount = newCharge.getCost();
-
+    
         // Registra la transazione e ottieni il risultato
         ui.getController().registerTransaction(user, currentVehicle, currentCS, newCharge, amount, paymentStrategy);
         
@@ -88,7 +101,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         int chargePercentage = (int) amount;  // Supponiamo che sia la percentuale di ricarica
         gpStrategy.calculatePoints(chargePercentage);
         ui.getController().assignGreenPoints(user, gpStrategy, chargePercentage);
-
+    
         System.out.println("\nPremi Invio per tornare al menu principale o 'q' per uscire.");
         scanner.nextLine(); // Consuma la nuova linea rimasta nel buffer
         String input = scanner.nextLine(); // Leggi l'input dell'utente

@@ -2,6 +2,7 @@ package GreenHub;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
 
@@ -13,6 +14,9 @@ public class User implements Serializable {
 	private String surname;
 	private Location location;
 	private Vehicle personalVehicle;
+	private List<Reservation> reservations = new ArrayList<>();
+
+	
 
 	// Getter&Setter
 	public String getUsername() {
@@ -81,6 +85,18 @@ public class User implements Serializable {
 		this.greenPointsBalance += points;
 	}
 
+	public List<Reservation> getReservations() {
+		if (reservations == null) {
+			reservations = new ArrayList<>();  // Inizializza la lista se è null
+		}
+		return reservations;
+	}
+	
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
 	// Constructors
 	public User(String username, int greenPointsBalance, int type, String name, String surname, Location location) {
 		this.username = username;
@@ -89,7 +105,10 @@ public class User implements Serializable {
 		this.name = name;
 		this.surname = surname;
 		this.location = location;
+		this.reservations = new ArrayList<>();  // Inizializza la lista di prenotazioni
 	}
+
+	
 
 	// Methods
 	@Override

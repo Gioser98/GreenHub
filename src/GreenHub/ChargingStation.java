@@ -1,9 +1,9 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ChargingStation implements Serializable {
 
@@ -15,40 +15,58 @@ public class ChargingStation implements Serializable {
     private boolean maintenance;
     private EnergySupplier owner;
 
+    // Costruttore
+    public ChargingStation() {
+        this.timeTable = new String[48]; // Inizializza il timeTable
+        this.availableRates = new ArrayList<>(); // Inizializza la lista di tariffe
+    }
+
+
     // Getters&Setters
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public Location getLocation() {
         return location;
     }
+
     public void setLocation(Location location) {
         this.location = location;
     }
+
     public String[] getTimeTable() {
         return timeTable;
     }
+
     public void setTimeTable(String string, int pos) {
         this.timeTable[pos] = string;
     }
+
     public ArrayList<ChargingRate> getAvailableRates() {
         return availableRates;
     }
+
     public void setAvailableRates(ArrayList<ChargingRate> availableRates) {
         this.availableRates = availableRates;
     }
+
     public boolean isMaintenance() {
         return maintenance;
     }
+
     public void setMaintenance(boolean maintenance) {
         this.maintenance = maintenance;
     }
+
     public EnergySupplier getOwner() {
         return owner;
     }
+
     public void setOwner(EnergySupplier owner) {
         this.owner = owner;
     }
@@ -58,16 +76,11 @@ public class ChargingStation implements Serializable {
         if (availableRates.isEmpty()) {
             throw new IllegalArgumentException("Nessuna tariffa di ricarica disponibile.");
         }
-
         // Assumiamo di restituire la tariffa della prima opzione disponibile
         return availableRates.get(0).getRatePerKWh(); // Tariffa della prima tariffa disponibile
     }
 
-    // Constructors
-    public ChargingStation() {
-        this.timeTable = new String[48];
-        this.availableRates = new ArrayList<>(); // Inizializziamo la lista
-    }
+    
 
     // Methods
     public String toString() {
@@ -86,65 +99,48 @@ public class ChargingStation implements Serializable {
         }
     }
 
-
-    /* 
     public boolean isCompatibleWith(Vehicle vehicle) {
-        for (ChargingRate rate : availableRates) {
-            if (rate.getSocketType().equals(vehicle.getSocketType())) {
-                return true;
-            }
-        }
-        return false;
-    }
-     */
-
-     public boolean isCompatibleWith(Vehicle vehicle) {
         // Rimuoviamo il controllo sul socket type
         return true; // La stazione è sempre compatibile
     }
-    
-    
 
-    public static void getNearAvailableStation(User user, List<ChargingStation> chargingStationList) {
-        Location userLocation = user.getPersonalVehicle().getLocation();
-        System.out.println("Stazioni di ricarica disponibili vicino a " + userLocation + ":");
-        for (ChargingStation cs : chargingStationList) {
-            if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
-                System.out.println(cs);
+
+    public void printTimeTableWithTimeSlots() {
+        System.out.println("Stato attuale della colonnina di ricarica:");
+
+        for (int i = 0; i < timeTable.length; i++) {
+            String startTime = formatTime(i * 30);
+            String endTime = formatTime((i + 1) * 30);
+            String slotStatus = (timeTable[i] == null || timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
+
+            System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
+
+            if ((i + 1) % 4 == 0) {
+                System.out.println();
             }
         }
     }
 
- 
+    public static String formatTime(int minutes) {
+        int hours = minutes / 60;
+        int mins = minutes % 60;
+        return String.format("%02d:%02d", hours, mins);
+    }
 
-    public void printTimeTableWithTimeSlots() {
-		System.out.println("Stato attuale della colonnina di ricarica:");
+    // Nuovo metodo per verificare la disponibilità di uno slot
+    public boolean isSlotAvailable(int slot) {
+        if (slot < 0 || slot >= timeTable.length) {
+            return false; // Se lo slot è fuori dai limiti, non è disponibile
+        }
+        return timeTable[slot] == null || timeTable[slot].isEmpty(); // Controlla se lo slot è vuoto
+    }
 
-		for (int i = 0; i < timeTable.length; i++) {
-			String startTime = formatTime(i * 30);
-			String endTime = formatTime((i + 1) * 30);
-			String slotStatus = (timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
-
-			System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
-
-			if ((i + 1) % 4 == 0) {
-				System.out.println();
-			}
-		}
-	}
-
-	public static String formatTime(int minutes) {
-		int hours = minutes / 60;
-		int mins = minutes % 60;
-		return String.format("%02d:%02d", hours, mins);
-	}
-
-	public void resetTimeTable() {
-		for (int i = 0; i < 48; i++) {
-			this.timeTable[i] = "";
-		}
-		System.out.println("Il vettore timeTable è stato azzerato.");
-	}
+    public void resetTimeTable() {
+        for (int i = 0; i < timeTable.length; i++) {
+            this.timeTable[i] = ""; // Imposta tutti gli slot come vuoti
+        }
+        System.out.println("Il vettore timeTable è stato azzerato.");
+    }
 
     public static void resetAllTimeTables(List<ChargingStation> chargingStationList) {
         for (ChargingStation station : chargingStationList) {
@@ -152,7 +148,48 @@ public class ChargingStation implements Serializable {
         }
         System.out.println("Tutte le timeTable delle stazioni di ricarica sono state azzerate.");
     }
-    
 
-  
+    /**
+     * Metodo per verificare se la stazione di ricarica è occupata in base alle prenotazioni
+     * @param reservations lista di prenotazioni
+     * @return true se la stazione è occupata, altrimenti false
+     */
+    public boolean isCurrentlyOccupied(List<Reservation> reservations, User currentUser) {    
+        LocalTime currentTime = LocalTime.now(); // Ottiene l'ora corrente
+    
+        for (Reservation reservation : reservations) {
+            // Controlla se la stazione di ricarica corrisponde
+            if (reservation.getChargingStation().getId() == this.id) {
+                // Ottieni l'orario di inizio e di fine della prenotazione
+                Time startTime = reservation.getStartTime();
+                Time endTime = reservation.getEndTime();
+    
+                // Converti il tuo oggetto Time a LocalTime per confrontarlo
+                LocalTime start = LocalTime.of(startTime.getHour(), startTime.getMinute());
+                LocalTime end = LocalTime.of(endTime.getHour(), endTime.getMinute());
+    
+                // Verifica se l'ora corrente è compresa tra l'orario di inizio e fine della prenotazione
+                if (!currentTime.isBefore(start) && !currentTime.isAfter(end)) {
+                    // Se l'ora corrente è tra l'orario di inizio e di fine, verifica lo username
+                    if (reservation.getUser().getUsername().equals(currentUser.getUsername())) {
+                        // Se l'utente loggato è lo stesso della prenotazione, si può procedere
+
+                        return false; // Non occupato, stesso utente
+                    } else {
+                        // Se l'utente è diverso, la stazione è occupata
+                        return true; // Occupato da un altro utente
+                    }
+                }
+            }
+        }
+    
+        // Se nessuna condizione di occupazione è stata soddisfatta, la stazione non è occupata
+        return false;
+    }
+
+
+
+    
+    
+    
 }

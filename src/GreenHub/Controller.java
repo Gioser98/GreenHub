@@ -63,32 +63,41 @@ public class Controller {
         view.showMessage("Utente registrato correttamente!");
     }
 
-    // Metodo per il login di un utente
+     // Metodo per il login di un utente
     public User loginUser() {
+        
         String username = view.getInputUsername();  // Ottieni l'username dalla View
         User user = getUserByUsername(username);
-        
+    
         if (user != null) {
-            
-            // Genera una nuova posizione casuale
-            int latitude = new Random().nextInt(100);   // Genera casualmente latitudine
-            int longitude = new Random().nextInt(100);  // Genera casualmente longitudine
-            Location newLocation = new Location(latitude, longitude);
-            user.setLocation(newLocation);  // Aggiorna la posizione dell'utente
+            // Aggiorna la posizione dell'utente con una nuova posizione casuale
+            Location newLocation = generateRandomLocation();
+            user.setLocation(newLocation);
 
-            // Genera un livello di batteria casuale
-            int maxBatteryLevel = (int) user.getPersonalVehicle().getCapacity(); // Ottieni la capacità del veicolo
-            int newBatteryLevel = new Random().nextInt(maxBatteryLevel + 1); // Genera un livello casuale tra 0 e capacity
+            // Aggiorna il livello di batteria del veicolo con un nuovo livello casuale
+            int newBatteryLevel = generateRandomBatteryLevel(user);
             user.getPersonalVehicle().setBatteryLevel(newBatteryLevel);
-            
-            
 
-            return user;  // Ritorna l'utente se trovato
+        return user;  // Ritorna l'utente se trovato
         } else {
             view.showMessage("Utente non trovato.");
-            return null;  // Ritorna null se non trovato
+        return null;  // Ritorna null se non trovato
         }
     }
+
+    // Metodo per generare una posizione casuale
+    private Location generateRandomLocation() {
+        int latitude = new Random().nextInt(100);   // Genera casualmente latitudine
+        int longitude = new Random().nextInt(100);  // Genera casualmente longitudine
+    return new Location(latitude, longitude);
+    }
+
+    // Metodo per generare un livello di batteria casuale
+    private int generateRandomBatteryLevel(User user) {
+        int maxBatteryLevel = (int) user.getPersonalVehicle().getCapacity(); // Ottieni la capacità del veicolo
+    return new Random().nextInt(maxBatteryLevel + 1); // Genera un livello casuale tra 0 e capacity
+    }
+   
     
 
     public User getUserByUsername(String username) {
@@ -177,7 +186,7 @@ public class Controller {
         int stationId = view.getStationIdFromUser(); // Chiede alla View l'ID della stazione
     
         for (ChargingStation cs : chargingStationList) {
-            if (cs.getId() == stationId && cs.isCompatibleWith(vehicle) && !cs.isMaintenance()) {
+            if (cs.getId() == stationId  && !cs.isMaintenance()) {
                 view.showMessage("Hai scelto: " + cs);
                 return cs;
             }
@@ -280,10 +289,77 @@ public class Controller {
     // ==============================
     // Reservation methods
     // ==============================
-    public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS, int startingSlot, int endingSlot) {
-        boolean slotAvailable = true; // Logica per verificare la disponibilità dello slot
-        Reservation.reserveSlot(currentUser, currentVehicle, currentCS, startingSlot, endingSlot, slotAvailable, reservationList);
+    public void reserveSlot(User currentUser, Vehicle currentVehicle, ChargingStation currentCS,
+                        int startingSlot, int endingSlot) {
+    boolean slotAvailable = true;  // Logica per verificare la disponibilità dello slot
+
+    // Controlla la disponibilità degli slot
+    for (int j = startingSlot; j < endingSlot; j++) {
+        if (!currentCS.isSlotAvailable(j)) { // Controlla la disponibilità dello slot
+            slotAvailable = false;
+            break;
+        }
+    }   
+
+    if (slotAvailable) {
+        // Prenota gli slot nella stazione di ricarica
+        for (int j = startingSlot; j < endingSlot; j++) {
+            currentCS.setTimeTable(currentUser.getUsername(), j); // Assegna lo slot all'utente
+        }
+        
+        view.showMessage("Slot prenotati!");
+
+        // Crea una nuova prenotazione
+        Reservation newReservation = new Reservation();
+        newReservation.setUser(currentUser);
+        newReservation.setVehicle(currentVehicle);
+        newReservation.setChargingStation(currentCS);
+        newReservation.setStartTime(new Time(startingSlot * 30 / 60, startingSlot * 30 % 60));
+        newReservation.setEndTime(new Time(endingSlot * 30 / 60, endingSlot * 30 % 60));
+
+        // Genera un nuovo ID per la prenotazione
+        int maxID = 0;
+        for (Reservation r : reservationList) {
+            if (r.getId() > maxID) {
+                maxID = r.getId();
+            }
+        }
+        newReservation.setId(maxID + 1);
+
+        // Aggiungi la prenotazione alla lista di prenotazioni dell'utente
+        currentUser.getReservations().add(newReservation);
+
+        // Aggiungi la prenotazione alla lista globale
+        reservationList.add(newReservation);
+
+    } else {
+        view.showMessage("Slot non disponibili!");
+        }
     }
+
+
+    // Metodo per aggiungere una prenotazione
+    public  void addReservation(Reservation reservation) {
+        reservationList.add(reservation);
+    }
+
+    // Metodo per ottenere tutte le prenotazioni
+    public  List<Reservation> getAllReservations() {
+        return new ArrayList<>(reservationList); // Ritorna una copia della lista per evitare modifiche esterne
+    }
+
+    // Metodo per resettare tutte le prenotazioni (facoltativo)
+    public  void resetReservations() {
+        reservationList.clear();
+    }
+
+    // Metodo per stampare tutte le prenotazioni
+    public  void printAllReservations() {
+        for (Reservation reservation : reservationList) {
+            System.out.println(reservation);
+        }
+    }
+
 
     // ==============================
     // Data management methods
@@ -306,6 +382,12 @@ public class Controller {
         }
     }
 
+
+    // ==============================
+    // Debugging
+    // ==============================
+
+
     // Metodo per stampare tutti i dati
     public void printino() {
         view.printChargingRateList(chargingRateList);
@@ -324,5 +406,7 @@ public class Controller {
     public void resettone() {
         ChargingStation.resetAllTimeTables(chargingStationList);
     }
+
+    
 }
 
