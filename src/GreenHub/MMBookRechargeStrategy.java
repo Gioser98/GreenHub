@@ -32,7 +32,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 		GreenPointsStrategy gpStrategy = new GPReservationStrategy();  // Usa la strategia di prenotazione
 		int value = 1;  // Per la prenotazione, possiamo usare un valore fisso
 
-		// Calcola i punti verdi usando la strategia
+		// Calcola i punti usando la strategia
 		int greenPoints = gpStrategy.calculatePoints(value);
 
 		// Usa il metodo del controller per assegnare i punti

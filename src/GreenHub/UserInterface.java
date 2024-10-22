@@ -70,11 +70,12 @@ public class UserInterface {
         while (true) {
             System.out.println("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
             
-            int max = (int) user.getPersonalVehicle().getCapacity();
-            int marco = (int) user.getPersonalVehicle().getBatteryLevel();
-            int percentuale = (int) ((marco / (double) max) * 100);
+            
 
             if (user.getPersonalVehicle() != null) {
+                int max = (int) user.getPersonalVehicle().getCapacity();
+                int marco = (int) user.getPersonalVehicle().getBatteryLevel();
+                int percentuale = (int) ((marco / (double) max) * 100);
                 System.out.println("\nLa tua " + user.getPersonalVehicle().getMaker() + " " + user.getPersonalVehicle().getModel() + 
                     " ha una percentuale di carica pari a " + percentuale + " %");
             } else {

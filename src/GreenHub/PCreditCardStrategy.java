@@ -36,11 +36,6 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
         System.out.println("Elaborazione pagamento...");
         simulatePaymentDelay();  // Simula un'attesa per il pagamento
         System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
-        //if (processPayment()) {
-        //    System.out.println("Pagamento di Euro" + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
-        //} else {
-        //    System.out.println("Pagamento rifiutato. Controlla i dettagli della carta e riprova.");
-        //}
     }
 
     // Validazione del numero della carta (verifica che siano 16 cifre)
@@ -72,8 +67,5 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
         }
     }
 
-    // Simula il processo di pagamento, con una piccola probabilità di fallimento
-    //private boolean processPayment() {
-    //    return Math.random() > 0.1;  // 90% di probabilità di successo
-    //}
+
 }

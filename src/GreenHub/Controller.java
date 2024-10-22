@@ -64,7 +64,8 @@ public class Controller {
     }
 
      // Metodo per il login di un utente
-    public User loginUser() {
+     public User loginUser() {
+        
         String username = view.getInputUsername();  // Ottieni l'username dalla View
         User user = getUserByUsername(username);
     
@@ -72,15 +73,20 @@ public class Controller {
             // Aggiorna la posizione dell'utente con una nuova posizione casuale
             Location newLocation = generateRandomLocation();
             user.setLocation(newLocation);
-
-            // Aggiorna il livello di batteria del veicolo con un nuovo livello casuale
-            int newBatteryLevel = generateRandomBatteryLevel(user);
-            user.getPersonalVehicle().setBatteryLevel(newBatteryLevel);
-
-        return user;  // Ritorna l'utente se trovato
+    
+            // Controlla se l'utente ha un veicolo personale associato
+            if (user.getPersonalVehicle() != null) {
+                // Aggiorna il livello di batteria del veicolo con un nuovo livello casuale
+                int newBatteryLevel = generateRandomBatteryLevel(user);
+                user.getPersonalVehicle().setBatteryLevel(newBatteryLevel);
+            } else {
+                view.showMessage("Non hai un veicolo associato. Puoi aggiungerne uno successivamente.");
+            }
+    
+            return user;  // Ritorna l'utente se trovato
         } else {
             view.showMessage("Utente non trovato.");
-        return null;  // Ritorna null se non trovato
+            return null;  // Ritorna null se non trovato
         }
     }
 

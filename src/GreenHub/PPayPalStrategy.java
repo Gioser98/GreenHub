@@ -29,12 +29,7 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
         simulatePaymentDelay();  // Simula un'attesa per il pagamento
         
         System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato tramite PayPal (email: " + maskEmail(email) + ")");
-        /* 
-                if (processPayment()) {
-            System.out.println("Pagamento di " + String.format("%.2f", amount) + " \u20AC44 approvato tramite PayPal (email: " + maskEmail(email) + ")");
-        } else {
-            System.out.println("Pagamento rifiutato. Controlla i dettagli di PayPal e riprova."); 
-        }*/
+        
     }
   
 
@@ -59,8 +54,5 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
         }
     }
 
-    // Simula il processo di pagamento, con una piccola probabilità di fallimento
-    //private boolean processPayment() {
-      //  return Math.random() > 0.1;  // 90% di probabilità di successo
-    //}
+    
 }
