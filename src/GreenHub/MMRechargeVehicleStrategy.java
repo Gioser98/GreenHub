@@ -39,12 +39,11 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Procedi con la selezione della stazione di ricarica
         ChargingStation currentCS = ui.getController().chooseStation(currentVehicle);
     
-        // Controlla se la stazione è attualmente occupata
+       
             
-
+        // Verifica se la stazione è occupata
         List<Reservation> allReservations  = ui.getController().getAllReservations();
         
-        // Verifica se la stazione è occupata
         if (currentCS.isCurrentlyOccupied(allReservations, user)) {
             System.out.println("La stazione è occupata. Scegli un'altra stazione o attendi.");
             return;
@@ -99,7 +98,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Calcolo dei Green Points
         GreenPointsStrategy gpStrategy = new GPRechargeStrategy();
         int chargePercentage = (int) amount;  // Supponiamo che sia la percentuale di ricarica
-        gpStrategy.calculatePoints(chargePercentage);
+        //gpStrategy.calculatePoints(chargePercentage);
         ui.getController().assignGreenPoints(user, gpStrategy, chargePercentage);
     
         System.out.println("\nPremi Invio per tornare al menu principale o 'q' per uscire.");

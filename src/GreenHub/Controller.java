@@ -65,7 +65,6 @@ public class Controller {
 
      // Metodo per il login di un utente
     public User loginUser() {
-        
         String username = view.getInputUsername();  // Ottieni l'username dalla View
         User user = getUserByUsername(username);
     

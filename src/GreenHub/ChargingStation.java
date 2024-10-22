@@ -107,19 +107,28 @@ public class ChargingStation implements Serializable {
 
     public void printTimeTableWithTimeSlots() {
         System.out.println("Stato attuale della colonnina di ricarica:");
-
-        for (int i = 0; i < timeTable.length; i++) {
+    
+        for (int i = 0; i < timeTable.length-1; i++) {
             String startTime = formatTime(i * 30);
             String endTime = formatTime((i + 1) * 30);
+            
+            // Assicurati di non andare oltre le 23:59
+            if (i * 30 >= 24 * 60) {
+                break; // Esci dal ciclo se l'orario di inizio supera le 23:59
+            }
+    
             String slotStatus = (timeTable[i] == null || timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
-
+    
             System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
-
+    
             if ((i + 1) % 4 == 0) {
                 System.out.println();
             }
         }
     }
+    
+    
+    
 
     public static String formatTime(int minutes) {
         int hours = minutes / 60;
@@ -164,6 +173,16 @@ public class ChargingStation implements Serializable {
                 Time startTime = reservation.getStartTime();
                 Time endTime = reservation.getEndTime();
     
+                // Stampa i valori per il debug
+                System.out.println("Start Time: " + startTime.getHour() + ":" + startTime.getMinute());
+                System.out.println("End Time: " + endTime.getHour() + ":" + endTime.getMinute());
+    
+                // Controlla se startTime e endTime sono validi
+                if (startTime.getHour() < 0 || startTime.getHour() >= 24 || 
+                    endTime.getHour() < 0 || endTime.getHour() >= 24) {
+                    throw new IllegalArgumentException("L'ora deve essere compresa tra 0 e 23");
+                }
+    
                 // Converti il tuo oggetto Time a LocalTime per confrontarlo
                 LocalTime start = LocalTime.of(startTime.getHour(), startTime.getMinute());
                 LocalTime end = LocalTime.of(endTime.getHour(), endTime.getMinute());
@@ -173,7 +192,6 @@ public class ChargingStation implements Serializable {
                     // Se l'ora corrente è tra l'orario di inizio e di fine, verifica lo username
                     if (reservation.getUser().getUsername().equals(currentUser.getUsername())) {
                         // Se l'utente loggato è lo stesso della prenotazione, si può procedere
-
                         return false; // Non occupato, stesso utente
                     } else {
                         // Se l'utente è diverso, la stazione è occupata
@@ -186,6 +204,8 @@ public class ChargingStation implements Serializable {
         // Se nessuna condizione di occupazione è stata soddisfatta, la stazione non è occupata
         return false;
     }
+    
+    
 
 
 

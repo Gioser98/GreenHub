@@ -19,7 +19,7 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 		currentCS = ui.getController().chooseStation(currentVehicle);
 		currentCS.printTimeTableWithTimeSlots();
 
-		System.out.print("Quali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
+		System.out.print("\nQuali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
 		String[] slot = in.next().split("-");
 		int startingSlot = Integer.parseInt(slot[0]);
 		int endingSlot = Integer.parseInt(slot[1]);
