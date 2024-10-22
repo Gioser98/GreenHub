@@ -19,8 +19,8 @@ public class UserInterface {
         strategies.put(3, new MMReservationListStrategy());
         //strategies.put(3, new MMRentVehicleStrategy());
         //strategies.put(4, new MMRedeemRewardStrategy());
-        strategies.put(5, new MMRegisterCarStrategy());
-        strategies.put(6, new MMExitStrategy());
+        strategies.put(4, new MMRegisterCarStrategy());
+        strategies.put(5, new MMExitStrategy());
     }
 
     public Controller getController() {
@@ -85,14 +85,14 @@ public class UserInterface {
             System.out.println("\n1) Ricarica il tuo veicolo elettrico");
             System.out.println("2) Prenota una ricarica");
             System.out.println("3) Elenco prenotazioni");
-            System.out.println("4) Riscatta una ricompensa");
+            //System.out.println("4) Riscatta una ricompensa");
             
             // Mostra l'opzione di registrazione solo se l'utente non ha un veicolo
             if (user.getPersonalVehicle() == null) {
-                System.out.println("5) Registrazione nuova auto");
+                System.out.println("4) Registrazione nuova auto");
             }
             
-            System.out.println("6) Esci");
+            System.out.println("5) Esci");
             System.out.print("Scelta: ");
             int choice = scanner.nextInt();
             MainMenuStrategy strategy = strategies.get(choice);

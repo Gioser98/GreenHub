@@ -43,7 +43,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             
 
         List<Reservation> allReservations  = ui.getController().getAllReservations();
-        System.out.println(allReservations);
+        
         // Verifica se la stazione è occupata
         if (currentCS.isCurrentlyOccupied(allReservations, user)) {
             System.out.println("La stazione è occupata. Scegli un'altra stazione o attendi.");
