@@ -57,7 +57,7 @@ public class Reservation implements Serializable {
 	
 	// Methods
 	public String toString() {
-		return "Prenotazione di " + user + " con il veicolo " + vehicle + "presso al stazione di ricarica "+ chargingStation + " inizia alle " + startTime + " e finisce alle " + endTime;
+		return "Prenotazione di " + user.getUsername() + " con il veicolo " + vehicle.getMaker() + " " + vehicle.getModel() + " presso al stazione di ricarica "+ chargingStation + " inizia alle " + startTime + " e finisce alle " + endTime;
 	}
 	
 

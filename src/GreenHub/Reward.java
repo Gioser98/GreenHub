@@ -3,6 +3,8 @@ package GreenHub;
 public class Reward {
     private GreenPointsStrategy strategy;
 
+    
+
     // Setter per impostare la strategia
     public void setStrategy(GreenPointsStrategy strategy) {
         this.strategy = strategy;

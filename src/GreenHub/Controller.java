@@ -65,7 +65,7 @@ public class Controller {
 
      // Metodo per il login di un utente
      public User loginUser() {
-        
+    
         String username = view.getInputUsername();  // Ottieni l'username dalla View
         User user = getUserByUsername(username);
     
@@ -169,7 +169,8 @@ public class Controller {
         if (owner.getPersonalVehicle() == null) {
             owner.setPersonalVehicle(vehicle);
         }
-
+        int newBatteryLevel = generateRandomBatteryLevel(owner);
+        vehicle.setBatteryLevel(newBatteryLevel);
         view.showMessage("Veicolo registrato correttamente!");
     }
 
@@ -289,6 +290,7 @@ public class Controller {
         // Calcola il costo della ricarica
         double cost = calculateRechargeCost(user, cs);
         newCharge.setCost(cost);
+        vehicle.setBatteryLevel(100);
     }
 
     // ==============================

@@ -69,9 +69,7 @@ public class UserInterface {
     public void MainMenu(User user) throws InterruptedException {
         while (true) {
             System.out.println("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
-            
-            
-
+    
             if (user.getPersonalVehicle() != null) {
                 int max = (int) user.getPersonalVehicle().getCapacity();
                 int marco = (int) user.getPersonalVehicle().getBatteryLevel();
@@ -81,33 +79,41 @@ public class UserInterface {
             } else {
                 System.out.println("\nNon hai un veicolo personale associato.");
             }
-            
-            
+    
             System.out.println("\n1) Ricarica il tuo veicolo elettrico");
             System.out.println("2) Prenota una ricarica");
             System.out.println("3) Elenco prenotazioni");
             //System.out.println("4) Riscatta una ricompensa");
-            
+    
             // Mostra l'opzione di registrazione solo se l'utente non ha un veicolo
             if (user.getPersonalVehicle() == null) {
                 System.out.println("4) Registrazione nuova auto");
             }
-            
+    
             System.out.println("5) Esci");
             System.out.print("Scelta: ");
             int choice = scanner.nextInt();
-            MainMenuStrategy strategy = strategies.get(choice);
-            if (strategy != null) {
-                try {
-                    strategy.execute(this, user);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.out.println("Errore durante l'esecuzione dell'operazione.");
-                }
+    
+            // Se l'utente non ha un veicolo registrato, blocca le scelte 1, 2 e 3
+            if ((choice == 1 || choice == 2 || choice == 3) && user.getPersonalVehicle() == null) {
+                System.out.println("\nDevi registrare un veicolo elettrico per effettuare questa operazione.");
+                Thread.sleep(2000);
             } else {
-                System.out.println("Opzione non valida, riprova.");
+                // Esegui la strategia scelta
+                MainMenuStrategy strategy = strategies.get(choice);
+                if (strategy != null) {
+                    try {
+                        strategy.execute(this, user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Errore durante l'esecuzione dell'operazione.");
+                    }
+                } else {
+                    System.out.println("Opzione non valida, riprova.");
+                }
             }
         }
     }
+    
 
 }

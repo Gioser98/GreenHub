@@ -173,10 +173,7 @@ public class ChargingStation implements Serializable {
                 Time startTime = reservation.getStartTime();
                 Time endTime = reservation.getEndTime();
     
-                // Stampa i valori per il debug
-                System.out.println("Start Time: " + startTime.getHour() + ":" + startTime.getMinute());
-                System.out.println("End Time: " + endTime.getHour() + ":" + endTime.getMinute());
-    
+                    
                 // Controlla se startTime e endTime sono validi
                 if (startTime.getHour() < 0 || startTime.getHour() >= 24 || 
                     endTime.getHour() < 0 || endTime.getHour() >= 24) {

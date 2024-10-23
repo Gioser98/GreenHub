@@ -45,10 +45,10 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         List<Reservation> allReservations  = ui.getController().getAllReservations();
         
         if (currentCS.isCurrentlyOccupied(allReservations, user)) {
-            System.out.println("La stazione è occupata. Scegli un'altra stazione o attendi.");
+            System.out.println( "\u001B[31m" + "\nLa stazione è occupata. Scegli un'altra stazione o attendi.\n" + "\u001B[0m");
             return;
         } else {
-            System.out.println("La stazione è disponibile. Puoi procedere con la ricarica.");
+            System.out.println("\u001B[32m" + "La stazione è disponibile. Puoi procedere con la ricarica." + "\u001B[0m");
 }
 
     
@@ -144,16 +144,16 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         int initialCharge = percentuale; // Ottieni la percentuale iniziale di carica
         int targetCharge = 100; // Ricarica fino al 100%
     
-        System.out.println("Inizio ricarica..." + percentuale);
+        System.out.println("Inizio ricarica...\n");
         for (int i = initialCharge; i <= targetCharge; i++) {
             // Simula la barra di avanzamento
             System.out.print("\r[");
 
             // Determina il colore in base alla percentuale
             String color;
-            if (i <= 30) {
+            if (i <= 29) {
                 color = "\u001B[31m"; // Rosso
-            } else if (i <= 70) {
+            } else if (i <= 69) {
                 color = "\u001B[33m"; // Giallo
             } else {
                 color = "\u001B[32m"; // Verde
@@ -192,18 +192,18 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
 
     // Guida l'utente nel collegamento della presa
     private void guidePlugInProcess() {
-        System.out.println("Collega il cavo di ricarica al tuo veicolo.");
+        System.out.println("Collega il cavo di ricarica al tuo veicolo.\n");
         try {
             Thread.sleep(3000); // Pausa di 3000 millisecondi
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Cavo collegato correttamente. La ricarica inizierà a breve.");
+        System.out.println("Cavo collegato correttamente. La ricarica inizierà a breve.\n");
     }
 
     // Guida l'utente nello scollegamento della presa dopo la ricarica
     private void guidePlugOutProcess() {
-        System.out.println("La ricarica è completata. Scollega il cavo di ricarica dal tuo veicolo.");
+        System.out.println("La ricarica è completata. Scollega il cavo di ricarica dal tuo veicolo.\n");
         try {
             Thread.sleep(3000); // Pausa di 5000 millisecondi
         } catch (InterruptedException e) {
