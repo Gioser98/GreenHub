@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class UserInterface {
     private Controller controller = new Controller();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
+    private View view = new View();
     private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
     
     public UserInterface() {
@@ -17,8 +18,6 @@ public class UserInterface {
         strategies.put(1, new MMRechargeVehicleStrategy());
         strategies.put(2, new MMBookRechargeStrategy());
         strategies.put(3, new MMReservationListStrategy());
-        //strategies.put(3, new MMRentVehicleStrategy());
-        //strategies.put(4, new MMRedeemRewardStrategy());
         strategies.put(4, new MMRegisterCarStrategy());
         strategies.put(5, new MMExitStrategy());
     }
@@ -30,90 +29,82 @@ public class UserInterface {
 		return scanner;
 	}
 
-    public void WelcomeMenu() throws IOException, ClassNotFoundException, InterruptedException {
-        while (true) {
-            System.out.println("-------------BENVENUTO IN GREENHUB-------------");
-            System.out.println("Tutti i dati verranno caricati dai file fra pochi secondi.");
-            System.out.println("Per salvare le modifiche sul file, terminare il programma scegliendo "
-                    + "l'apposita opzione, altrimenti verranno perse.");
-            System.out.println("1) Registrazione nuovo utente");
-            System.out.println("2) Login utente già registrato");
-            System.out.println("3) Exit");
-            System.out.println("4) Leggi contenuti dei file");
-            System.out.print("Scelta: ");
-            int choice = scanner.nextInt();
+    public View getView() {
+        return view;
+    }
 
-            switch (choice) {
-            case 1:
-                controller.registerUser();
-                controller.saveAll();  // Salva i dati
-                break;
-            case 2:
+    public void WelcomeMenu() throws IOException, ClassNotFoundException, InterruptedException {
+        Map<Integer, Runnable> actions = new HashMap<>();
+        
+        actions.put(1, () -> {
+            controller.registerUser();
+            controller.saveAll();  // Salva i dati
+        });
+        
+        actions.put(2, () -> {
+            try {
                 User user = controller.loginUser();
                 if (user != null) {
                     MainMenu(user);
                 }
-                break;
-            case 3:
-                System.exit(0);
-            case 4:
-                controller.printino();  // Legge i dati attraverso il Controller
-                break;
-        
-            default:
-                System.out.println("Opzione non valida, riprova.");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        });
+        
+        actions.put(3, () -> System.exit(0));
+        
+        actions.put(4, () -> controller.printino());
+    
+        while (true) {
+            view.showWelcomeMenuOptions();
+            int choice = scanner.nextInt();
+    
+            Runnable action = actions.getOrDefault(choice, () -> System.out.println("Opzione non valida, riprova."));
+            action.run();
         }
     }
 
     public void MainMenu(User user) throws InterruptedException {
+        view.showMessage("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
+        
+        if (user.getPersonalVehicle() != null) {
+            view.showVehicleStatus(user);  // Usa il metodo nella View
+        } else {
+            view.showMessage("\nNon hai un veicolo personale associato.");
+        }
+        
         while (true) {
-            System.out.println("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
-    
-            if (user.getPersonalVehicle() != null) {
-                int max = (int) user.getPersonalVehicle().getCapacity();
-                int marco = (int) user.getPersonalVehicle().getBatteryLevel();
-                int percentuale = (int) ((marco / (double) max) * 100);
-                System.out.println("\nLa tua " + user.getPersonalVehicle().getMaker() + " " + user.getPersonalVehicle().getModel() + 
-                    " ha una percentuale di carica pari a " + percentuale + " %");
-            } else {
-                System.out.println("\nNon hai un veicolo personale associato.");
-            }
-    
-            System.out.println("\n1) Ricarica il tuo veicolo elettrico");
-            System.out.println("2) Prenota una ricarica");
-            System.out.println("3) Elenco prenotazioni");
-            //System.out.println("4) Riscatta una ricompensa");
-    
-            // Mostra l'opzione di registrazione solo se l'utente non ha un veicolo
-            if (user.getPersonalVehicle() == null) {
-                System.out.println("4) Registrazione nuova auto");
-            }
-    
-            System.out.println("5) Esci");
-            System.out.print("Scelta: ");
+            view.showMenuOptions(user);  // Usa il metodo nella View
+            view.showMessage("Scelta: ");
             int choice = scanner.nextInt();
     
-            // Se l'utente non ha un veicolo registrato, blocca le scelte 1, 2 e 3
-            if ((choice == 1 || choice == 2 || choice == 3) && user.getPersonalVehicle() == null) {
-                System.out.println("\nDevi registrare un veicolo elettrico per effettuare questa operazione.");
-                Thread.sleep(2000);
+            if (isActionAllowed(choice, user)) {
+                executeMenuAction(choice, user);
             } else {
-                // Esegui la strategia scelta
-                MainMenuStrategy strategy = strategies.get(choice);
-                if (strategy != null) {
-                    try {
-                        strategy.execute(this, user);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Errore durante l'esecuzione dell'operazione.");
-                    }
-                } else {
-                    System.out.println("Opzione non valida, riprova.");
-                }
+                view.showMessage("\nDevi registrare un veicolo elettrico per effettuare questa operazione.");
+                Thread.sleep(2000);
             }
         }
     }
     
-
+    // Controlla se l'azione scelta è consentita
+    private boolean isActionAllowed(int choice, User user) {
+        return choice == 4 || choice == 5 || user.getPersonalVehicle() != null;
+    }
+    
+    // Esegue l'azione di menu scelta
+    private void executeMenuAction(int choice, User user) throws InterruptedException {
+        MainMenuStrategy strategy = strategies.get(choice);
+        if (strategy != null) {
+            try {
+                strategy.execute(this, user);
+            } catch (IOException e) {
+                e.printStackTrace();
+                view.showMessage("Errore durante l'esecuzione dell'operazione.");
+            }
+        } else {
+            view.showMessage("Opzione non valida, riprova.");
+        }
+    }
 }

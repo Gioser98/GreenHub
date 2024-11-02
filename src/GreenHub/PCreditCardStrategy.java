@@ -3,13 +3,13 @@ package GreenHub;
 import java.io.Serializable;
 import java.util.Scanner;
 
-
 public class PCreditCardStrategy implements PaymentStrategy, Serializable {
     private String cardNumber;
     private String expiryDate;
     private String cvv;
 
-    public PCreditCardStrategy() {
+    // Metodo per inizializzare i dettagli di pagamento
+    public void initializePayment() {
         Scanner scanner = new Scanner(System.in);
 
         // Validazione del numero di carta di credito
@@ -34,7 +34,7 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
     @Override
     public void pay(double amount) {
         System.out.println("Elaborazione pagamento...");
-        simulatePaymentDelay();  // Simula un'attesa per il pagamento
+        simulatePaymentDelay();
         System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato con la carta " + maskCardNumber(cardNumber));
     }
 
@@ -61,11 +61,9 @@ public class PCreditCardStrategy implements PaymentStrategy, Serializable {
     // Simula un'attesa per il pagamento (es. 2 secondi)
     private void simulatePaymentDelay() {
         try {
-            Thread.sleep(2000);  // Attesa di 2 secondi per simulare il processo di pagamento
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
-
-
 }

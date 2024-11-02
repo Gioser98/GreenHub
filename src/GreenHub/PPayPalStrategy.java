@@ -8,7 +8,8 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
     private String email;
     private String password;
 
-    public PPayPalStrategy() {
+    // Metodo per inizializzare i dettagli di pagamento
+    public void initializePayment() {
         Scanner scanner = new Scanner(System.in);
 
         // Validazione dell'email
@@ -24,14 +25,10 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
 
     @Override
     public void pay(double amount) {
-        
         System.out.println("Elaborazione pagamento tramite PayPal...");
-        simulatePaymentDelay();  // Simula un'attesa per il pagamento
-        
+        simulatePaymentDelay();
         System.out.println("Pagamento di Euro " + String.format("%.2f", amount) + " approvato tramite PayPal (email: " + maskEmail(email) + ")");
-        
     }
-  
 
     // Validazione dell'email con espressione regolare
     private boolean isValidEmail(String email) {
@@ -48,11 +45,9 @@ public class PPayPalStrategy implements PaymentStrategy, Serializable {
     // Simula un'attesa per il pagamento (es. 2 secondi)
     private void simulatePaymentDelay() {
         try {
-            Thread.sleep(2000);  // Attesa di 2 secondi per simulare il processo di pagamento
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
-
-    
 }
