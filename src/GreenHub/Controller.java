@@ -27,6 +27,7 @@ public class Controller {
         // Costruttore vuoto
     }
 
+
     // ==============================
     // User methods
     // ==============================
@@ -184,6 +185,7 @@ public class Controller {
     // ==============================
     // ChargingStation methods
     // ==============================
+    
     public ArrayList<ChargingStation> getChargingStationList() {
         return chargingStationList;
     }
@@ -266,6 +268,7 @@ public class Controller {
 
         return availableStations; // Restituisce la lista delle stazioni disponibili
     }
+       
 
     public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
         newCharge.setChargingStation(cs);
@@ -342,6 +345,19 @@ public class Controller {
     } else {
         view.showMessage("Slot non disponibili!");
         }
+    }
+
+    // Metodo per verificare la disponibilità dello slot e, se disponibile, effettuare la prenotazione
+    public boolean reserveSlotIfAvailable(User user, Vehicle vehicle, ChargingStation station, int startSlot, int endSlot) {
+        for (int j = startSlot; j < endSlot; j++) {
+            if (!station.getTimeTable()[j].isEmpty()) {
+                return false; // Slot non disponibile
+            }
+        }
+        
+        // Se gli slot sono liberi, effettua la prenotazione
+        reserveSlot(user, vehicle, station, startSlot, endSlot);
+        return true; // Prenotazione completata
     }
 
 

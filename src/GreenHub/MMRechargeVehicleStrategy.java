@@ -108,7 +108,6 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Calcola il costo della ricarica
         double amount = newCharge.getCost();
     
-    
         // Registra la transazione e ottieni il risultato
         ui.getController().registerTransaction(user, currentVehicle, currentCS, newCharge, amount, paymentStrategy);
         

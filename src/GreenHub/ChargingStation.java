@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChargingStation implements Serializable {
+public class ChargingStation{
 
     private static final long serialVersionUID = 1L;
     private int id;
@@ -148,14 +148,13 @@ public class ChargingStation implements Serializable {
         for (int i = 0; i < timeTable.length; i++) {
             this.timeTable[i] = ""; // Imposta tutti gli slot come vuoti
         }
-        System.out.println("Il vettore timeTable è stato azzerato.");
+        
     }
 
     public static void resetAllTimeTables(List<ChargingStation> chargingStationList) {
         for (ChargingStation station : chargingStationList) {
             station.resetTimeTable();
         }
-        System.out.println("Tutte le timeTable delle stazioni di ricarica sono state azzerate.");
     }
 
     /**
