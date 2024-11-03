@@ -35,7 +35,6 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             return;
         }
     
-        // Richiedi la distanza massima per trovare le stazioni di ricarica disponibili
         ui.getView().showMessage("Stazioni di ricarica vicino a te: " + user.getLocation() + "\n");
     
         // Recupera la lista delle stazioni di ricarica nelle vicinanze
@@ -43,7 +42,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         
         // Verifica se ci sono stazioni disponibili
         if (nearStations.isEmpty()) {
-            ui.getView().showMessage("Nessuna stazione di ricarica disponibile nella distanza specificata.");
+            ui.getView().showMessage("Nessuna stazione di ricarica disponibile.");
             return; // Esci se non ci sono stazioni disponibili
         }
     
@@ -75,17 +74,44 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         // Scegli il metodo di pagamento e inizializza i dati di pagamento
         int choice = ui.getView().choosePaymentMethod();
         PaymentStrategy paymentStrategy = paymentOptions.get(choice);
-
+        
         if (paymentStrategy == null) {
             ui.getView().showMessage("Operazione annullata: nessun metodo di pagamento selezionato.");
             return;
         }
-
+    
         if (paymentStrategy instanceof PCreditCardStrategy) {
             ((PCreditCardStrategy) paymentStrategy).initializePayment();
         } else if (paymentStrategy instanceof PPayPalStrategy) {
             ((PPayPalStrategy) paymentStrategy).initializePayment();
         }
+    
+        // Chiedi se l'utente ha un codice sconto subito dopo il pagamento
+        ui.getView().showMessage("Hai un codice sconto per la ricarica? (s/n)");
+        String hasDiscountCode = scanner.next();
+        double discount = 1.0; // Nessuno sconto di default
+
+        if (hasDiscountCode.equalsIgnoreCase("s")) {
+            // Chiedi il codice sconto
+            ui.getView().showMessage("Inserisci il codice sconto:");
+            String discountCode = scanner.next();
+        
+            // Verifica se il codice è valido per l'utente corrente
+            if (ui.getController().isDiscountCodeValid(discountCode, user)) {
+                // Ottieni la ricompensa appropriata dalla RewardFactory
+                RewardType reward = RewardFactory.getRewardByCode(discountCode);
+
+                if (reward != null) {
+                    discount = reward.applyReward();
+                    ui.getView().showMessage( "\u001B[32m"+ "\n Codice sconto valido! \n" + "\u001B[0m");
+                } else {
+                    ui.getView().showMessage("\u001B[31m"+ "Codice sconto non valido. Nessuno sconto applicato." + "\u001B[0m");
+                }
+            } else {
+                ui.getView().showMessage("\u001B[31m"+ "Codice sconto non valido o non associato a questo utente. Nessuno sconto applicato." + "\u001B[0m");
+            }
+        }
+
     
         // Imposta l'ora corrente e crea una nuova carica
         LocalDateTime currentTime = LocalDateTime.now();
@@ -103,7 +129,8 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getView().guidePlugOutProcess();
     
         // Registra la carica
-        ui.getController().registerCharge(user, currentVehicle, currentCS, currentTime, newCharge, startTime);
+        //int discount=1;
+        ui.getController().registerCharge(user, currentVehicle, currentCS, currentTime, newCharge, startTime, discount);
     
         // Calcola il costo della ricarica
         double amount = newCharge.getCost();

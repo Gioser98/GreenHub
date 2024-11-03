@@ -2,6 +2,7 @@ package GreenHub;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Map;
 
 public class View {
 
@@ -55,10 +56,11 @@ public class View {
         System.out.println("\n1) Ricarica il tuo veicolo elettrico");
         System.out.println("2) Prenota una ricarica");
         System.out.println("3) Elenco prenotazioni");
+        System.out.println("4) Riscatta una ricompensa");
         if (user.getPersonalVehicle() == null) {
-            System.out.println("4) Registrazione nuova auto");
+            System.out.println("5) Registrazione nuova auto");
         }
-        System.out.println("5) Esci");
+        System.out.println("6) Esci");
     }
    
     public void showWelcomeMenuOptions() {
@@ -192,4 +194,17 @@ public class View {
     public void printReservationList(ArrayList<Reservation> reservationList) {
         System.out.println("Reservation List: " + reservationList);
     }
+    
+    
+public void printRedeemedRewardsMap(Map<String, String> redeemedRewardsMap) {
+    if (redeemedRewardsMap == null || redeemedRewardsMap.isEmpty()) {
+        System.out.println("La mappa delle ricompense riscattate è vuota.");
+        return;
+    }
+    System.out.println("Contenuto della mappa delle ricompense riscattate:");
+    for (Map.Entry<String, String> entry : redeemedRewardsMap.entrySet()) {
+        System.out.println("Codice: " + entry.getKey() + " - Utente: " + entry.getValue());
+    }
+}
+
 }

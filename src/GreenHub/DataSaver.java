@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DataSaver {
     // Le liste non devono essere qui, il DataSaver ora si occupa solo di salvare e leggere dati, non di gestire liste
@@ -19,7 +20,7 @@ public class DataSaver {
     public void saveAll(ArrayList<ChargingRate> chargingRateList, ArrayList<EnergySupplier> energySupplierList, 
                         ArrayList<ChargingStation> chargingStationList, ArrayList<Reward> rewardList, 
                         ArrayList<User> userList, ArrayList<Vehicle> vehicleList, 
-                        ArrayList<Transaction> transactionList, ArrayList<Reservation> reservationList) throws IOException {
+                        ArrayList<Transaction> transactionList, ArrayList<Reservation> reservationList, Map<String, String> redeemedRewardsMap) throws IOException {
         // Salvataggio di chargingRateList
         try (FileOutputStream chargingRateFOS = new FileOutputStream(new File("ChargingRate.txt"));
              ObjectOutputStream chargingRateOOS = new ObjectOutputStream(chargingRateFOS)) {
@@ -67,7 +68,11 @@ public class DataSaver {
              ObjectOutputStream reservationOOS = new ObjectOutputStream(reservationFOS)) {
             reservationOOS.writeObject(reservationList);
         }
-
+        // Salvataggio di redeemedRewardsMap
+        try (FileOutputStream rewardMapFOS = new FileOutputStream(new File("RedeemedRewardsMap.txt"));
+            ObjectOutputStream rewardMapOOS = new ObjectOutputStream(rewardMapFOS)) {
+            rewardMapOOS.writeObject(redeemedRewardsMap);
+            }
         System.out.println("\n----------------------------------------------------------------");
         System.out.println("Tutti i dati sono stati correttamente salvati su file.");
         System.out.println("----------------------------------------------------------------");
@@ -78,7 +83,7 @@ public class DataSaver {
     public void readAll(ArrayList<ChargingRate> chargingRateList, ArrayList<EnergySupplier> energySupplierList, 
                         ArrayList<ChargingStation> chargingStationList, ArrayList<Reward> rewardList, 
                         ArrayList<User> userList, ArrayList<Vehicle> vehicleList, 
-                        ArrayList<Transaction> transactionList, ArrayList<Reservation> reservationList) throws FileNotFoundException, IOException {
+                        ArrayList<Transaction> transactionList, ArrayList<Reservation> reservationList, Map<String, String> redeemedRewardsMap) throws FileNotFoundException, IOException {
         // Lettura chargingRateList
         FileInputStream FIS = new FileInputStream("ChargingRate.txt");
         ObjectInputStream OIS = new ObjectInputStream(FIS);
@@ -167,6 +172,22 @@ public class DataSaver {
             OIS.close();
         }
 
+        // Caricamento di redeemedRewardsMap
+        try (FileInputStream mapFIS = new FileInputStream("RedeemedRewardsMap.txt");
+            ObjectInputStream mapOIS = new ObjectInputStream(mapFIS)) {
+            // Carica la mappa direttamente e assegna
+            Map<String, String> loadedMap = (Map<String, String>) mapOIS.readObject();
+   
+            // Svuota e sostituisci la mappa originale con i dati caricati
+        
+            redeemedRewardsMap.putAll(loadedMap);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        }
+
+
        
-    }
+    
 }

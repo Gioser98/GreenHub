@@ -18,8 +18,9 @@ public class UserInterface {
         strategies.put(1, new MMRechargeVehicleStrategy());
         strategies.put(2, new MMBookRechargeStrategy());
         strategies.put(3, new MMReservationListStrategy());
-        strategies.put(4, new MMRegisterCarStrategy());
-        strategies.put(5, new MMExitStrategy());
+        strategies.put(4, new MMRedeemRewardStrategy());
+        strategies.put(5, new MMRegisterCarStrategy());
+        strategies.put(6, new MMExitStrategy());
     }
 
     public Controller getController() {
@@ -70,15 +71,17 @@ public class UserInterface {
     }
 
     public void MainMenu(User user) throws InterruptedException {
-        view.showMessage("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
         
-        if (user.getPersonalVehicle() != null) {
-            view.showVehicleStatus(user);  // Usa il metodo nella View
-        } else {
-            view.showMessage("\nNon hai un veicolo personale associato.");
-        }
         
         while (true) {
+            view.showMessage("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
+        
+            if (user.getPersonalVehicle() != null) {
+                view.showVehicleStatus(user);  // Usa il metodo nella View
+            } else {
+                view.showMessage("\nNon hai un veicolo personale associato.");
+            }
+            
             view.showMenuOptions(user);  // Usa il metodo nella View
             view.showMessage("Scelta: ");
             int choice = scanner.nextInt();

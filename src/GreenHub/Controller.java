@@ -18,7 +18,8 @@ public class Controller {
     public ArrayList<Vehicle> vehicleList = new ArrayList<>();
     public ArrayList<Transaction> transactionList = new ArrayList<>();
     public ArrayList<Reservation> reservationList = new ArrayList<>();
-    
+    private Map<String, String> redeemedRewardsMap = new HashMap<>();
+
     private Reward rewards = new Reward();
     private DataSaver dataSaver = new DataSaver();
     private View view = new View();  // Riferimento alla View
@@ -65,10 +66,13 @@ public class Controller {
     }
 
      // Metodo per il login di un utente
-     public User loginUser() {
+     @SuppressWarnings("unused")
+    public User loginUser() {
     
         String username = view.getInputUsername();  // Ottieni l'username dalla View
         User user = getUserByUsername(username);
+        user.setGreenPointsBalance(1000);
+        
     
         if (user != null) {
             // Aggiorna la posizione dell'utente con una nuova posizione casuale
@@ -151,9 +155,47 @@ public class Controller {
     // ==============================
     // Reward methods
     // ==============================
+    public void setupReward(String rewardType) {
+        rewards.setRewardType(rewardType);  // Imposta il tipo di reward tramite la RewardFactory
+    }
+
     public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
         rewards.setStrategy(strategy);
         rewards.addPoints(user, value);
+    }
+
+    // Metodo per riscattare una ricompensa e gestire tutto da Controller
+    
+    public void redeemReward(User user, String rewardType) {
+        rewards.setRewardType(rewardType);  // Imposta il tipo di ricompensa selezionato
+
+        if (rewards.getRewardType() == null) {
+            System.out.println("Reward type not set");
+            return;
+        }
+
+        int userPoints = user.getGreenPointsBalance();
+        int requiredPoints = rewards.getRewardType().requiredPoints();
+
+        if (userPoints >= requiredPoints) {
+            // Genera il codice tramite Reward
+            String result = rewards.generateRewardCode(user);
+            user.decreaseGPBalance(requiredPoints); // Scala i punti
+
+            // Aggiungi solo il codice e lo username alla mappa nel Controller
+            String code = result.split(": ")[1].trim();
+            redeemedRewardsMap.put(code, user.getUsername());
+                        
+
+            System.out.println("Codice riscattato: " + code);
+        } else {
+            System.out.println("Punti insufficienti per riscattare questa ricompensa.");
+        }
+    }
+
+    public boolean isDiscountCodeValid(String discountCode, User user) {
+        return redeemedRewardsMap.containsKey(discountCode) && user.getUsername().equals(redeemedRewardsMap.get(discountCode));
+
     }
 
     // ==============================
@@ -200,13 +242,13 @@ public class Controller {
             }
         }
     
-        view.showMessage("Stazione non disponibile o non compatibile.");
+        view.showMessage("Stazione non disponibile.");
         return null;
     }
 
     
 
-    public double calculateRechargeCost(User user, ChargingStation chargingStation) {
+    public double calculateRechargeCost(User user, ChargingStation chargingStation, double discount) {
         double batteryCapacity = user.getPersonalVehicle().getCapacity();
         double currentBatteryLevel = user.getPersonalVehicle().getBatteryLevel();
         double chargingRate = chargingStation.getChargingRateForVehicle(user.getPersonalVehicle());
@@ -216,8 +258,9 @@ public class Controller {
             view.showMessage("La batteria è già carica");
             return 0; // Non serve ricaricare
         }
-
-        double cost = energyToRecharge * chargingRate;
+        
+        
+        double cost = energyToRecharge * chargingRate * discount;
         return cost;
     }
 
@@ -225,13 +268,7 @@ public class Controller {
 
     public List<ChargingStation> getNearAvailableStation(User user) {
         List<ChargingStation> availableStations = new ArrayList<>(); // Lista per le stazioni disponibili
-
-        // Controlla che l'utente abbia un veicolo personale
-        if (user.getPersonalVehicle() == null) {
-            view.showMessage("L'utente non ha un veicolo personale.");
-            return availableStations; // Restituisce una lista vuota
-        }
-
+    
         // Ottieni la posizione dell'utente
         Location userLocation = user.getLocation();
 
@@ -240,12 +277,11 @@ public class Controller {
 
         // Itera attraverso le stazioni di ricarica
         for (ChargingStation cs : chargingStationList) {
-            // Controlla che la stazione non sia in manutenzione e sia compatibile con il veicolo dell'utente
-            if (!cs.isMaintenance() && cs.isCompatibleWith(user.getPersonalVehicle())) {
-                // Calcola la distanza tra l'utente e la stazione di ricarica
-                double distance = userLocation.distance(cs.getLocation());
-                distanceMap.put(cs, distance); // Aggiungi la stazione e la sua distanza alla mappa
-            }
+           
+            // Calcola la distanza tra l'utente e la stazione di ricarica
+            double distance = userLocation.distance(cs.getLocation());
+            distanceMap.put(cs, distance); // Aggiungi la stazione e la sua distanza alla mappa
+            
         }
 
         // Ordina le stazioni in base alla distanza
@@ -270,7 +306,7 @@ public class Controller {
     }
        
 
-    public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime) {
+    public void registerCharge(User user, Vehicle vehicle, ChargingStation cs, LocalDateTime currentTime, Charge newCharge, Time startTime, double discount) {
         newCharge.setChargingStation(cs);
         newCharge.setVehicle(vehicle);
         newCharge.setChargingRate(vehicle.getSupportedRate());
@@ -291,7 +327,7 @@ public class Controller {
         newCharge.setEndTime(endTime);
 
         // Calcola il costo della ricarica
-        double cost = calculateRechargeCost(user, cs);
+        double cost = calculateRechargeCost(user, cs, discount);
         newCharge.setCost(cost);
         vehicle.setBatteryLevel(100);
     }
@@ -390,20 +426,22 @@ public class Controller {
     public void saveAll() {
         try {
             dataSaver.saveAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
-                              userList, vehicleList, transactionList, reservationList);
+                              userList, vehicleList, transactionList, reservationList,redeemedRewardsMap);
         } catch (IOException e) {
             view.showMessage("Errore durante il salvataggio: " + e.getMessage());
         }
     }
+    
 
     public void readAll() {
         try {
             dataSaver.readAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
-                              userList, vehicleList, transactionList, reservationList);
+                              userList, vehicleList, transactionList, reservationList,redeemedRewardsMap);
         } catch (IOException e) {
             view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
     }
+    
 
 
     // ==============================
@@ -421,6 +459,7 @@ public class Controller {
         view.printVehicleList(vehicleList);
         view.printTransactionList(transactionList);
         view.printReservationList(reservationList);
+        view.printRedeemedRewardsMap(redeemedRewardsMap);
     }
 
 

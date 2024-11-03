@@ -85,6 +85,10 @@ public class User implements Serializable {
 		this.greenPointsBalance += points;
 	}
 
+	public void decreaseGPBalance(int points) {
+		this.greenPointsBalance -= points;
+	}
+
 	public List<Reservation> getReservations() {
 		if (reservations == null) {
 			reservations = new ArrayList<>();  // Inizializza la lista se è null

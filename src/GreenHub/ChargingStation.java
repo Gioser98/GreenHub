@@ -179,7 +179,7 @@ public class ChargingStation implements Serializable{
                     throw new IllegalArgumentException("L'ora deve essere compresa tra 0 e 23");
                 }
     
-                // Converti il tuo oggetto Time a LocalTime per confrontarlo
+                
                 LocalTime start = LocalTime.of(startTime.getHour(), startTime.getMinute());
                 LocalTime end = LocalTime.of(endTime.getHour(), endTime.getMinute());
     

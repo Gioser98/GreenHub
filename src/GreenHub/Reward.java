@@ -1,14 +1,34 @@
 package GreenHub;
 
-public class Reward {
-    private GreenPointsStrategy strategy;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-    
+public class Reward implements Serializable{
+    private GreenPointsStrategy strategy;
+    private RewardType rewardType;
+    public RewardType getRewardType() {
+        return rewardType;
+    }
+
+    public void setRewardType(RewardType rewardType) {
+        this.rewardType = rewardType;
+    }
+
 
     // Setter per impostare la strategia
     public void setStrategy(GreenPointsStrategy strategy) {
         this.strategy = strategy;
     }
+
+    public void setRewardType(String type) {
+        this.rewardType = RewardFactory.getReward(type);
+        if (this.rewardType == null) {
+            throw new IllegalArgumentException("Tipo di ricompensa non valido");
+        }
+    }
+
+   
 
     // Metodo per calcolare i punti utilizzando la strategia corrente
     public int calculatePoints(int value) {
@@ -24,4 +44,21 @@ public class Reward {
         user.increaseGPBalance(points);     // Incrementa i punti dell'utente
         System.out.println("Aggiunti " + points + " Green Points all'utente: " + user.getUsername());
     }
+
+    // Metodo per riscattare una ricompensa
+    
+    // Genera solo il codice della ricompensa senza salvare nulla
+    public String generateRewardCode(User user) {
+        if (rewardType == null) {
+            throw new IllegalStateException("Reward type not set");
+        }
+
+        return rewardType.redeem(user);  // Ritorna il risultato del riscatto
+    }
+    
+
+   
+
+
+
 }
