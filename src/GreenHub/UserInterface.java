@@ -12,8 +12,8 @@ public class UserInterface {
     private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
     
     public UserInterface() {
+        
         controller.readAll();  // Carica i dati esistenti
-
         // Popola la mappa con le strategie
         strategies.put(1, new MMRechargeVehicleStrategy());
         strategies.put(2, new MMBookRechargeStrategy());
@@ -32,6 +32,10 @@ public class UserInterface {
     public View getView() {
         return view;
     }
+
+    
+
+    
 
     public void WelcomeMenu() throws IOException, ClassNotFoundException, InterruptedException {
         Map<Integer, Runnable> actions = new HashMap<>();
