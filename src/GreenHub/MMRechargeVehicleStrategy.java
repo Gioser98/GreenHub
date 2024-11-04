@@ -10,13 +10,13 @@ import java.util.Scanner;
 public class MMRechargeVehicleStrategy implements MainMenuStrategy {
     Scanner scanner = new Scanner(System.in);
     // Mappa per i metodi di pagamento
-    private final Map<Integer, PaymentStrategy> paymentOptions;
+    private final Map<String, PaymentStrategy> paymentOptions;
 
     // Costruttore che inizializza la mappa
     public MMRechargeVehicleStrategy() {
         paymentOptions = new HashMap<>();
-        paymentOptions.put(1, new PCreditCardStrategy()); // Carta di credito
-        paymentOptions.put(2, new PPayPalStrategy());     // PayPal
+        paymentOptions.put("Carta di credito", new PCreditCardStrategy()); // Carta di credito
+        paymentOptions.put("PayPal", new PPayPalStrategy());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getView().guidePlugInProcess();
 
         // Scegli il metodo di pagamento e inizializza i dati di pagamento
-        int choice = ui.getView().choosePaymentMethod();
+        String choice = ui.getView().choosePaymentMethod(paymentOptions);
         PaymentStrategy paymentStrategy = paymentOptions.get(choice);
         
         if (paymentStrategy == null) {

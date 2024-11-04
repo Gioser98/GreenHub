@@ -3,8 +3,10 @@ package GreenHub;
 public class RFZalandoVoucherReward implements RewardType{
     @Override
     public String redeem(User user) {
-        String code = RewardUtils.generateRandomChars(20);
-        return "\nBuono Zalando generato: " + code + ". Utilizzalo per qualsiasi acquisto su Zalando.\n";
+        String prefix = "ZALANDO";
+        String randomPart = RewardUtils.generateRandomChars(13); // Genera 13 caratteri casuali
+        String code = prefix + randomPart; // Combina il prefisso con la parte casuale
+        return "\nBuono Zalando generato: " + code;
     }
 
     @Override

@@ -11,7 +11,15 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 
         ui.getController().getNearAvailableStation(user);
         currentCS = ui.getController().chooseStation(currentVehicle);
-        currentCS.printTimeTableWithTimeSlots();
+        
+        // Ottieni lo stato degli slot dalla stazione di ricarica selezionata e visualizzalo tramite View
+        if (currentCS != null) {
+            var timeSlotStatusList = currentCS.getTimeSlotStatus();
+            ui.getView().printTimeTableWithTimeSlots(timeSlotStatusList, currentCS.getId());
+        } else {
+            ui.getView().showMessage("Stazione non trovata o non disponibile.");
+            return;
+        }
 
         ui.getView().showMessage("\nQuali slot vuoi prenotare? Inseriscili nella forma 14-18: ");
         String[] slot = in.next().split("-");

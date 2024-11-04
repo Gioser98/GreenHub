@@ -105,37 +105,82 @@ public class ChargingStation implements Serializable{
     }
 
 
-    public void printTimeTableWithTimeSlots() {
-        System.out.println("Stato attuale della colonnina di ricarica:");
+    //public void printTimeTableWithTimeSlots() {
+    //    System.out.println("Stato attuale della colonnina di ricarica:");
+    //
+    //    for (int i = 0; i < timeTable.length-1; i++) {
+    //        String startTime = formatTime(i * 30);
+    //        String endTime = formatTime((i + 1) * 30);
+    //        
+    //        // Assicurati di non andare oltre le 23:59
+    //        if (i * 30 >= 24 * 60) {
+    //            break; // Esci dal ciclo se l'orario di inizio supera le 23:59
+    //        }
+    //
+    //        String slotStatus = (timeTable[i] == null || timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
+    //
+    //        System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
+    //
+    //        if ((i + 1) % 4 == 0) {
+    //            System.out.println();
+    //        }
+    //    }
+    //}
+    //
+    //
+    //
+//
+    //public static String formatTime(int minutes) {
+    //    int hours = minutes / 60;
+    //    int mins = minutes % 60;
+    //    return String.format("%02d:%02d", hours, mins);
+    //}
+    // Metodo per ottenere lo stato degli slot come lista
     
-        for (int i = 0; i < timeTable.length-1; i++) {
+    public List<TimeSlotStatus> getTimeSlotStatus() {
+        List<TimeSlotStatus> slotStatusList = new ArrayList<>();
+
+        for (int i = 0; i < timeTable.length - 1; i++) {
             String startTime = formatTime(i * 30);
             String endTime = formatTime((i + 1) * 30);
-            
-            // Assicurati di non andare oltre le 23:59
-            if (i * 30 >= 24 * 60) {
-                break; // Esci dal ciclo se l'orario di inizio supera le 23:59
-            }
-    
-            String slotStatus = (timeTable[i] == null || timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
-    
-            System.out.printf("[Slot%s] %s-%s: %-14s ", i, startTime, endTime, slotStatus);
-    
-            if ((i + 1) % 4 == 0) {
-                System.out.println();
-            }
-        }
-    }
-    
-    
-    
 
-    public static String formatTime(int minutes) {
+            if (i * 30 >= 24 * 60) {
+                break;
+            }
+
+            String status = (timeTable[i] == null || timeTable[i].isEmpty()) ? "Disponibile" : "Occupata";
+            slotStatusList.add(new TimeSlotStatus(i, startTime, endTime, status));
+        }
+
+        return slotStatusList;
+    }
+
+    // Metodo privato per formattare l'ora
+    private String formatTime(int minutes) {
         int hours = minutes / 60;
         int mins = minutes % 60;
         return String.format("%02d:%02d", hours, mins);
     }
 
+    // Classe interna per rappresentare lo stato di ciascun intervallo di tempo
+    public static class TimeSlotStatus {
+        private final int slotIndex;
+        private final String startTime;
+        private final String endTime;
+        private final String status;
+
+        public TimeSlotStatus(int slotIndex, String startTime, String endTime, String status) {
+            this.slotIndex = slotIndex;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.status = status;
+        }
+
+        public int getSlotIndex() { return slotIndex; }
+        public String getStartTime() { return startTime; }
+        public String getEndTime() { return endTime; }
+        public String getStatus() { return status; }
+    }
     // Nuovo metodo per verificare la disponibilità di uno slot
     public boolean isSlotAvailable(int slot) {
         if (slot < 0 || slot >= timeTable.length) {

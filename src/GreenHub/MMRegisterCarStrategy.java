@@ -1,53 +1,42 @@
 package GreenHub;
 
 import java.io.IOException;
-import java.util.Scanner;
+
 
 public class MMRegisterCarStrategy implements MainMenuStrategy {
 	@Override
-	public void execute(UserInterface ui, User user) throws IOException {
-		Scanner scanner = ui.getScanner();
-		Controller controller = ui.getController();
+public void execute(UserInterface ui, User user) throws IOException {
+    View view = ui.getView();
+    Controller controller = ui.getController();
 
-		System.out.print("Inserisci il maker dell'auto: ");
-		String maker = scanner.next();
-		System.out.print("Inserisci il modello dell'auto: ");
-		String model = scanner.next();
-		//System.out.print("Inserisci il tipo dell'auto (0: Elettrica, 1: Ibrida, 2: Combustione): ");
-		//int type = scanner.nextInt();
-		System.out.print("Inserisci la capacità dell'auto: ");
-		int capacity = scanner.nextInt();
+    // Richiede i dati della macchina usando i metodi di View
+    String maker = view.getCarMaker();
+    String model = view.getCarModel();
+    int capacity = view.getCarCapacity();
 
-		// Mostra la lista dei ChargingRate disponibili e chiedi all'utente di selezionarne uno
-		System.out.println("Seleziona il rate di ricarica supportato (ID): ");
-		ChargingRate.printAll(controller.getChargingRateList()); // Mostra la lista dei rate di ricarica
-		int selectedRateId = scanner.nextInt();
+    // Mostra la lista dei ChargingRate disponibili e chiede all'utente di selezionarne uno
+    int selectedRateId = view.selectChargingRate(controller.getChargingRateList());
 
-		// Trova il ChargingRate corrispondente all'ID selezionato
-		ChargingRate selectedRate = null;
-		for (ChargingRate rate : controller.getChargingRateList()) {
-			if (rate.getId() == selectedRateId) {
-				selectedRate = rate;
-				break;
-			}
-		}
+    // Trova il ChargingRate corrispondente all'ID selezionato
+    ChargingRate selectedRate = controller.getChargingRateList().stream()
+            .filter(rate -> rate.getId() == selectedRateId)
+            .findFirst()
+            .orElse(null);
 
-		if (selectedRate == null) {
-			System.out.println("Rate di ricarica selezionato non valido.");
-			return;
-		}
+    if (selectedRate == null) {
+        view.showInvalidChargingRateMessage();
+        return;
+    }
 
-		// Usa la posizione dell'utente per il veicolo
-		Location location = user.getLocation();
+    // Usa la posizione dell'utente per il veicolo
+    Location location = user.getLocation();
 
-		// Crea un nuovo veicolo
-		Vehicle vehicle = new Vehicle(0, maker, model, selectedRate, location, capacity);
+    // Crea un nuovo veicolo e lo aggiunge al controller
+    Vehicle vehicle = new Vehicle(0, maker, model, selectedRate, location, capacity);
+    controller.addVehicle(user, vehicle);
 
-		// Aggiungi il veicolo al controller
-		controller.addVehicle(user, vehicle);
+    // Salva lo stato aggiornato dei dati
+    controller.saveAll();
+}
 
-		// Salva lo stato aggiornato dei dati
-        controller.saveAll(); // Aggiunta questa chiamata per salvare i dati
-		
-	}
 }

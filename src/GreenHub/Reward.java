@@ -45,7 +45,7 @@ public class Reward implements Serializable{
         System.out.println("Aggiunti " + points + " Green Points all'utente: " + user.getUsername());
     }
 
-    // Metodo per riscattare una ricompensa
+    
     
     // Genera solo il codice della ricompensa senza salvare nulla
     public String generateRewardCode(User user) {

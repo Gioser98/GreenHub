@@ -9,34 +9,31 @@ public class UserInterface {
     private Controller controller = new Controller();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
     private View view = new View();
-    private Map<Integer, MainMenuStrategy> strategies = new HashMap<>();
+    private Map<String, MainMenuStrategy> strategies = new HashMap<>();
     
     public UserInterface() {
-        
         controller.readAll();  // Carica i dati esistenti
         // Popola la mappa con le strategie
-        strategies.put(1, new MMRechargeVehicleStrategy());
-        strategies.put(2, new MMBookRechargeStrategy());
-        strategies.put(3, new MMReservationListStrategy());
-        strategies.put(4, new MMRedeemRewardStrategy());
-        strategies.put(5, new MMRegisterCarStrategy());
-        strategies.put(6, new MMExitStrategy());
+        strategies.put("Ricarica il tuo veicolo elettrico", new MMRechargeVehicleStrategy());
+        strategies.put("Prenota una ricarica", new MMBookRechargeStrategy());
+        strategies.put("Lista prenotazioni", new MMReservationListStrategy());
+        strategies.put("Riscatta una ricompensa", new MMRedeemRewardStrategy());
+        strategies.put("Aggiungi un veicolo", new MMRegisterCarStrategy());
+        strategies.put("Esci", new MMExitStrategy());
+        strategies.put("Lista ricompense", new MMRewardList());
     }
 
     public Controller getController() {
         return controller;
     }
-	public Scanner getScanner() {
-		return scanner;
-	}
+
+    public Scanner getScanner() {
+        return scanner;
+    }
 
     public View getView() {
         return view;
     }
-
-    
-
-    
 
     public void WelcomeMenu() throws IOException, ClassNotFoundException, InterruptedException {
         Map<Integer, Runnable> actions = new HashMap<>();
@@ -59,8 +56,6 @@ public class UserInterface {
         
         actions.put(3, () -> System.exit(0));
         
-        actions.put(4, () -> controller.printino());
-    
         while (true) {
             view.showWelcomeMenuOptions();
             int choice = scanner.nextInt();
@@ -71,21 +66,16 @@ public class UserInterface {
     }
 
     public void MainMenu(User user) throws InterruptedException {
-        
-        
         while (true) {
             view.showMessage("\nCiao " + user.getName() + "! Saldo Green Points: " + user.getGreenPointsBalance());
-        
+
             if (user.getPersonalVehicle() != null) {
                 view.showVehicleStatus(user);  // Usa il metodo nella View
             } else {
                 view.showMessage("\nNon hai un veicolo personale associato.");
             }
             
-            view.showMenuOptions(user);  // Usa il metodo nella View
-            view.showMessage("Scelta: ");
-            int choice = scanner.nextInt();
-    
+            String choice = view.showDynamicMenuOptions(user, strategies);  // Usa il metodo aggiornato nella View
             if (isActionAllowed(choice, user)) {
                 executeMenuAction(choice, user);
             } else {
@@ -94,14 +84,14 @@ public class UserInterface {
             }
         }
     }
-    
+
     // Controlla se l'azione scelta è consentita
-    private boolean isActionAllowed(int choice, User user) {
-        return choice == 4 || choice == 5 || user.getPersonalVehicle() != null;
+    private boolean isActionAllowed(String choice, User user) {
+        return choice.equals("Riscatta una ricompensa") || choice.equals("Aggiungi un veicolo") || user.getPersonalVehicle() != null;
     }
-    
+
     // Esegue l'azione di menu scelta
-    private void executeMenuAction(int choice, User user) throws InterruptedException {
+    private void executeMenuAction(String choice, User user) throws InterruptedException {
         MainMenuStrategy strategy = strategies.get(choice);
         if (strategy != null) {
             try {
