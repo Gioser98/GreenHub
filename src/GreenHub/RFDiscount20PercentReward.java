@@ -1,6 +1,7 @@
 package GreenHub;
 
 public class RFDiscount20PercentReward implements RewardType{
+    
     @Override
     public String redeem(User user) {
         String code = "20" + RewardUtils.generateRandomChars(3);

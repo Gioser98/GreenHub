@@ -1,12 +1,19 @@
 package GreenHub;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Reward implements Serializable{
     private GreenPointsStrategy strategy;
     private RewardType rewardType;
+       
+    
+    // Setter per impostare la strategia
+    public void setStrategy(GreenPointsStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    
     public RewardType getRewardType() {
         return rewardType;
     }
@@ -15,19 +22,12 @@ public class Reward implements Serializable{
         this.rewardType = rewardType;
     }
 
-
-    // Setter per impostare la strategia
-    public void setStrategy(GreenPointsStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     public void setRewardType(String type) {
         this.rewardType = RewardFactory.getReward(type);
         if (this.rewardType == null) {
             throw new IllegalArgumentException("Tipo di ricompensa non valido");
         }
     }
-
    
 
     // Metodo per calcolare i punti utilizzando la strategia corrente

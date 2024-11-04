@@ -9,18 +9,20 @@ public class RewardFactory {
     private static final Map<String, String> prefixToRewardType = new HashMap<>(); // Mappa dei prefissi
 
     static {
-        rewardTypes.put("FreeRecharge", new RFFreeRechargeReward());
-        rewardTypes.put("Discount20", new RFDiscount20PercentReward());
-        rewardTypes.put("ZalandoVoucher", new RFZalandoVoucherReward());
+        rewardTypes.put("Ricarica gratuita", new RFFreeRechargeReward());
+        rewardTypes.put("Sconto del 20%", new RFDiscount20PercentReward());
+        rewardTypes.put("Zalando Voucher", new RFZalandoVoucherReward());
 
          // Mappa dei prefissi per associare il prefisso numerico al tipo di ricompensa
-         prefixToRewardType.put("20", "Discount20");  // Prefisso "20" corrisponde a Discount20
-         prefixToRewardType.put("100", "FreeRecharge"); // Prefisso "100" corrisponde a FreeRecharg
+         prefixToRewardType.put("20", "Sconto del 20%");  // Prefisso "20" corrisponde a Discount20
+         prefixToRewardType.put("100", "Ricarica gratuita"); // Prefisso "100" corrisponde a FreeRecharge
     }
 
     public static RewardType getReward(String rewardType) {
         return rewardTypes.getOrDefault(rewardType, null);
     }
+
+    
 
     public static RewardType getRewardByCode(String discountCode) {
         // Legge i primi caratteri del codice e cerca nella mappa dei prefissi

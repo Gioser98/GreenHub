@@ -155,9 +155,7 @@ public class Controller {
     // ==============================
     // Reward methods
     // ==============================
-    public void setupReward(String rewardType) {
-        rewards.setRewardType(rewardType);  // Imposta il tipo di reward tramite la RewardFactory
-    }
+    
 
     public void assignGreenPoints(User user, GreenPointsStrategy strategy, int value) {
         rewards.setStrategy(strategy);
@@ -165,7 +163,6 @@ public class Controller {
     }
 
     // Metodo per riscattare una ricompensa e gestire tutto da Controller
-    
     public void redeemReward(User user, String rewardType) {
         rewards.setRewardType(rewardType);  // Imposta il tipo di ricompensa selezionato
 

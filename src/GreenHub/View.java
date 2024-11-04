@@ -160,6 +160,25 @@ public class View {
     }
 
 
+     // Metodo per mostrare il menù delle ricompense e ottenere la scelta dell'utente
+     public int showRewardsMenu(int greenPointsBalance, Map<String, RewardType> availableRewards) {
+        System.out.println("=== Menù Riscatto Ricompense ===");
+        System.out.println("Saldo punti attuale: " + greenPointsBalance);
+
+        System.out.println("\nScegli una ricompensa da riscattare:");
+        
+        // Stampa tutte le ricompense disponibili con i punti necessari
+        int index = 1;
+        for (String rewardName : availableRewards.keySet()) {
+            RewardType rewardType = availableRewards.get(rewardName);
+            System.out.println(index + ". " + rewardName + " (" + rewardType.requiredPoints() + " punti)");
+            index++;
+        }
+        System.out.println(index + ". Torna al menù principale");
+        
+        System.out.print("Inserisci il numero della tua scelta: ");
+        return scanner.nextInt();
+    }
 
 
     // Metodi per stampare le varie liste
