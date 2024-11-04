@@ -71,7 +71,6 @@ public class View {
             System.out.println("1) Registrazione nuovo utente");
             System.out.println("2) Login utente già registrato");
             System.out.println("3) Exit");
-            System.out.println("4) Leggi contenuti dei file");
             System.out.print("Scelta: ");
     }
 
