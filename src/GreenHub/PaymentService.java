@@ -33,6 +33,17 @@ public class PaymentService implements Serializable {
         return password != null && password.length() >= 8;
     }
 
+    public boolean isValidAccountNumber(String accountNumber) {
+        // Logica per validare l'IBAN o il numero di conto (ad esempio, lunghezza minima)
+        return accountNumber.matches("\\w{10,34}");  // Esempio di validazione di base
+    }
+    
+    public String maskAccountNumber(String accountNumber) {
+        // Maschera parte dell'IBAN per sicurezza
+        return accountNumber.replaceAll(".(?=.{4})", "*");
+    }
+    
+
     // ==============================
     // Mascheramento Dati Sensibili
     // ==============================

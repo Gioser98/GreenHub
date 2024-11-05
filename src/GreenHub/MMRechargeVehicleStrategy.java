@@ -18,6 +18,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         this.paymentOptions = new HashMap<>(); // Inizializza la mappa
         paymentOptions.put("Carta di credito", new PCreditCardStrategy()); // Carta di credito
         paymentOptions.put("PayPal", new PPayPalStrategy());
+        paymentOptions.put("Bonifico Bancario", new PBankTransferStrategy());
     }
     
 
