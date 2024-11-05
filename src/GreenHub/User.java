@@ -9,7 +9,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private int greenPointsBalance;
-	private int type; // 0 EV - 1 ICE - 2 NoVehicle
+	//private int type; // 0 EV - 2 NoVehicle
 	private String name;
 	private String surname;
 	private Location location;
@@ -41,13 +41,13 @@ public class User implements Serializable {
 		this.greenPointsBalance = greenPointsBalance;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
+	//public int getType() {
+	//	return type;
+	//}
+//
+	//public void setType(int type) {
+	//	this.type = type;
+	//}
 
 	public String getName() {
 		return name;
@@ -102,10 +102,10 @@ public class User implements Serializable {
 	}
 
 	// Constructors
-	public User(String username, int greenPointsBalance, int type, String name, String surname, Location location) {
+	public User(String username, int greenPointsBalance,  String name, String surname, Location location) {
 		this.username = username;
 		this.greenPointsBalance = greenPointsBalance;
-		this.type = type;
+		//this.type = type;
 		this.name = name;
 		this.surname = surname;
 		this.location = location;

@@ -125,6 +125,10 @@ public class View {
         }
     }
 
+    /**
+     * @param redeemedRewardsMap
+     * @param username
+     */
     public void showUserRedeemedRewards(Map<String, String> redeemedRewardsMap, String username) {
         System.out.println("\n=== Le tue Ricompense ===");
 
@@ -140,12 +144,21 @@ public class View {
             System.out.println("Non hai ancora riscattato alcuna ricompensa.");
         }
 
-       // Richiede all'utente di premere "m" per tornare al menu principale
-        System.out.println("\nPremi 'q' per tornare al menu principale.");
-        while (!scanner.nextLine().equalsIgnoreCase("q")) {
-        System.out.println("Input non valido. Premi 'q' per tornare al menu principale.");
+       // Aggiungi opzione per tornare al menu principale
+       System.out.println("\nPremi 0 per tornare al menu principale.");
+       System.out.print("Scelta: ");
+       
+       // Acquisisci l'input dell'utente
+       int choice = scanner.nextInt();
+       
+       // Se l'utente sceglie 0, torna al menu principale
+       if (choice == 0) {
+           return;  // Esce dal ciclo e ritorna al menu principale
+       } else {
+           System.out.println("Opzione non valida. Riprova.");
+       }
     }
-    }
+    
 
     // Simulazione della ricarica con una barra di avanzamento
     public void simulateCharging(User user) throws InterruptedException {

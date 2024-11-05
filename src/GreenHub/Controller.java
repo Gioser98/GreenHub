@@ -9,17 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Controller {
-    // Liste per i dati
-    public ArrayList < ChargingRate > chargingRateList = new ArrayList < > ();
-    public ArrayList < EnergySupplier > energySupplierList = new ArrayList < > ();
-    public ArrayList < ChargingStation > chargingStationList = new ArrayList < > ();
-    public ArrayList < Reward > rewardList = new ArrayList < > ();
-    public ArrayList < User > userList = new ArrayList < > ();
-    public ArrayList < Vehicle > vehicleList = new ArrayList < > ();
-    public ArrayList < Transaction > transactionList = new ArrayList < > ();
-    public ArrayList < Reservation > reservationList = new ArrayList < > ();
-    private Map < String, String > redeemedRewardsMap = new HashMap < > ();
-
     private Reward rewards = new Reward();
     private DataSaver dataSaver = new DataSaver();
     private View view = new View(); // Riferimento alla View
@@ -33,7 +22,7 @@ public class Controller {
     // ==============================
     public void addUser(User user) {
         if (getUserByUsername(user.getUsername()) == null) {
-            userList.add(user);
+            dataSaver.getUserList().add(user);
         } else {
             view.showMessage("Username già esistente.");
         }
@@ -58,7 +47,7 @@ public class Controller {
         int latitude = new Random().nextInt(100); // Genera casualmente latitudine
         int longitude = new Random().nextInt(100); // Genera casualmente longitudine
         Location location = new Location(latitude, longitude);
-        User user = new User(username, 0, 2, name, surname, location);
+        User user = new User(username, 0,  name, surname, location);
 
         addUser(user);
         view.showMessage("Utente registrato correttamente!");
@@ -107,7 +96,7 @@ public class Controller {
     }
 
     public User getUserByUsername(String username) {
-        for (User u: userList) {
+        for (User u: dataSaver.getUserList()) {
             if (u.getUsername().equals(username)) {
                 return u;
             }
@@ -137,11 +126,15 @@ public class Controller {
             Time timestamp = new Time(now.getHour(), now.getMinute());
             transaction.setTimestamp(timestamp);
 
-            int newId = transactionList.isEmpty() ? 1 : transactionList.get(transactionList.size() - 1).getId() + 1;
+            int newId = dataSaver.getTransactionList().isEmpty() ? 1 : dataSaver.getTransactionList().get(dataSaver.getTransactionList().size() - 1).getId() + 1;
             transaction.setId(newId);
 
-            transaction.processPayment();
-            transactionList.add(transaction);
+            //transaction.processPayment();
+            if (!transaction.processPayment()) {
+                view.showMessage("Nessuna strategia di pagamento definita. Impossibile completare il pagamento.");
+            }
+            
+            dataSaver.getTransactionList().add(transaction);
             return "Pagamento effettuato con successo e transazione registrata.";
         } catch (Exception e) {
             return "Errore durante il pagamento: " + e.getMessage();
@@ -176,7 +169,7 @@ public class Controller {
 
             // Aggiungi solo il codice e lo username alla mappa nel Controller
             String code = result.split(": ")[1].trim();
-            redeemedRewardsMap.put(code, user.getUsername());
+            dataSaver.getRedeemedRewardsMap().put(code, user.getUsername());
 
             System.out.println("Codice riscattato: " + code);
         } else {
@@ -185,12 +178,12 @@ public class Controller {
     }
 
     public boolean isDiscountCodeValid(String discountCode, User user) {
-        return redeemedRewardsMap.containsKey(discountCode) && user.getUsername().equals(redeemedRewardsMap.get(discountCode));
+        return dataSaver.getRedeemedRewardsMap().containsKey(discountCode) && user.getUsername().equals(dataSaver.getRedeemedRewardsMap().get(discountCode));
 
     }
 
     public Map < String, String > getRedeemedRewardsMap() {
-        return redeemedRewardsMap;
+        return dataSaver.getRedeemedRewardsMap();
     }
 
     // ==============================
@@ -202,7 +195,7 @@ public class Controller {
         }
 
         vehicle.setOwner(owner);
-        vehicleList.add(vehicle);
+        dataSaver.getVehicleList().add(vehicle);
 
         if (owner.getPersonalVehicle() == null) {
             owner.setPersonalVehicle(vehicle);
@@ -216,7 +209,7 @@ public class Controller {
     // ChargingRate methods
     // ==============================
     public ArrayList < ChargingRate > getChargingRateList() {
-        return chargingRateList;
+        return dataSaver.getChargingRateList();
     }
 
     // ==============================
@@ -226,13 +219,13 @@ public class Controller {
     
 
     public ArrayList < ChargingStation > getChargingStationList() {
-        return chargingStationList;
+        return dataSaver.getChargingStationList();
     }
 
     public ChargingStation chooseStation(Vehicle vehicle) {
         int stationId = view.getStationIdFromUser(); // Chiede alla View l'ID della stazione
 
-        for (ChargingStation cs: chargingStationList) {
+        for (ChargingStation cs: dataSaver.getChargingStationList()) {
             if (cs.getId() == stationId && !cs.isMaintenance()) {
                 view.showMessage("Hai scelto: " + cs);
                 return cs;
@@ -268,7 +261,7 @@ public class Controller {
         Map < ChargingStation, Double > distanceMap = new HashMap < > ();
 
         // Itera attraverso le stazioni di ricarica
-        for (ChargingStation cs: chargingStationList) {
+        for (ChargingStation cs: dataSaver.getChargingStationList()) {
 
             // Calcola la distanza tra l'utente e la stazione di ricarica
             double distance = userLocation.distance(cs.getLocation());
@@ -356,7 +349,7 @@ public class Controller {
 
             // Genera un nuovo ID per la prenotazione
             int maxID = 0;
-            for (Reservation r: reservationList) {
+            for (Reservation r: dataSaver.getReservationList()) {
                 if (r.getId() > maxID) {
                     maxID = r.getId();
                 }
@@ -367,7 +360,7 @@ public class Controller {
             currentUser.getReservations().add(newReservation);
 
             // Aggiungi la prenotazione alla lista globale
-            reservationList.add(newReservation);
+            dataSaver.getReservationList().add(newReservation);
 
         } else {
             view.showMessage("Slot non disponibili!");
@@ -389,22 +382,22 @@ public class Controller {
 
     // Metodo per aggiungere una prenotazione
     public void addReservation(Reservation reservation) {
-        reservationList.add(reservation);
+        dataSaver.getReservationList().add(reservation);
     }
 
     // Metodo per ottenere tutte le prenotazioni
     public List < Reservation > getAllReservations() {
-        return new ArrayList < > (reservationList); // Ritorna una copia della lista per evitare modifiche esterne
+        return new ArrayList < > (dataSaver.getReservationList()); // Ritorna una copia della lista per evitare modifiche esterne
     }
 
     // Metodo per resettare tutte le prenotazioni (facoltativo)
     public void resetReservations() {
-        reservationList.clear();
+        dataSaver.getReservationList().clear();
     }
 
     // Metodo per stampare tutte le prenotazioni
     public void printAllReservations() {
-        for (Reservation reservation: reservationList) {
+        for (Reservation reservation: dataSaver.getReservationList()) {
             System.out.println(reservation);
         }
     }
@@ -414,8 +407,7 @@ public class Controller {
     // ==============================
     public void saveAll() {
         try {
-            dataSaver.saveAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
-                userList, vehicleList, transactionList, reservationList, redeemedRewardsMap);
+            dataSaver.saveAll();
         } catch (IOException e) {
             view.showMessage("Errore durante il salvataggio: " + e.getMessage());
         }
@@ -423,8 +415,7 @@ public class Controller {
 
     public void readAll() {
         try {
-            dataSaver.readAll(chargingRateList, energySupplierList, chargingStationList, rewardList,
-                userList, vehicleList, transactionList, reservationList, redeemedRewardsMap);
+            dataSaver.readAll();
         } catch (IOException e) {
             view.showMessage("Errore durante la lettura: " + e.getMessage());
         }
@@ -436,20 +427,20 @@ public class Controller {
 
     // Metodo per stampare tutti i dati
     public void printino() {
-        view.printChargingRateList(chargingRateList);
-        view.printEnergySupplierList(energySupplierList);
-        view.printChargingStationList(chargingStationList);
-        view.printRewardList(rewardList);
-        view.printUserList(userList);
-        view.printVehicleList(vehicleList);
-        view.printTransactionList(transactionList);
-        view.printReservationList(reservationList);
-        view.printRedeemedRewardsMap(redeemedRewardsMap);
+        view.printChargingRateList(dataSaver.getChargingRateList());
+        view.printEnergySupplierList(dataSaver.getEnergySupplierList());
+        view.printChargingStationList(dataSaver.getChargingStationList());
+        view.printRewardList(dataSaver.getRewardList());
+        view.printUserList(dataSaver.getUserList());
+        view.printVehicleList(dataSaver.getVehicleList());
+        view.printTransactionList(dataSaver.getTransactionList());
+        view.printReservationList(dataSaver.getReservationList());
+        view.printRedeemedRewardsMap(dataSaver.getRedeemedRewardsMap());
     }
 
     // Metodo per resettare tutte le prenotazioni
     public void resettone() {
-        ChargingStation.resetAllTimeTables(chargingStationList);
+        ChargingStation.resetAllTimeTables(dataSaver.getChargingStationList());
     }
 
 }

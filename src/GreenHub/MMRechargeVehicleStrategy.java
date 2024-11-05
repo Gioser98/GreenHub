@@ -129,7 +129,6 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getView().guidePlugOutProcess();
     
         // Registra la carica
-        //int discount=1;
         ui.getController().registerCharge(user, currentVehicle, currentCS, currentTime, newCharge, startTime, discount);
     
         // Calcola il costo della ricarica
@@ -139,9 +138,8 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getController().registerTransaction(user, currentVehicle, currentCS, newCharge, amount, paymentStrategy);
         
         // Calcolo dei Green Points
-        GreenPointsStrategy gpStrategy = new GPRechargeStrategy();
-        int chargePercentage = (int) amount;  // Supponiamo che sia la percentuale di ricarica
-        ui.getController().assignGreenPoints(user, gpStrategy, chargePercentage);
+        GreenPointsStrategy gpStrategy = new GPRechargeStrategy(); 
+        ui.getController().assignGreenPoints(user, gpStrategy, (int) amount);
     
         ui.getView().showMessage("\nPremi Invio per tornare al menu principale o 'q' per uscire.");
         scanner.nextLine(); // Consuma la nuova linea rimasta nel buffer

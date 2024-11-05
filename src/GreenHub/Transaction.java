@@ -74,13 +74,16 @@ public class Transaction implements Serializable {
     }
 
     // Methods
-    public void processPayment() {
+    public boolean processPayment() {
         if (paymentStrategy != null) {
             paymentStrategy.pay(amount);
+            return true;
         } else {
-            System.out.println("Nessuna strategia di pagamento definita.");
+            return false;
         }
     }
+    
+    
 
     @Override
     public String toString() {

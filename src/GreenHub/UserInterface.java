@@ -55,6 +55,9 @@ public class UserInterface {
         });
         
         actions.put(3, () -> System.exit(0));
+
+        // Aggiungi l'opzione 4 per richiamare il metodo printino nel Controller
+        actions.put(4, () -> controller.printino());
         
         while (true) {
             view.showWelcomeMenuOptions();
