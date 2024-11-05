@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataSaver {
+public class DataManager {
     // Liste gestite internamente
     private ArrayList<ChargingRate> chargingRateList = new ArrayList<>();
     private ArrayList<EnergySupplier> energySupplierList = new ArrayList<>();
@@ -17,7 +17,7 @@ public class DataSaver {
     private ArrayList<Reservation> reservationList = new ArrayList<>();
     private Map<String, String> redeemedRewardsMap = new HashMap<>();
 
-    public DataSaver() {
+    public DataManager() {
         // Costruttore vuoto
     }
 

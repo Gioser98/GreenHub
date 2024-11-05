@@ -1,6 +1,7 @@
 package GreenHub;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class Location implements Serializable {
 	
@@ -46,5 +47,14 @@ public class Location implements Serializable {
 	public String toString() {
 		return "(" + latitude + "," + longitude + ")";
 	}
+
+	public static Location generateRandomLocation() {
+        int latitude = new Random().nextInt(100);  // Generates a random latitude
+        int longitude = new Random().nextInt(100); // Generates a random longitude
+        return new Location(latitude, longitude);
+    }
+
+	
+	
 }
 

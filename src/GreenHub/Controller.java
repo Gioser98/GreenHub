@@ -44,9 +44,7 @@ public class Controller {
 
         String name = view.getInputName(); // Usa il metodo esistente per ottenere il nome
         String surname = view.getInputSurname(); // Usa il metodo esistente per ottenere il cognome
-        int latitude = new Random().nextInt(100); // Genera casualmente latitudine
-        int longitude = new Random().nextInt(100); // Genera casualmente longitudine
-        Location location = new Location(latitude, longitude);
+        Location location = Location.generateRandomLocation(); // Ottiene una location casuale
         User user = new User(username, 0,  name, surname, location);
 
         addUser(user);
@@ -54,7 +52,7 @@ public class Controller {
     }
 
     // Metodo per il login di un utente
-    @SuppressWarnings("unused")
+    
     public User loginUser() {
 
         String username = view.getInputUsername(); // Ottieni l'username dalla View
@@ -63,8 +61,8 @@ public class Controller {
 
         if (user != null) {
             // Aggiorna la posizione dell'utente con una nuova posizione casuale
-            Location newLocation = generateRandomLocation();
-            user.setLocation(newLocation);
+            Location location = Location.generateRandomLocation(); // Ottiene una location casuale
+            user.setLocation(location);
 
             // Controlla se l'utente ha un veicolo personale associato
             if (user.getPersonalVehicle() != null) {
@@ -82,19 +80,14 @@ public class Controller {
         }
     }
 
-    // Metodo per generare una posizione casuale
-    private Location generateRandomLocation() {
-        int latitude = new Random().nextInt(100); // Genera casualmente latitudine
-        int longitude = new Random().nextInt(100); // Genera casualmente longitudine
-        return new Location(latitude, longitude);
-    }
+
 
     // Metodo per generare un livello di batteria casuale
     private int generateRandomBatteryLevel(User user) {
         int maxBatteryLevel = (int) user.getPersonalVehicle().getCapacity(); // Ottieni la capacità del veicolo
         return new Random().nextInt(maxBatteryLevel + 1); // Genera un livello casuale tra 0 e capacity
     }
-
+ 
     public User getUserByUsername(String username) {
         for (User u: dataSaver.getUserList()) {
             if (u.getUsername().equals(username)) {
@@ -104,11 +97,7 @@ public class Controller {
         return null;
     }
 
-    public void increaseUserGPBalance(String username, int points) {
-        User user = getUserByUsername(username);
-        user.increaseGPBalance(points);
-        view.showMessage("Saldo GP aggiornato correttamente!");
-    }
+    
 
     // ==============================
     // Transaction methods
