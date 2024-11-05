@@ -3,6 +3,12 @@ package GreenHub;
 import java.util.Scanner;
 
 public class MMBookRechargeStrategy implements MainMenuStrategy {
+    private GreenPointsStrategy greenPointsStrategy;
+
+    public MMBookRechargeStrategy(GreenPointsStrategy greenPointsStrategy) {
+        this.greenPointsStrategy = greenPointsStrategy;
+    }
+
     @Override
     public void execute(UserInterface ui, User user) {
         ChargingStation currentCS;
@@ -31,11 +37,11 @@ public class MMBookRechargeStrategy implements MainMenuStrategy {
 
         if (slotAvailable) {
             // **Assegnazione Green Points per la prenotazione**
-            GreenPointsStrategy gpStrategy = new GPReservationStrategy();
+            //GreenPointsStrategy gpStrategy = new GPReservationStrategy();
             int value = 1;  // Punteggio fisso per la prenotazione
-            int greenPoints = gpStrategy.calculatePoints(value);
+            int greenPoints = greenPointsStrategy.calculatePoints(value);
             
-            ui.getController().assignGreenPoints(user, gpStrategy, value);
+            ui.getController().assignGreenPoints(user, greenPointsStrategy, value);
             ui.getView().showMessage("Prenotazione completata. Hai guadagnato " + greenPoints + " Green Point!");
         } else {
             ui.getView().showMessage("Gli slot selezionati non sono disponibili. Riprova con orari diversi.");

@@ -11,13 +11,15 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
     Scanner scanner = new Scanner(System.in);
     // Mappa per i metodi di pagamento
     private final Map<String, PaymentStrategy> paymentOptions;
+    private GreenPointsStrategy greenPointsStrategy;
 
-    // Costruttore che inizializza la mappa
-    public MMRechargeVehicleStrategy() {
-        paymentOptions = new HashMap<>();
+    public MMRechargeVehicleStrategy(GreenPointsStrategy greenPointsStrategy) {
+        this.greenPointsStrategy = greenPointsStrategy;
+        this.paymentOptions = new HashMap<>(); // Inizializza la mappa
         paymentOptions.put("Carta di credito", new PCreditCardStrategy()); // Carta di credito
         paymentOptions.put("PayPal", new PPayPalStrategy());
     }
+    
 
     @Override
     public void execute(UserInterface ui, User user) throws IOException {
@@ -80,11 +82,7 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
             return;
         }
     
-        if (paymentStrategy instanceof PCreditCardStrategy) {
-            ((PCreditCardStrategy) paymentStrategy).initializePayment();
-        } else if (paymentStrategy instanceof PPayPalStrategy) {
-            ((PPayPalStrategy) paymentStrategy).initializePayment();
-        }
+        paymentStrategy.initializePayment();
     
         // Chiedi se l'utente ha un codice sconto subito dopo il pagamento
         ui.getView().showMessage("Hai un codice sconto per la ricarica? (s/n)");
@@ -138,8 +136,14 @@ public class MMRechargeVehicleStrategy implements MainMenuStrategy {
         ui.getController().registerTransaction(user, currentVehicle, currentCS, newCharge, amount, paymentStrategy);
         
         // Calcolo dei Green Points
-        GreenPointsStrategy gpStrategy = new GPRechargeStrategy(); 
-        ui.getController().assignGreenPoints(user, gpStrategy, (int) amount);
+        // Assegna i green points utilizzando la strategia fornita
+        if (greenPointsStrategy != null) {
+            ui.getController().assignGreenPoints(user, greenPointsStrategy, (int) amount);
+        } else {
+            ui.getView().showMessage("Strategia di Green Points non definita.");
+        }
+        //GreenPointsStrategy gpStrategy = new GPRechargeStrategy(); 
+        //ui.getController().assignGreenPoints(user, gpStrategy, (int) amount);
     
         ui.getView().showMessage("\nPremi Invio per tornare al menu principale o 'q' per uscire.");
         scanner.nextLine(); // Consuma la nuova linea rimasta nel buffer

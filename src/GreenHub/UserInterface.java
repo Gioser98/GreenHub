@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
-    private FrontController controller = new FrontController();  // Il Controller gestisce tutto
+    private C_FrontController controller = new C_FrontController();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
     private View view = new View();
     private Map<String, MainMenuStrategy> strategies = new HashMap<>();
@@ -14,8 +14,8 @@ public class UserInterface {
     public UserInterface() {
         controller.readAll();  // Carica i dati esistenti
         // Popola la mappa con le strategie
-        strategies.put("Ricarica il tuo veicolo elettrico", new MMRechargeVehicleStrategy());
-        strategies.put("Prenota una ricarica", new MMBookRechargeStrategy());
+        strategies.put("Ricarica il tuo veicolo elettrico", new MMRechargeVehicleStrategy(new GPRechargeStrategy()));
+        strategies.put("Prenota una ricarica", new MMBookRechargeStrategy(new GPReservationStrategy()));
         strategies.put("Lista prenotazioni", new MMReservationListStrategy());
         strategies.put("Riscatta una ricompensa", new MMRedeemRewardStrategy());
         strategies.put("Aggiungi un veicolo", new MMRegisterCarStrategy());
@@ -23,7 +23,7 @@ public class UserInterface {
         strategies.put("Lista ricompense", new MMRewardList());
     }
 
-    public FrontController getController() {
+    public C_FrontController getController() {
         return controller;
     }
 

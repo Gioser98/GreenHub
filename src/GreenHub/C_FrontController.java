@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class FrontController {
+public class C_FrontController {
     
     private C_UserController userController;
     private C_TransactionController transactionController;
@@ -18,7 +18,7 @@ public class FrontController {
     private View view = new View();
     private Reward rewards = new Reward();
     
-    public FrontController() {
+    public C_FrontController() {
         this.userController = new C_UserController(dataSaver, view);
         this.transactionController = new C_TransactionController(dataSaver, view);
         this.rewardController = new C_RewardController(rewards, dataSaver, view);
@@ -27,7 +27,7 @@ public class FrontController {
         this.chargingStationController = new C_ChargingStationController(dataSaver, view);
     }
 
-    public FrontController(DataManager dataSaver, View view, Reward rewards) {
+    public C_FrontController(DataManager dataSaver, View view, Reward rewards) {
         this.userController = new C_UserController(dataSaver, view);
         this.transactionController = new C_TransactionController(dataSaver, view);
         this.rewardController = new C_RewardController(rewards, dataSaver, view);

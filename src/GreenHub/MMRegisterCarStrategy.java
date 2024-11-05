@@ -7,7 +7,7 @@ public class MMRegisterCarStrategy implements MainMenuStrategy {
 	@Override
 public void execute(UserInterface ui, User user) throws IOException {
     View view = ui.getView();
-    FrontController controller = ui.getController();
+    C_FrontController controller = ui.getController();
 
     // Richiede i dati della macchina usando i metodi di View
     String maker = view.getCarMaker();
