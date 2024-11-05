@@ -3,7 +3,7 @@ package GreenHub;
 import java.io.Serializable;
 
 public class Reservation implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private User user;
@@ -11,7 +11,7 @@ public class Reservation implements Serializable {
 	private ChargingStation chargingStation;
 	private Time startTime;
 	private Time endTime;
-	
+
 	// Getter&Setter
 	public int getId() {
 		return id;
@@ -49,17 +49,14 @@ public class Reservation implements Serializable {
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
-	
+
 	// Constructors
 	public Reservation() {
-	    // Costruttore vuoto
+		// Costruttore vuoto
 	}
-	
+
 	// Methods
 	public String toString() {
 		return "Prenotazione di " + user.getUsername() + " con il veicolo " + vehicle.getMaker() + " " + vehicle.getModel() + " presso al stazione di ricarica "+ chargingStation + " inizia alle " + startTime + " e finisce alle " + endTime;
 	}
-	
-
-	
 }

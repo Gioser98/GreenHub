@@ -18,7 +18,7 @@ public class C_ChargingStationController {
 	public ChargingStation chooseStation(Vehicle vehicle) {
 		int stationId = view.getStationIdFromUser();
 
-		for (ChargingStation cs : dataSaver.getChargingStationList()) {
+		for (ChargingStation cs: dataSaver.getChargingStationList()) {
 			if (cs.getId() == stationId && !cs.isMaintenance()) {
 				view.showMessage("Hai scelto: " + cs);
 				return cs;
@@ -71,18 +71,18 @@ public class C_ChargingStationController {
 		return energyToRecharge * chargingRate * discount;
 	}
 
-	public List<ChargingStation> getNearAvailableStation(User user) {
-		List<ChargingStation> availableStations = new ArrayList<>();
+	public List < ChargingStation > getNearAvailableStation(User user) {
+		List < ChargingStation > availableStations = new ArrayList < > ();
 		Location userLocation = user.getLocation();
 
-		Map<ChargingStation, Double> distanceMap = new HashMap<>();
+		Map < ChargingStation, Double > distanceMap = new HashMap < > ();
 
-		for (ChargingStation cs : dataSaver.getChargingStationList()) {
+		for (ChargingStation cs: dataSaver.getChargingStationList()) {
 			double distance = userLocation.distance(cs.getLocation());
 			distanceMap.put(cs, distance);
 		}
 
-		List<Map.Entry<ChargingStation, Double>> sortedStations = new ArrayList<>(distanceMap.entrySet());
+		List < Map.Entry < ChargingStation, Double >> sortedStations = new ArrayList < > (distanceMap.entrySet());
 		sortedStations.sort(Map.Entry.comparingByValue());
 
 		for (int i = 0; i < Math.min(3, sortedStations.size()); i++) {

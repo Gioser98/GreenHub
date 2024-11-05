@@ -16,8 +16,6 @@ public class User implements Serializable {
 	private Vehicle personalVehicle;
 	private List<Reservation> reservations = new ArrayList<>();
 
-	
-
 	// Getter&Setter
 	public String getUsername() {
 		return username;
@@ -40,14 +38,6 @@ public class User implements Serializable {
 		}
 		this.greenPointsBalance = greenPointsBalance;
 	}
-
-	//public int getType() {
-	//	return type;
-	//}
-//
-	//public void setType(int type) {
-	//	this.type = type;
-	//}
 
 	public String getName() {
 		return name;
@@ -95,7 +85,6 @@ public class User implements Serializable {
 		}
 		return reservations;
 	}
-	
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
@@ -112,8 +101,6 @@ public class User implements Serializable {
 		this.reservations = new ArrayList<>();  // Inizializza la lista di prenotazioni
 	}
 
-	
-
 	// Methods
 	@Override
 	public String toString() {
@@ -127,5 +114,4 @@ public class User implements Serializable {
 			i++;
 		}
 	}
-
 }

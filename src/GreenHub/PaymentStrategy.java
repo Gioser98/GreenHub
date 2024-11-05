@@ -1,7 +1,6 @@
 package GreenHub;
 
 public interface PaymentStrategy {
-    void initializePayment();
-    void pay(double amount);
-    
+	void initializePayment();
+	void pay(double amount);   
 }

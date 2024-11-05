@@ -22,5 +22,4 @@ public class RFDiscount20PercentReward implements RewardType{
 	public boolean isValidCode(String code) {
 		return code.startsWith("20") && code.length() == 5;
 	}
-
 }

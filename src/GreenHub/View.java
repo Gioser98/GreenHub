@@ -97,7 +97,6 @@ public class View {
 		}
 	}
 
-
 	public String choosePaymentMethod(Map<String, PaymentStrategy> paymentOptions) {
 		System.out.println("Scegli un metodo di pagamento:");
 
@@ -151,7 +150,6 @@ public class View {
 			System.out.println("Opzione non valida. Riprova.");
 		}
 	}
-
 
 	// Simulazione della ricarica con una barra di avanzamento
 	public void simulateCharging(User user) throws InterruptedException {
@@ -246,7 +244,6 @@ public class View {
 		System.out.print("Inserisci il numero della tua scelta: ");
 		return scanner.nextInt();
 	}
-
 
 	public void printTimeTableWithTimeSlots(List<ChargingStation.TimeSlotStatus> timeSlotStatusList, int stationId) {
 		System.out.println("Stato attuale della colonnina di ricarica (ID:" + stationId + "):");
@@ -343,7 +340,4 @@ public class View {
 	public void showInvalidChargingRateMessage() {
 		System.out.println("Rate di ricarica selezionato non valido.");
 	}
-
-
-
 }
