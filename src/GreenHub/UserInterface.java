@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
-    private Controller controller = new Controller();  // Il Controller gestisce tutto
+    private FrontController controller = new FrontController();  // Il Controller gestisce tutto
     private Scanner scanner = new Scanner(System.in);
     private View view = new View();
     private Map<String, MainMenuStrategy> strategies = new HashMap<>();
@@ -23,7 +23,7 @@ public class UserInterface {
         strategies.put("Lista ricompense", new MMRewardList());
     }
 
-    public Controller getController() {
+    public FrontController getController() {
         return controller;
     }
 
