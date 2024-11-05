@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Controller {
     private Reward rewards = new Reward();
-    private DataSaver dataSaver = new DataSaver();
+    private DataManager dataSaver = new DataManager();
     private View view = new View(); // Riferimento alla View
 
     public Controller() {
@@ -59,7 +59,7 @@ public class Controller {
 
         String username = view.getInputUsername(); // Ottieni l'username dalla View
         User user = getUserByUsername(username);
-        user.setGreenPointsBalance(1000);
+        
 
         if (user != null) {
             // Aggiorna la posizione dell'utente con una nuova posizione casuale
