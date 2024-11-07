@@ -2,25 +2,21 @@ package GreenHub;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class MMRechargeVehicleStrategy implements MainMenuStrategy {
 	Scanner scanner = new Scanner(System. in );
-	// Mappa per i metodi di pagamento
-	private final Map < String,
-	PaymentStrategy > paymentOptions;
-	private GreenPointsStrategy greenPointsStrategy;
+	private final Map<String, PaymentStrategy> paymentOptions;
+    private GreenPointsStrategy greenPointsStrategy;
 
-	public MMRechargeVehicleStrategy(GreenPointsStrategy greenPointsStrategy) {
-		this.greenPointsStrategy = greenPointsStrategy;
-		this.paymentOptions = new HashMap < >(); // Inizializza la mappa
-		paymentOptions.put("Carta di credito", new PCreditCardStrategy()); // Carta di credito
-		paymentOptions.put("PayPal", new PPayPalStrategy());
-		paymentOptions.put("Bonifico Bancario", new PBankTransferStrategy());
-	}
+    public MMRechargeVehicleStrategy(GreenPointsStrategy greenPointsStrategy) {
+        this.greenPointsStrategy = greenPointsStrategy;
+        this.paymentOptions = PaymentFactory.getPaymentOptions(); // Ottieni i metodi di pagamento dalla factory
+    }
+	
 
 	@Override
 	public void execute(UserInterface ui, User user) throws IOException {
