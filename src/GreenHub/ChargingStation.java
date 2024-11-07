@@ -126,33 +126,7 @@ public class ChargingStation implements Serializable {
 		return String.format("%02d:%02d", hours, mins);
 	}
 
-	// Classe interna per rappresentare lo stato di ciascun intervallo di tempo
-	public static class TimeSlotStatus {
-		private final int slotIndex;
-		private final String startTime;
-		private final String endTime;
-		private final String status;
-
-		public TimeSlotStatus(int slotIndex, String startTime, String endTime, String status) {
-			this.slotIndex = slotIndex;
-			this.startTime = startTime;
-			this.endTime = endTime;
-			this.status = status;
-		}
-
-		public int getSlotIndex() {
-			return slotIndex;
-		}
-		public String getStartTime() {
-			return startTime;
-		}
-		public String getEndTime() {
-			return endTime;
-		}
-		public String getStatus() {
-			return status;
-		}
-	}
+	
 	// Nuovo metodo per verificare la disponibilità di uno slot
 	public boolean isSlotAvailable(int slot) {
 		if (slot < 0 || slot >= timeTable.length) {

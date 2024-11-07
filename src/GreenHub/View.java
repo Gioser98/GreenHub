@@ -245,11 +245,11 @@ public class View {
 		return scanner.nextInt();
 	}
 
-	public void printTimeTableWithTimeSlots(List<ChargingStation.TimeSlotStatus> timeSlotStatusList, int stationId) {
+	public void printTimeTableWithTimeSlots(List<TimeSlotStatus> timeSlotStatusList, int stationId) {
 		System.out.println("Stato attuale della colonnina di ricarica (ID:" + stationId + "):");
 
 		for (int i = 0; i < timeSlotStatusList.size(); i++) {
-			ChargingStation.TimeSlotStatus slot = timeSlotStatusList.get(i);
+			TimeSlotStatus slot = timeSlotStatusList.get(i);
 
 			System.out.printf("[Slot %d] %s-%s: %-14s ", slot.getSlotIndex(), slot.getStartTime(), slot.getEndTime(), slot.getStatus());
 
