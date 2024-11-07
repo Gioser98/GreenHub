@@ -9,7 +9,6 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private int greenPointsBalance;
-	//private int type; // 0 EV - 2 NoVehicle
 	private String name;
 	private String surname;
 	private Location location;
@@ -114,4 +113,12 @@ public class User implements Serializable {
 			i++;
 		}
 	}
+
+	public static void clearAllReservations(List<User> userList) {
+		for (User user : userList) {
+			user.getReservations().clear();
+		}
+		System.out.println("Tutte le prenotazioni sono state svuotate per tutti gli utenti.");
+	}
+	
 }
